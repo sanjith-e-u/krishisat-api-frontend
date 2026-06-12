@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: "Complete API reference for all KrishiSat satellite intelligence endpoints including NDVI, NDRE, Weather, and farm registration.",
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.krishisat.dev"
+
 const endpoints = [
   {
     method: "POST",
@@ -159,7 +161,7 @@ export default function ApiReferencePage() {
         </p>
         <div className="mt-6 inline-flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
           <span className="text-xs font-semibold text-slate-400">Base URL</span>
-          <code className="font-mono text-xs font-bold text-slate-800">https://api.krishisat.io</code>
+          <code className="font-mono text-xs font-bold text-slate-800">{API_URL}</code>
         </div>
       </section>
 

@@ -9,56 +9,56 @@ export const metadata: Metadata = {
 
 const plans = [
   {
-    name: "Developer",
-    price: "₹999",
+    name: "Free",
+    price: "$0",
     period: "/ month",
-    description: "For prototyping and early-stage agritech applications.",
-    credits: "10,000",
+    description: "For testing, prototyping, and early sandbox agritech developments.",
+    credits: "1,000",
     features: [
-      "10,000 monthly API credits",
+      "1,000 monthly API credits",
       "Core vegetation indices (NDVI, NDRE)",
       "Standard response latency",
-      "Community Discord access",
-      "Basic documentation",
-      "2 API keys"
+      "1 Sandbox API key",
+      "Community Discord support",
+      "Complete REST documentation"
     ],
-    cta: "Start Developer Plan",
+    cta: "Get Started Free",
     highlight: false,
     icon: Code,
   },
   {
-    name: "Professional",
-    price: "₹4,999",
+    name: "Pro",
+    price: "$49",
     period: "/ month",
-    description: "For production-ready agricultural dashboards and platforms.",
-    credits: "60,000",
+    description: "For production-ready agricultural platforms and monitoring applications.",
+    credits: "50,000",
     features: [
-      "60,000 monthly API credits",
+      "50,000 monthly API credits",
       "Full index suite (NDVI, NDRE, NDWI, NDMI, SAVI, CI)",
-      "Prioritized response queues",
-      "Weather telemetry APIs",
-      "Email & Slack support",
-      "Unlimited API keys",
-      "SLA 99.9% uptime"
+      "Prioritized satellite ingress queues",
+      "Weather telemetry & GDD APIs",
+      "5 active Production API keys",
+      "Priority email support (4hr SLA)",
+      "99.9% API uptime guarantee"
     ],
-    cta: "Start Professional Plan",
+    cta: "Start Pro Plan",
     highlight: true,
     icon: Zap,
   },
   {
     name: "Enterprise",
     price: "Custom",
-    period: "contact us",
-    description: "For large-scale agricultural operations and government bodies.",
+    period: "contact sales",
+    description: "For enterprise agritechs, regional cooperatives, and government bodies.",
     credits: "Unlimited",
     features: [
-      "Unlimited API credit volumes",
-      "Dedicated satellite ingress pipelines",
-      "Sub-150ms response SLA",
+      "Custom monthly API credit volumes",
+      "Dedicated Sentinel ingress pipelines",
+      "Sub-150ms calculation response SLA",
       "Dedicated solutions architect",
       "Custom data retention periods",
       "On-premise deployment options",
-      "Priority 24/7 support"
+      "Priority 24/7 support contracts"
     ],
     cta: "Contact Sales",
     highlight: false,
@@ -67,11 +67,11 @@ const plans = [
 ]
 
 const faq = [
-  { q: "What is an API credit?", a: "Each API call costs credits depending on the endpoint. NDVI/NDRE/NDWI/NDMI/SAVI/CI each cost 2 credits. Weather telemetry and Farm Registration cost 1 credit per call." },
+  { q: "What is an API credit?", a: "Each API call costs credits depending on the complexity of the endpoint. NDVI/NDRE/NDWI/NDMI/SAVI/CI each cost 2 credits. Weather telemetry and Farm Registration cost 1 credit per call." },
   { q: "Do unused credits roll over?", a: "Credits reset monthly. Unused credits do not roll over. Enterprise plans can negotiate custom rollover terms with our team." },
   { q: "Can I upgrade or downgrade anytime?", a: "Yes. You can switch plans at any time from your dashboard billing settings. Changes take effect immediately on the next billing cycle." },
-  { q: "Is there a free tier?", a: "We are launching a free tier with 1,000 monthly credits in Q3 2026. Join our waitlist on the platform to be notified." },
-  { q: "What payment methods are accepted?", a: "We accept all major credit cards, UPI, NEFT/RTGS bank transfers, and can issue invoices for Enterprise accounts." }
+  { q: "How does Pay-As-You-Go overage work?", a: "If you consume all included credits on the Pro plan, we don't block your API keys. Additional queries are automatically billed at $0.005 per credit on your monthly invoice." },
+  { q: "What payment methods are accepted?", a: "We accept all major credit cards, UPI, corporate bank wires, and can issue automated purchase order invoices for Enterprise clients." }
 ]
 
 export default function PricingPage() {
@@ -82,12 +82,27 @@ export default function PricingPage() {
         <span className="text-xs font-bold text-primary bg-primary/8 px-3 py-1 rounded-full uppercase tracking-widest">Pricing</span>
         <h1 className="text-4xl font-extrabold text-slate-900 mt-5 tracking-tight">Simple, transparent pricing</h1>
         <p className="text-lg text-slate-500 mt-4 max-w-lg mx-auto leading-relaxed">
-          Start small, scale as your coverage expands. No hidden fees. Pay only for what your systems consume.
+          Start small, scale as your coverage expands. Pay only for the telemetry your systems consume.
         </p>
       </section>
 
+      {/* Pay-as-you-go Explanation Banner */}
+      <section className="max-w-6xl mx-auto px-6 pt-12">
+        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+          <div className="space-y-1 text-center md:text-left">
+            <h3 className="text-sm font-extrabold text-slate-900">💡 Pay-As-You-Go Credit System</h3>
+            <p className="text-xs text-slate-500 leading-relaxed max-w-2xl">
+              Each API call consumes credits depending on the complexity of the sensor calculations (e.g. 1 credit for weather, 2 credits for NDVI). If you exceed your plan&apos;s monthly included credits, additional requests are automatically billed at a flat rate of <strong className="text-slate-800 font-bold">$0.005 per credit</strong>. No service interruptions, no overage shocks.
+            </p>
+          </div>
+          <Link href="/developers/reference" className="text-xs font-bold text-primary bg-primary/8 px-4 py-2.5 rounded-xl hover:bg-primary/10 transition-colors shrink-0">
+            View API Credit Spec
+          </Link>
+        </div>
+      </section>
+
       {/* Pricing Grid */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
+      <section className="max-w-6xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {plans.map((plan) => {
             const Icon = plan.icon
@@ -131,7 +146,7 @@ export default function PricingPage() {
                 </ul>
 
                 <Link
-                  href="/register"
+                  href={plan.cta === "Contact Sales" ? "/contact-sales" : "/register"}
                   className={`w-full h-11 rounded-xl text-sm font-bold flex items-center justify-center transition-all ${
                     plan.highlight
                       ? "bg-white text-primary hover:bg-slate-50"

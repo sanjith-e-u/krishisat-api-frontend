@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: "Get started with the KrishiSat Satellite Intelligence API. Make your first NDVI call in under 5 minutes.",
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.krishisat.dev"
+
 const steps = [
   {
     step: "01",
@@ -29,7 +31,7 @@ ks_test_Xq9mR4bL...`,
     step: "03",
     title: "Register your first farm",
     description: "Submit a GeoJSON polygon defining your field boundary to receive a farm_id used in all subsequent calls.",
-    code: `curl -X POST https://api.krishisat.io/v1/farms \\
+    code: `curl -X POST ${API_URL}/v1/farms \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -50,7 +52,7 @@ ks_test_Xq9mR4bL...`,
     step: "04",
     title: "Call your first NDVI index",
     description: "Use the farm_id from Step 3 to fetch the latest vegetation health index.",
-    code: `curl -X POST https://api.krishisat.io/v1/vegetation/ndvi \\
+    code: `curl -X POST ${API_URL}/v1/vegetation/ndvi \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{

@@ -25,7 +25,7 @@ export default function Footer() {
             <ul className="flex flex-col gap-3.5 text-sm">
               <li>
                 <Link href="/marketplace" className="hover:text-white transition-colors">
-                  Marketplace
+                  API Catalog
                 </Link>
               </li>
               <li>
@@ -40,7 +40,7 @@ export default function Footer() {
               </li>
               <li>
                 <span className="inline-flex items-center gap-2 text-slate-500 cursor-not-allowed">
-                  Status <span className="text-[10px] text-slate-600 font-medium">(coming soon)</span>
+                  Status <span className="text-[10px] text-slate-605 font-medium">(coming soon)</span>
                 </span>
               </li>
             </ul>
@@ -68,9 +68,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <span className="text-slate-500 cursor-not-allowed">
-                  SDKs <span className="text-[10px] text-slate-600 font-medium">(coming soon)</span>
-                </span>
+                <Link href="/developers" className="hover:text-white transition-colors">
+                  SDKs
+                </Link>
               </li>
             </ul>
           </div>
@@ -133,8 +133,8 @@ export default function Footer() {
         <div className="mt-16 pt-8 border-t border-slate-800/80 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-sans">
           <div>© 2026 KrishiSat AI. All rights reserved.</div>
           <div className="flex gap-6">
-            <span className="hover:text-slate-400 cursor-pointer">Privacy Policy</span>
-            <span className="hover:text-slate-400 cursor-pointer">Terms of Service</span>
+            <Link href="/privacy" className="hover:text-slate-400 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-slate-400 transition-colors">Terms of Service</Link>
           </div>
         </div>
       </div>

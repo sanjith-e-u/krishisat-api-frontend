@@ -12,6 +12,7 @@ import {
   ArrowRight,
   Database,
   Cpu,
+  Sprout,
 } from "lucide-react";
 import Terminal from "@/components/terminal";
 import CodeBlock from "@/components/code-block";
@@ -40,9 +41,9 @@ export default function Home() {
 
               {/* H1 Headline */}
               <h1 className="font-sans font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-white leading-[1.1] mb-6">
-                Agricultural Intelligence{" "}
+                Agricultural Intelligence APIs{" "}
                 <br className="hidden sm:inline" />
-                <span className="text-[#06B6D4]">Infrastructure</span> for Developers
+                <span className="text-[#22C55E]">powered by Satellite & AI</span>
               </h1>
 
               {/* Subheadline */}
@@ -51,18 +52,24 @@ export default function Home() {
               </p>
 
               {/* CTA Buttons */}
-              <div className="flex flex-wrap gap-4 mb-14">
+              <div className="flex flex-wrap items-center gap-4 mb-14">
                 <Link
-                  href="/developers"
-                  className="bg-[#2563EB] hover:bg-[#1d4ed8] text-white px-6 py-3 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-2"
+                  href="/register"
+                  className="bg-[#22C55E] hover:bg-[#1cbd53] text-white px-6 py-3 rounded-lg text-sm font-bold transition-colors shadow-sm flex items-center gap-2"
                 >
-                  Start Building <ArrowRight className="w-4 h-4" />
+                  Get API Key <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
-                  href="/developers"
+                  href="/docs"
                   className="border border-slate-600 hover:border-slate-400 text-slate-300 hover:text-white px-6 py-3 rounded-lg text-sm font-medium transition-colors bg-transparent"
                 >
-                  View Documentation
+                  View Docs
+                </Link>
+                <Link
+                  href="/contact-sales"
+                  className="text-slate-450 hover:text-white text-sm font-medium transition-colors ml-2"
+                >
+                  Contact Sales →
                 </Link>
               </div>
 
@@ -118,6 +125,83 @@ export default function Home() {
               <Eye className="w-5 h-5 text-[#2563EB] mb-3" />
               <div className="text-2xl font-bold text-[#0F172A] tracking-tight">24/7</div>
               <div className="text-xs text-[#64748B] mt-1 font-mono uppercase tracking-wider">Monitoring</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 2.5: WHAT YOU GET */}
+      <section className="bg-slate-900 py-24 border-b border-slate-800 text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]" />
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <span className="text-xs font-bold tracking-widest text-[#22C55E] font-mono uppercase">
+              WHAT YOU GET
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mt-2 text-white">
+              Core Agricultural Telemetry APIs
+            </h2>
+            <p className="text-slate-400 text-sm mt-3">
+              KrishiSat delivers production-ready agricultural data interfaces through three core endpoints.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* NDVI API */}
+            <div className="bg-slate-950 border border-slate-800 rounded-2xl p-8 hover:border-slate-700 transition-all flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="w-10 h-10 rounded-xl bg-[#22C55E]/15 flex items-center justify-center text-[#22C55E]">
+                  <Sprout className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-bold">NDVI API (Crop Health)</h3>
+                <p className="text-slate-400 text-xs leading-relaxed">
+                  Retrieve Normalized Difference Vegetation Index (NDVI) values derived from Sentinel-2 bands to track temporal biomass changes, canopy chlorophyll absorption, and spatial crop vigor anomalies.
+                </p>
+              </div>
+              <div className="pt-6 border-t border-slate-900 mt-6 flex justify-between items-center">
+                <code className="text-[10px] font-mono text-slate-500">POST /v1/vegetation/ndvi</code>
+                <Link href="/docs#ndvi" className="text-xs text-[#22C55E] hover:underline inline-flex items-center gap-1">
+                  Docs <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Weather API */}
+            <div className="bg-slate-950 border border-slate-800 rounded-2xl p-8 hover:border-slate-700 transition-all flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center text-amber-500">
+                  <Wind className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-bold">Weather API (Meteorology)</h3>
+                <p className="text-slate-400 text-xs leading-relaxed">
+                  Query hyperlocal meteorological telemetry including precipitation accumulation, hourly temperature profiles, relative humidity, wind vectors, and growing degree days (GDD) mapped to farm centroids.
+                </p>
+              </div>
+              <div className="pt-6 border-t border-slate-900 mt-6 flex justify-between items-center">
+                <code className="text-[10px] font-mono text-slate-500">POST /v1/weather</code>
+                <Link href="/docs#weather" className="text-xs text-[#22C55E] hover:underline inline-flex items-center gap-1">
+                  Docs <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Farm Monitoring */}
+            <div className="bg-slate-950 border border-slate-800 rounded-2xl p-8 hover:border-slate-700 transition-all flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-400">
+                  <Map className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-bold">Farm Monitoring</h3>
+                <p className="text-slate-400 text-xs leading-relaxed">
+                  Register geographic farm coordinates using GeoJSON boundary polygons to initiate automated temporal Sentinel tiling lookups, spatial indexes calculations, and cloud coverage filtering.
+                </p>
+              </div>
+              <div className="pt-6 border-t border-slate-900 mt-6 flex justify-between items-center">
+                <code className="text-[10px] font-mono text-slate-500">POST /v1/farms</code>
+                <Link href="/docs#farm-registration" className="text-xs text-[#22C55E] hover:underline inline-flex items-center gap-1">
+                  Docs <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -327,32 +411,69 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION 5: API QUICK START */}
+      {/* SECTION 5: TRY API IN 10 SECONDS */}
       <section className="bg-[#F8FAFC] py-24 border-b border-[#E2E8F0]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left Column */}
-            <div>
+          <div className="flex flex-col lg:flex-row gap-12 items-center">
+            {/* Left Column (35%) */}
+            <div className="w-full lg:w-[35%] space-y-6">
               <span className="text-xs font-semibold tracking-widest text-[#2563EB] font-mono uppercase">
-                API
+                DEVELOPER EXPERIENCE
               </span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-[#0F172A] tracking-tight mt-2 mb-6">
-                One request. Every index.
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight mt-2">
+                Try API in 10 seconds
               </h2>
-              <p className="text-[#64748B] text-base sm:text-lg mb-8 leading-relaxed">
-                A single endpoint returns all agricultural intelligence indices for a registered farm polygon. Forget stitching together multiple third-party API providers or normalizing complex geospatial data shapes.
+              <p className="text-[#64748B] text-sm leading-relaxed">
+                Query our unified spatial analytics endpoints immediately. Enter your target coordinates as a GeoJSON polygon, select your agricultural indices, and retrieve real-time diagnostic indicators instantly.
               </p>
-              <Link
-                href="/developers"
-                className="text-[#2563EB] hover:text-[#1d4ed8] text-sm font-semibold inline-flex items-center gap-1.5 transition-colors"
-              >
-                Read the docs <ArrowRight className="w-4 h-4" />
-              </Link>
+              
+              <div className="space-y-3 pt-2">
+                {[
+                  "One token authentication for all data feeds",
+                  "Standardized, developer-grade JSON payloads",
+                  "Integrated edge caching for ultra-low latencies"
+                ].map((item) => (
+                  <div key={item} className="flex items-center gap-2.5 text-xs text-[#64748B]">
+                    <span className="text-[#22C55E] font-bold">✓</span>
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-4 pt-4">
+                <Link
+                  href="/register"
+                  className="bg-[#14532D] hover:bg-[#114524] text-white px-5 py-2.5 rounded-lg text-xs font-semibold transition-colors shadow-sm"
+                >
+                  Start Sandbox
+                </Link>
+                <Link
+                  href="/developers/reference"
+                  className="border border-slate-300 hover:border-slate-400 text-slate-700 px-5 py-2.5 rounded-lg text-xs font-semibold transition-colors bg-white"
+                >
+                  View API Reference
+                </Link>
+              </div>
             </div>
 
-            {/* Right Column */}
-            <div className="flex justify-center w-full">
-              <CodeBlock />
+            {/* Right Column (65%) */}
+            <div className="w-full lg:w-[65%] grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+              <div className="flex flex-col">
+                <div className="text-[10px] font-mono font-bold text-slate-450 uppercase tracking-widest mb-2">
+                  Request Payload (cURL)
+                </div>
+                <div className="flex-grow flex items-stretch">
+                  <CodeBlock />
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <div className="text-[10px] font-mono font-bold text-slate-450 uppercase tracking-widest mb-2">
+                  Response Body (JSON)
+                </div>
+                <div className="flex-grow flex items-stretch">
+                  <Terminal />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -544,7 +665,7 @@ export default function Home() {
                 </ul>
               </div>
               <Link
-                href="/pricing"
+                href="/contact-sales"
                 className="w-full text-center border border-slate-300 hover:border-slate-500 text-slate-700 font-medium py-2.5 rounded-lg text-sm transition-colors mt-auto"
               >
                 Contact Sales →
@@ -615,7 +736,7 @@ export default function Home() {
               Start Building →
             </Link>
             <Link
-              href="/pricing"
+              href="/contact-sales"
               className="border border-slate-700 hover:border-slate-500 text-slate-300 hover:text-white px-6 py-3 rounded-lg text-sm font-medium transition-colors bg-transparent"
             >
               Contact Sales

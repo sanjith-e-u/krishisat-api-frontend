@@ -9,10 +9,10 @@ import Logo from "@/components/brand/logo";
 
 const navLinks = [
   { name: "Home", href: "/" },
-  { name: "Marketplace", href: "/marketplace" },
+  { name: "APIs", href: "/marketplace" },
   { name: "Pricing", href: "/pricing" },
   { name: "Docs", href: "/docs" },
-  { name: "Trust", href: "/trust" },
+  { name: "Dashboard", href: "/dashboard" },
 ];
 
 export default function Nav() {

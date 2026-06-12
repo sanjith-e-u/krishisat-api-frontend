@@ -1,3 +1,5 @@
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.krishisat.dev";
+
 export interface DocSection {
   id: string;
   title: string;
@@ -29,9 +31,9 @@ export const docsSections: DocSection[] = [
       "All requests require a secure API Key transmitted over SSL. The production base URL is centralized as defined below:"
     ],
     code: {
-      curl: `curl -I https://api.krishisat.ai/health`,
-      python: `import requests\n\nresponse = requests.get("https://api.krishisat.ai/health")\nprint(response.status_code)`,
-      node: `const axios = require('axios');\n\naxios.get('https://api.krishisat.ai/health')\n  .then(res => console.log(res.status))\n  .catch(err => console.error(err));`
+      curl: `curl -I ${API_URL}/health`,
+      python: `import requests\n\nresponse = requests.get("${API_URL}/health")\nprint(response.status_code)`,
+      node: `const axios = require('axios');\n\naxios.get('${API_URL}/health')\n  .then(res => console.log(res.status))\n  .catch(err => console.error(err));`
     },
     response: `{\n  "status": "healthy",\n  "api_version": "v1.2.0",\n  "satellite_ingress": "active"\n}`
   },
@@ -46,9 +48,9 @@ export const docsSections: DocSection[] = [
       "Authentication headers should adhere to the following schema:"
     ],
     code: {
-      curl: `curl https://api.krishisat.ai/v1/farms \\\n  -H "Authorization: Bearer YOUR_API_KEY"`,
-      python: `import requests\n\nheaders = {\n    "Authorization": "Bearer YOUR_API_KEY"\n}\nresponse = requests.get("https://api.krishisat.ai/v1/farms", headers=headers)`,
-      node: `const fetch = require('node-fetch');\n\nfetch('https://api.krishisat.ai/v1/farms', {\n  headers: { 'Authorization': 'Bearer YOUR_API_KEY' }\n})\n.then(res => res.json())\n.then(json => console.log(json));`
+      curl: `curl ${API_URL}/v1/farms \\\n  -H "Authorization: Bearer YOUR_API_KEY"`,
+      python: `import requests\n\nheaders = {\n    "Authorization": "Bearer YOUR_API_KEY"\n}\nresponse = requests.get("${API_URL}/v1/farms", headers=headers)`,
+      node: `const fetch = require('node-fetch');\n\nfetch('${API_URL}/v1/farms', {\n  headers: { 'Authorization': 'Bearer YOUR_API_KEY' }\n})\n.then(res => res.json())\n.then(json => console.log(json));`
     },
     response: `{\n  "error": {\n    "code": "unauthorized",\n    "message": "Valid API key required in Authorization header."\n  }\n}`
   },
@@ -84,9 +86,9 @@ export const docsSections: DocSection[] = [
       "Look for the following headers in API responses to check remaining capacity:"
     ],
     code: {
-      curl: `curl -I https://api.krishisat.ai/v1/weather \\\n  -H "Authorization: Bearer ks_test_key"`,
-      python: `import requests\n\nres = requests.post("https://api.krishisat.ai/v1/weather", headers={"Authorization": "Bearer ks_test_key"})\nprint(res.headers.get("X-RateLimit-Remaining"))`,
-      node: `const axios = require('axios');\n\naxios.post('https://api.krishisat.ai/v1/weather', {}, {\n  headers: { 'Authorization': 'Bearer ks_test_key' }\n}).then(res => {\n  console.log(res.headers['x-ratelimit-remaining']);\n});`
+      curl: `curl -I ${API_URL}/v1/weather \\\n  -H "Authorization: Bearer ks_test_key"`,
+      python: `import requests\n\nres = requests.post("${API_URL}/v1/weather", headers={"Authorization": "Bearer ks_test_key"})\nprint(res.headers.get("X-RateLimit-Remaining"))`,
+      node: `const axios = require('axios');\n\naxios.post('${API_URL}/v1/weather', {}, {\n  headers: { 'Authorization': 'Bearer ks_test_key' }\n}).then(res => {\n  console.log(res.headers['x-ratelimit-remaining']);\n});`
     },
     response: `HTTP/2 200 OK\nContent-Type: application/json\nX-RateLimit-Limit: 100\nX-RateLimit-Remaining: 98\nX-RateLimit-Reset: 1776204000\nX-Credits-Remaining: 840`
   },
@@ -105,9 +107,9 @@ export const docsSections: DocSection[] = [
       "Save the returned \`farm_id\` reference. You will supply this ID in all subsequent index and weather API computations."
     ],
     code: {
-      curl: `curl -X POST https://api.krishisat.ai/v1/farms \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_name": "East Field",\n    "polygon": {\n      "type": "Polygon",\n      "coordinates": [[[77.56, 12.98], [77.57, 12.98], [77.57, 12.97], [77.56, 12.97], [77.56, 12.98]]]\n    }\n  }'`,
-      python: `import requests\n\npayload = {\n    "farm_name": "East Field",\n    "polygon": {\n        "type": "Polygon",\n        "coordinates": [[[77.56, 12.98], [77.57, 12.98], [77.57, 12.97], [77.56, 12.97], [77.56, 12.98]]]\n    }\n}\nres = requests.post(\n    "https://api.krishisat.ai/v1/farms",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json=payload\n)`,
-      node: `const fetch = require('node-fetch');\n\nfetch('https://api.krishisat.ai/v1/farms', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({\n    farm_name: 'East Field',\n    polygon: {\n      type: 'Polygon',\n      coordinates: [[[77.56, 12.98], [77.57, 12.98], [77.57, 12.97], [77.56, 12.97], [77.56, 12.98]]]\n    }\n  })\n}).then(res => res.json());`
+      curl: `curl -X POST ${API_URL}/v1/farms \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_name": "East Field",\n    "polygon": {\n      "type": "Polygon",\n      "coordinates": [[[77.56, 12.98], [77.57, 12.98], [77.57, 12.97], [77.56, 12.97], [77.56, 12.98]]]\n    }\n  }'`,
+      python: `import requests\n\npayload = {\n    "farm_name": "East Field",\n    "polygon": {\n        "type": "Polygon",\n        "coordinates": [[[77.56, 12.98], [77.57, 12.98], [77.57, 12.97], [77.56, 12.97], [77.56, 12.98]]]\n    }\n}\nres = requests.post(\n    "${API_URL}/v1/farms",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json=payload\n)`,
+      node: `const fetch = require('node-fetch');\n\nfetch('${API_URL}/v1/farms', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({\n    farm_name: 'East Field',\n    polygon: {\n      type: 'Polygon',\n      coordinates: [[[77.56, 12.98], [77.57, 12.98], [77.57, 12.97], [77.56, 12.97], [77.56, 12.98]]]\n    }\n  })\n}).then(res => res.json());`
     },
     response: `{\n  "farm_id": "farm_001",\n  "status": "registered",\n  "created_at": "2026-06-11T10:00:00Z"\n}`
   },
@@ -126,9 +128,9 @@ export const docsSections: DocSection[] = [
       "It estimates live green vegetation density and overall plant vigor. Values range from \`-1.0\` to \`1.0\`. Scores above \`0.6\` represent dense, healthy crops."
     ],
     code: {
-      curl: `curl -X POST https://api.krishisat.ai/v1/vegetation/ndvi \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_id": "farm_001",\n    "date": "2026-06-11"\n  }'`,
-      python: `import requests\n\nres = requests.post(\n    "https://api.krishisat.ai/v1/vegetation/ndvi",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json={"farm_id": "farm_001", "date": "2026-06-11"}\n)`,
-      node: `const fetch = require('node-fetch');\n\nfetch('https://api.krishisat.ai/v1/vegetation/ndvi', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ farm_id: 'farm_001', date: '2026-06-11' })\n}).then(res => res.json());`
+      curl: `curl -X POST ${API_URL}/v1/vegetation/ndvi \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_id": "farm_001",\n    "date": "2026-06-11"\n  }'`,
+      python: `import requests\n\nres = requests.post(\n    "${API_URL}/v1/vegetation/ndvi",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json={"farm_id": "farm_001", "date": "2026-06-11"}\n)`,
+      node: `const fetch = require('node-fetch');\n\nfetch('${API_URL}/v1/vegetation/ndvi', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ farm_id: 'farm_001', date: '2026-06-11' })\n}).then(res => res.json());`
     },
     response: `{\n  "farm_id": "farm_001",\n  "ndvi": 0.82,\n  "health": "Healthy",\n  "date": "2026-06-11"\n}`
   },
@@ -147,9 +149,9 @@ export const docsSections: DocSection[] = [
       "Because Red Edge wavelengths penetrate canopy layers deeper than Red bands, NDRE is ideal for monitoring thick crops or detecting early nitrogen deficiencies."
     ],
     code: {
-      curl: `curl -X POST https://api.krishisat.ai/v1/vegetation/ndre \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_id": "farm_001"\n  }'`,
-      python: `import requests\n\nres = requests.post(\n    "https://api.krishisat.ai/v1/vegetation/ndre",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json={"farm_id": "farm_001"}\n)`,
-      node: `const fetch = require('node-fetch');\n\nfetch('https://api.krishisat.ai/v1/vegetation/ndre', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ farm_id: 'farm_001' })\n}).then(res => res.json());`
+      curl: `curl -X POST ${API_URL}/v1/vegetation/ndre \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_id": "farm_001"\n  }'`,
+      python: `import requests\n\nres = requests.post(\n    "${API_URL}/v1/vegetation/ndre",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json={"farm_id": "farm_001"}\n)`,
+      node: `const fetch = require('node-fetch');\n\nfetch('${API_URL}/v1/vegetation/ndre', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ farm_id: 'farm_001' })\n}).then(res => res.json());`
     },
     response: `{\n  "farm_id": "farm_001",\n  "ndre": 0.58,\n  "chlorophyll_indication": "Optimum",\n  "date": "2026-06-11"\n}`
   },
@@ -168,9 +170,9 @@ export const docsSections: DocSection[] = [
       "It limits background soil color reflections, making it extremely reliable for young crops, sparse orchards, or vineyards."
     ],
     code: {
-      curl: `curl -X POST https://api.krishisat.ai/v1/vegetation/savi \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_id": "farm_001"\n  }'`,
-      python: `import requests\n\nres = requests.post(\n    "https://api.krishisat.ai/v1/vegetation/savi",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json={"farm_id": "farm_001"}\n)`,
-      node: `const fetch = require('node-fetch');\n\nfetch('https://api.krishisat.ai/v1/vegetation/savi', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ farm_id: 'farm_001' })\n}).then(res => res.json());`
+      curl: `curl -X POST ${API_URL}/v1/vegetation/savi \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_id": "farm_001"\n  }'`,
+      python: `import requests\n\nres = requests.post(\n    "${API_URL}/v1/vegetation/savi",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json={"farm_id": "farm_001"}\n)`,
+      node: `const fetch = require('node-fetch');\n\nfetch('${API_URL}/v1/vegetation/savi', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ farm_id: 'farm_001' })\n}).then(res => res.json());`
     },
     response: `{\n  "farm_id": "farm_001",\n  "savi": 0.61,\n  "soil_adjusted_index": 0.61,\n  "date": "2026-06-11"\n}`
   },
@@ -189,9 +191,9 @@ export const docsSections: DocSection[] = [
       "It offers an accurate representation of leaf nitrogen levels and photosynthetic potential, aiding precision fertilization programs."
     ],
     code: {
-      curl: `curl -X POST https://api.krishisat.ai/v1/vegetation/ci \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_id": "farm_001"\n  }'`,
-      python: `import requests\n\nres = requests.post(\n    "https://api.krishisat.ai/v1/vegetation/ci",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json={"farm_id": "farm_001"}\n)`,
-      node: `const fetch = require('node-fetch');\n\nfetch('https://api.krishisat.ai/v1/vegetation/ci', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ farm_id: 'farm_001' })\n}).then(res => res.json());`
+      curl: `curl -X POST ${API_URL}/v1/vegetation/ci \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_id": "farm_001"\n  }'`,
+      python: `import requests\n\nres = requests.post(\n    "${API_URL}/v1/vegetation/ci",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json={"farm_id": "farm_001"}\n)`,
+      node: `const fetch = require('node-fetch');\n\nfetch('${API_URL}/v1/vegetation/ci', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ farm_id: 'farm_001' })\n}).then(res => res.json());`
     },
     response: `{\n  "farm_id": "farm_001",\n  "chlorophyll_index": 3.45,\n  "nitrogen_estimate": "Adequate",\n  "date": "2026-06-11"\n}`
   },
@@ -210,9 +212,9 @@ export const docsSections: DocSection[] = [
       "It monitors plant canopy moisture saturation, aiding drought warnings and crop water stress profiling."
     ],
     code: {
-      curl: `curl -X POST https://api.krishisat.ai/v1/water/ndmi \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_id": "farm_001"\n  }'`,
-      python: `import requests\n\nres = requests.post(\n    "https://api.krishisat.ai/v1/water/ndmi",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json={"farm_id": "farm_001"}\n)`,
-      node: `const fetch = require('node-fetch');\n\nfetch('https://api.krishisat.ai/v1/water/ndmi', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ farm_id: 'farm_001' })\n}).then(res => res.json());`
+      curl: `curl -X POST ${API_URL}/v1/water/ndmi \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_id": "farm_001"\n  }'`,
+      python: `import requests\n\nres = requests.post(\n    "${API_URL}/v1/water/ndmi",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json={"farm_id": "farm_001"}\n)`,
+      node: `const fetch = require('node-fetch');\n\nfetch('${API_URL}/v1/water/ndmi', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ farm_id: 'farm_001' })\n}).then(res => res.json());`
     },
     response: `{\n  "farm_id": "farm_001",\n  "ndmi": 0.45,\n  "water_stress": "Low Stress",\n  "date": "2026-06-11"\n}`
   },
@@ -231,9 +233,9 @@ export const docsSections: DocSection[] = [
       "It is optimal for tracking irrigation progress, delineating flooded areas, and measuring surface pooling risks."
     ],
     code: {
-      curl: `curl -X POST https://api.krishisat.ai/v1/water/ndwi \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_id": "farm_001"\n  }'`,
-      python: `import requests\n\nres = requests.post(\n    "https://api.krishisat.ai/v1/water/ndwi",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json={"farm_id": "farm_001"}\n)`,
-      node: `const fetch = require('node-fetch');\n\nfetch('https://api.krishisat.ai/v1/water/ndwi', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ farm_id: 'farm_001' })\n}).then(res => res.json());`
+      curl: `curl -X POST ${API_URL}/v1/water/ndwi \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_id": "farm_001"\n  }'`,
+      python: `import requests\n\nres = requests.post(\n    "${API_URL}/v1/water/ndwi",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json={"farm_id": "farm_001"}\n)`,
+      node: `const fetch = require('node-fetch');\n\nfetch('${API_URL}/v1/water/ndwi', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ farm_id: 'farm_001' })\n}).then(res => res.json());`
     },
     response: `{\n  "farm_id": "farm_001",\n  "ndwi": 0.15,\n  "water_pooling_risk": "Negligible",\n  "date": "2026-06-11"\n}`
   },
@@ -252,9 +254,9 @@ export const docsSections: DocSection[] = [
       "Telemetry updates hourly, providing localized temperature, precipitation probability, relative humidity, wind speed, and computed growing degree days (GDD)."
     ],
     code: {
-      curl: `curl -X POST https://api.krishisat.ai/v1/weather \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_id": "farm_001"\n  }'`,
-      python: `import requests\n\nres = requests.post(\n    "https://api.krishisat.ai/v1/weather",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json={"farm_id": "farm_001"}\n)`,
-      node: `const fetch = require('node-fetch');\n\nfetch('https://api.krishisat.ai/v1/weather', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ farm_id: 'farm_001' })\n}).then(res => res.json());`
+      curl: `curl -X POST ${API_URL}/v1/weather \\\n  -H "Authorization: Bearer $KSAT_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "farm_id": "farm_001"\n  }'`,
+      python: `import requests\n\nres = requests.post(\n    "${API_URL}/v1/weather",\n    headers={"Authorization": f"Bearer {api_key}"},\n    json={"farm_id": "farm_001"}\n)`,
+      node: `const fetch = require('node-fetch');\n\nfetch('${API_URL}/v1/weather', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ farm_id: 'farm_001' })\n}).then(res => res.json());`
     },
     response: `{\n  "farm_id": "farm_001",\n  "temperature": 29,\n  "rainfall": 12,\n  "humidity": 74,\n  "wind_speed": 14,\n  "growing_degree_days": 8.4,\n  "updated_at": "2026-06-11T10:00:00Z"\n}`
   },
@@ -272,9 +274,9 @@ export const docsSections: DocSection[] = [
       "Error responses return a detailed diagnostic payload:"
     ],
     code: {
-      curl: `# Example request prompting a 404 response\ncurl https://api.krishisat.ai/v1/vegetation/ndvi \\\n  -H "Authorization: Bearer ks_test_key" \\\n  -d '{"farm_id":"farm_invalid"}'`,
-      python: `import requests\n\n# Simulated payload query triggering a rate throttle\nres = requests.post(\n    "https://api.krishisat.ai/v1/vegetation/ndvi",\n    headers={"Authorization": "Bearer ks_test_key"},\n    json={"farm_id": "farm_invalid"}\n)\nprint(res.status_code)\nprint(res.json())`,
-      node: `// Querying with an invalid token\nconst axios = require('axios');\n\naxios.post('https://api.krishisat.ai/v1/vegetation/ndvi', { farm_id: 'farm_invalid' }, {\n  headers: { 'Authorization': 'Bearer ks_invalid_token' }\n}).catch(err => {\n  console.log(err.response.status);\n  console.log(err.response.data);\n});`
+      curl: `# Example request prompting a 404 response\ncurl ${API_URL}/v1/vegetation/ndvi \\\n  -H "Authorization: Bearer ks_test_key" \\\n  -d '{"farm_id":"farm_invalid"}'`,
+      python: `import requests\n\n# Simulated payload query triggering a rate throttle\nres = requests.post(\n    "${API_URL}/v1/vegetation/ndvi",\n    headers={"Authorization": "Bearer ks_test_key"},\n    json={"farm_id": "farm_invalid"}\n)\nprint(res.status_code)\nprint(res.json())`,
+      node: `// Querying with an invalid token\nconst axios = require('axios');\n\naxios.post('${API_URL}/v1/vegetation/ndvi', { farm_id: 'farm_invalid' }, {\n  headers: { 'Authorization': 'Bearer ks_invalid_token' }\n}).catch(err => {\n  console.log(err.response.status);\n  console.log(err.response.data);\n});`
     },
     response: `{\n  "error": {\n    "code": "resource_not_found",\n    "message": "No farm registration matching farm_id 'farm_invalid' was found.",\n    "param": "farm_id"\n  }\n}`
   },
@@ -288,9 +290,9 @@ export const docsSections: DocSection[] = [
       "Each index endpoint includes a primary score variable (e.g. \`ndvi\`), a descriptive health classification string, and the timestamp representing when the satellite snapshot was captured."
     ],
     code: {
-      curl: `curl https://api.krishisat.ai/v1/vegetation/ndvi \\\n  -d '{"farm_id": "farm_001"}'`,
-      python: `# View standard index payload responses\nres = requests.post("https://api.krishisat.ai/v1/vegetation/ndvi", json={"farm_id": "farm_001"})\ndata = res.json()\nprint(f"Index: {data.get('ndvi')}, Status: {data.get('health')}")`,
-      node: `// Read telemetry keys dynamically\naxios.post('https://api.krishisat.ai/v1/vegetation/ndvi', { farm_id: 'farm_001' })\n  .then(res => {\n    const { ndvi, health, date } = res.data;\n    console.log(\`Score: \${ndvi}, Classification: \${health}\`);\n  });`
+      curl: `curl ${API_URL}/v1/vegetation/ndvi \\\n  -d '{"farm_id": "farm_001"}'`,
+      python: `# View standard index payload responses\nres = requests.post("${API_URL}/v1/vegetation/ndvi", json={"farm_id": "farm_001"})\ndata = res.json()\nprint(f"Index: {data.get('ndvi')}, Status: {data.get('health')}")`,
+      node: `// Read telemetry keys dynamically\naxios.post('${API_URL}/v1/vegetation/ndvi', { farm_id: 'farm_001' })\n  .then(res => {\n    const { ndvi, health, date } = res.data;\n    console.log(\`Score: \${ndvi}, Classification: \${health}\`);\n  });`
     },
     response: `{\n  "farm_id": "farm_001",\n  "ndvi": 0.82,\n  "health": "Healthy",\n  "date": "2026-06-11"\n}`
   },
@@ -302,13 +304,13 @@ export const docsSections: DocSection[] = [
     description: [
       "Need help integrating KrishiSat telemetry? Connect with our developer success team through the following channels:",
       "• Dashboard Help desk: Open a ticket directly inside the developer workspace.",
-      "• Email Support: support@krishisat.ai (SLA targets: 2 hours for production accounts, 1 business day for sandbox testers).",
+      "• Email Support: support@krishisat.dev (SLA targets: 2 hours for production accounts, 1 business day for sandbox testers).",
       "• SLA Status Dashboard: Keep track of incidents or service warnings on the active Status route."
     ],
     code: {
-      curl: `# Test API network latency to check connectivity\nping api.krishisat.ai`,
-      python: `# Simple diagnostics logging ping test\nimport urllib.request\ntry:\n    urllib.request.urlopen("https://api.krishisat.ai/health", timeout=5)\n    print("Connection: Successful")\nexcept Exception as e:\n    print(f"Connection Failed: {e}")`,
-      node: `// Check connectivity using ping hooks\nconst dns = require('dns');\n\ndns.lookup('api.krishisat.ai', (err, address, family) => {\n  if (err) console.error('Offline:', err);\n  else console.log('Resolved address:', address);\n});`
+      curl: `# Test API network latency to check connectivity\nping api.krishisat.dev`,
+      python: `# Simple diagnostics logging ping test\nimport urllib.request\ntry:\n    urllib.request.urlopen("${API_URL}/health", timeout=5)\n    print("Connection: Successful")\nexcept Exception as e:\n    print(f"Connection Failed: {e}")`,
+      node: `// Check connectivity using ping hooks\nconst dns = require('dns');\n\ndns.lookup('api.krishisat.dev', (err, address, family) => {\n  if (err) console.error('Offline:', err);\n  else console.log('Resolved address:', address);\n});`
     },
     response: `{\n  "support_status": "online",\n  "active_escalations": 0,\n  "average_ticket_response": "14m"\n}`
   }

@@ -123,7 +123,11 @@ export default function RegisterPage() {
               className="w-4 h-4 mt-0.5 text-[#14532D] bg-white border-slate-200 rounded focus:ring-[#14532D]"
             />
             <label htmlFor="terms" className="text-xs text-[#64748B] cursor-pointer leading-normal">
-              I agree to the KrishiSat Terms of Service and Privacy Policy, including automatic credits quota management.
+              I agree to the KrishiSat{" "}
+              <Link href="/terms" className="text-primary hover:underline font-semibold">Terms of Service</Link>{" "}
+              and{" "}
+              <Link href="/privacy" className="text-primary hover:underline font-semibold">Privacy Policy</Link>,{" "}
+              including automatic credits quota management.
             </label>
           </div>
 

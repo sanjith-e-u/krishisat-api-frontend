@@ -8,7 +8,11 @@ import {
   Activity,
   Zap,
   Database,
-  ArrowRight
+  ArrowRight,
+  Eye,
+  EyeOff,
+  Check,
+  Copy
 } from "lucide-react"
 
 // Reusable Metric Card component
@@ -67,6 +71,33 @@ function SectionHeader({ title, subtitle, action }: { title: string; subtitle?: 
 export default function DashboardOverview() {
   const [hoveredPoint, setHoveredPoint] = useState<{ x: number; y: number; label: string; value: number } | null>(null)
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
+  const [apiKey, setApiKey] = useState("ks_test_9jF2k8L1m9P4w0XqZ")
+  const [revealKey, setRevealKey] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg)
+    setTimeout(() => setToastMessage(null), 3050)
+  }
+
+  const handleCopyKey = () => {
+    navigator.clipboard.writeText(apiKey)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+    showToast("API Key copied to clipboard!")
+  }
+
+  const handleRegenerateKey = () => {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+    let randomString = ""
+    for (let i = 0; i < 17; i++) {
+      randomString += characters.charAt(Math.floor(Math.random() * characters.length))
+    }
+    const newKey = "ks_test_" + randomString
+    setApiKey(newKey)
+    showToast("API Key regenerated successfully!")
+  }
 
   // Chart Mock Data: 30 Days of API Requests
   const chartData = [
@@ -100,7 +131,15 @@ export default function DashboardOverview() {
   const areaPoints = `${getX(0)},${height - padding} ${points} ${getX(maxX)},${height - padding}`
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 relative">
+      
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 border border-slate-800 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2.5">
+          <div className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />
+          <span className="text-xs font-semibold">{toastMessage}</span>
+        </div>
+      )}
         
         {/* Title */}
         <div>
@@ -244,59 +283,109 @@ export default function DashboardOverview() {
             </div>
           </div>
 
-          {/* Recent Activity Card - Right Column */}
-          <div className="xl:col-span-4 bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex flex-col justify-between">
-            <div>
-              <SectionHeader title="Recent Activity" subtitle="Outbound developer request logs" />
-              
-              <ul className="space-y-4">
-                <li className="flex justify-between items-start py-1 border-b border-slate-50 last:border-b-0">
-                  <div>
-                    <h4 className="text-xs font-bold text-slate-800">NDVI API Called</h4>
-                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">POST /v1/vegetation/ndvi</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs font-semibold text-[#14532D]">2 credits</span>
-                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">Success 200</p>
-                  </div>
-                </li>
-                <li className="flex justify-between items-start py-1 border-b border-slate-50 last:border-b-0">
-                  <div>
-                    <h4 className="text-xs font-bold text-slate-800">Weather API Called</h4>
-                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">POST /v1/weather</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs font-semibold text-[#14532D]">1 credit</span>
-                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">Success 200</p>
-                  </div>
-                </li>
-                <li className="flex justify-between items-start py-1 border-b border-slate-50 last:border-b-0">
-                  <div>
-                    <h4 className="text-xs font-bold text-slate-800">NDRE API Called</h4>
-                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">POST /v1/vegetation/ndre</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs font-semibold text-[#14532D]">2 credits</span>
-                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">Success 200</p>
-                  </div>
-                </li>
-                <li className="flex justify-between items-start py-1">
-                  <div>
-                    <h4 className="text-xs font-bold text-slate-800">Farm Registration</h4>
-                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">POST /v1/farms</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs font-semibold text-[#14532D]">1 credit</span>
-                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">Success 201</p>
-                  </div>
-                </li>
-              </ul>
+          {/* Right Column - Stacked API Key + Recent Activity */}
+          <div className="xl:col-span-4 flex flex-col gap-6">
+            {/* API Key Card */}
+            <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex flex-col gap-4">
+              <SectionHeader
+                title="Primary API Key"
+                subtitle="Sandbox developer credentials"
+              />
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5 flex items-center justify-between font-mono text-xs text-slate-650">
+                <span className="truncate max-w-[170px] select-all">
+                  {revealKey ? apiKey : `${apiKey.substring(0, 8)}••••••••••••••••`}
+                </span>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => setRevealKey(!revealKey)}
+                    className="p-1 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none"
+                    title={revealKey ? "Hide API key" : "Show API key"}
+                  >
+                    {revealKey ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  </button>
+                  <button
+                    onClick={handleCopyKey}
+                    className="p-1 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none"
+                    title="Copy API key"
+                  >
+                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center text-xs pt-1">
+                <button
+                  onClick={handleRegenerateKey}
+                  className="text-primary hover:text-[#114524] font-semibold transition-colors focus:outline-none"
+                >
+                  Regenerate Key
+                </button>
+                <Link
+                  href="/dashboard/api-keys"
+                  className="text-slate-400 hover:text-slate-650 font-medium transition-colors"
+                >
+                  Manage Keys →
+                </Link>
+              </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-100 mt-6">
-              <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-1 rounded inline-block select-none animate-pulse">
-                ● Connected (mock)
-              </span>
+            {/* Recent Activity Card */}
+            <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex flex-col justify-between flex-grow">
+              <div>
+                <SectionHeader title="Recent Activity" subtitle="Outbound developer request logs" />
+                
+                <ul className="space-y-4">
+                  <li className="flex justify-between items-start py-1 border-b border-slate-50 last:border-b-0">
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-800">NDVI API Called</h4>
+                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">POST /v1/vegetation/ndvi</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs font-semibold text-[#14532D]">2 credits</span>
+                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">Success 200</p>
+                    </div>
+                  </li>
+                  <li className="flex justify-between items-start py-1 border-b border-slate-50 last:border-b-0">
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-800">Weather API Called</h4>
+                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">POST /v1/weather</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs font-semibold text-[#14532D]">1 credit</span>
+                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">Success 200</p>
+                    </div>
+                  </li>
+                  <li className="flex justify-between items-start py-1 border-b border-slate-50 last:border-b-0">
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-800">NDRE API Called</h4>
+                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">POST /v1/vegetation/ndre</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs font-semibold text-[#14532D]">2 credits</span>
+                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">Success 200</p>
+                    </div>
+                  </li>
+                  <li className="flex justify-between items-start py-1">
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-800">Farm Registration</h4>
+                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">POST /v1/farms</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs font-semibold text-[#14532D]">1 credit</span>
+                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">Success 201</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 mt-6 flex justify-between items-center">
+                <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-1 rounded inline-block select-none animate-pulse">
+                  ● Connected (mock)
+                </span>
+                <span className="text-[10px] text-slate-405 font-mono">
+                  region: ap-south-1
+                </span>
+              </div>
             </div>
           </div>
 

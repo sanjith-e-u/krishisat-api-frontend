@@ -13,7 +13,7 @@ export default function DashboardSettings() {
   // Profile Form States
   const [profile, setProfile] = useState({
     name: "Dev Agronomist",
-    email: "dev@krishisat.org",
+    email: "dev@krishisat.dev",
     role: "Senior Systems Engineer"
   })
 
@@ -29,7 +29,7 @@ export default function DashboardSettings() {
   const [apiConfig, setApiConfig] = useState({
     cacheEnabled: true,
     cacheTtl: "60",
-    webhookUrl: "https://api.krishisat.org/v1/telemetry-hook",
+    webhookUrl: "https://api.krishisat.dev/v1/telemetry-hook",
     verboseLogging: false
   })
 
