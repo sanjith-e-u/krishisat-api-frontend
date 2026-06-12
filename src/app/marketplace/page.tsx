@@ -125,39 +125,61 @@ export default function MarketplacePage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {category.apis.map((api) => (
-                  <Link
-                    key={api.path}
-                    href="/developers/reference"
-                    className="group p-5 border border-slate-200 rounded-xl hover:border-primary/30 hover:shadow-sm transition-all bg-white flex flex-col justify-between"
-                  >
-                    <div>
-                      <div className="flex justify-between items-start mb-3">
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${statusColors[api.status]}`}>
-                          {api.status}
-                        </span>
-                        <span className="text-[10px] font-bold text-slate-400 font-mono">
-                          {api.credits} cr (~${(api.credits * 0.005).toFixed(3)}) / call
-                        </span>
-                      </div>
-                      <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-primary transition-colors">{api.name}</h3>
-                      <p className="text-xs text-slate-500 mt-1 leading-relaxed">{api.desc}</p>
-                      
-                      {/* Use Case */}
-                      {api.useCase && (
-                        <div className="mt-3.5 bg-slate-50 rounded-lg p-2.5 border border-slate-100">
-                          <span className="text-[9px] font-bold uppercase text-slate-400 block tracking-wider">Primary Use Case</span>
-                          <span className="text-[11px] text-slate-605 mt-0.5 block font-medium leading-relaxed">{api.useCase}</span>
+                {category.apis.map((api) => {
+                  const isComingSoon = api.status === "Coming Soon";
+                  const href = `/developers/reference#${api.path.replace(/\//g, "-").replace(/^-/, "")}`;
+
+                  const cardContent = (
+                    <>
+                      <div>
+                        <div className="flex justify-between items-start mb-3">
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${statusColors[api.status]}`}>
+                            {api.status}
+                          </span>
+                          <span className="text-[10px] font-bold text-slate-400 font-mono">
+                            {api.credits} cr (~${(api.credits * 0.005).toFixed(3)}) / call
+                          </span>
                         </div>
-                      )}
+                        <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-primary transition-colors">
+                          {api.name}
+                        </h3>
+                        <p className="text-xs text-slate-500 mt-1 leading-relaxed">{api.desc}</p>
+
+                        {/* Use Case */}
+                        {api.useCase && (
+                          <div className="mt-3.5 bg-slate-50 rounded-lg p-2.5 border border-slate-100">
+                            <span className="text-[9px] font-bold uppercase text-slate-400 block tracking-wider">Primary Use Case</span>
+                            <span className="text-[11px] text-slate-605 mt-0.5 block font-medium leading-relaxed">{api.useCase}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="mt-5 pt-3 border-t border-slate-100 flex justify-between items-center">
+                        <code className="text-[10px] font-mono text-slate-500">{api.path}</code>
+                        {!isComingSoon && (
+                          <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-primary transition-colors" />
+                        )}
+                      </div>
+                    </>
+                  );
+
+                  return isComingSoon ? (
+                    <div
+                      key={api.path}
+                      className="p-5 border border-slate-200 rounded-xl bg-slate-50 opacity-60 select-none cursor-not-allowed flex flex-col justify-between"
+                    >
+                      {cardContent}
                     </div>
-                    
-                    <div className="mt-5 pt-3 border-t border-slate-100 flex justify-between items-center">
-                      <code className="text-[10px] font-mono text-slate-500">{api.path}</code>
-                      <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-primary transition-colors animate-in fade-in" />
-                    </div>
-                  </Link>
-                ))}
+                  ) : (
+                    <Link
+                      key={api.path}
+                      href={href}
+                      className="group p-5 border border-slate-200 rounded-xl hover:border-primary/30 hover:shadow-sm transition-all bg-white flex flex-col justify-between"
+                    >
+                      {cardContent}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           )

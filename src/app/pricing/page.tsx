@@ -13,9 +13,10 @@ const plans = [
     price: "$0",
     period: "/ month",
     description: "For testing, prototyping, and early sandbox agritech developments.",
-    credits: "1,000",
+    credits: "1,000 API calls",
     features: [
-      "1,000 monthly API credits",
+      "1,000 monthly API calls",
+      "No credit card required",
       "Core vegetation indices (NDVI, NDRE)",
       "Standard response latency",
       "1 Sandbox API key",
@@ -27,21 +28,21 @@ const plans = [
     icon: Code,
   },
   {
-    name: "Pro",
-    price: "$49",
-    period: "/ month",
+    name: "Pay-as-you-go",
+    price: "$0.004",
+    period: "/ API call",
     description: "For production-ready agricultural platforms and monitoring applications.",
-    credits: "50,000",
+    credits: "Flexible",
     features: [
-      "50,000 monthly API credits",
-      "Full index suite (NDVI, NDRE, NDWI, NDMI, SAVI, CI)",
-      "Prioritized satellite ingress queues",
-      "Weather telemetry & GDD APIs",
-      "5 active Production API keys",
-      "Priority email support (4hr SLA)",
+      "$0.004 per API call after free tier",
+      "Unlimited farms",
+      "Full API access",
+      "No monthly commitments",
+      "Email support + SLA",
+      "Usage analytics",
       "99.9% API uptime guarantee"
     ],
-    cta: "Start Pro Plan",
+    cta: "Start Building",
     highlight: true,
     icon: Zap,
   },
@@ -50,11 +51,11 @@ const plans = [
     price: "Custom",
     period: "contact sales",
     description: "For enterprise agritechs, regional cooperatives, and government bodies.",
-    credits: "Unlimited",
+    credits: "Custom",
     features: [
-      "Custom monthly API credit volumes",
-      "Dedicated Sentinel ingress pipelines",
-      "Sub-150ms calculation response SLA",
+      "Custom volume pricing",
+      "Dedicated SLA",
+      "VPC deployment option",
       "Dedicated solutions architect",
       "Custom data retention periods",
       "On-premise deployment options",
@@ -67,11 +68,10 @@ const plans = [
 ]
 
 const faq = [
-  { q: "What is an API credit?", a: "Each API call costs credits depending on the complexity of the endpoint. NDVI/NDRE/NDWI/NDMI/SAVI/CI each cost 2 credits. Weather telemetry and Farm Registration cost 1 credit per call." },
-  { q: "Do unused credits roll over?", a: "Credits reset monthly. Unused credits do not roll over. Enterprise plans can negotiate custom rollover terms with our team." },
-  { q: "Can I upgrade or downgrade anytime?", a: "Yes. You can switch plans at any time from your dashboard billing settings. Changes take effect immediately on the next billing cycle." },
-  { q: "How does Pay-As-You-Go overage work?", a: "If you consume all included credits on the Pro plan, we don't block your API keys. Additional queries are automatically billed at $0.005 per credit on your monthly invoice." },
-  { q: "What payment methods are accepted?", a: "We accept all major credit cards, UPI, corporate bank wires, and can issue automated purchase order invoices for Enterprise clients." }
+  { q: "Do you offer a free tier?", a: "Yes. Our Free tier includes 1,000 API calls per month with no credit card required. Sign up at /register to get started immediately." },
+  { q: "How does the Pay-As-You-Go pricing work?", a: "Your first 1,000 API calls per month are free. Additional requests are billed at a flat rate of $0.004 per API call. You only pay for the telemetry queries your systems consume." },
+  { q: "Are there any setup fees or monthly commitments?", a: "No. There are no setup fees, monthly minimums, or long-term contracts. You can start and stop using the API at any time." },
+  { q: "What payment methods are accepted?", a: "We accept all major credit cards, corporate bank wires, and can issue automated purchase order invoices for Enterprise clients." }
 ]
 
 export default function PricingPage() {
@@ -90,13 +90,13 @@ export default function PricingPage() {
       <section className="max-w-6xl mx-auto px-6 pt-12">
         <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
           <div className="space-y-1 text-center md:text-left">
-            <h3 className="text-sm font-extrabold text-slate-900">💡 Pay-As-You-Go Credit System</h3>
-            <p className="text-xs text-slate-500 leading-relaxed max-w-2xl">
-              Each API call consumes credits depending on the complexity of the sensor calculations (e.g. 1 credit for weather, 2 credits for NDVI). If you exceed your plan&apos;s monthly included credits, additional requests are automatically billed at a flat rate of <strong className="text-slate-800 font-bold">$0.005 per credit</strong>. No service interruptions, no overage shocks.
+            <h3 className="text-sm font-extrabold text-slate-900">💡 Pay-As-You-Go System</h3>
+            <p className="text-xs text-slate-505 leading-relaxed max-w-2xl">
+              KrishiSat uses a simple usage-based model. Your first 1,000 API calls each month are completely free. Subsequent requests are billed at a flat rate of <strong className="text-slate-800 font-bold">$0.004 per API call</strong>. No monthly fees, no overage shocks, and no service interruptions.
             </p>
           </div>
           <Link href="/developers/reference" className="text-xs font-bold text-primary bg-primary/8 px-4 py-2.5 rounded-xl hover:bg-primary/10 transition-colors shrink-0">
-            View API Credit Spec
+            View API Reference
           </Link>
         </div>
       </section>
@@ -133,7 +133,7 @@ export default function PricingPage() {
 
                 <div className="mt-6 mb-8">
                   <span className={`text-4xl font-black ${plan.highlight ? "text-white" : "text-slate-900"}`}>{plan.price}</span>
-                  <span className={`text-xs ml-1 ${plan.highlight ? "text-white/60" : "text-slate-400"}`}>{plan.period}</span>
+                  <span className={`text-xs ml-1 ${plan.highlight ? "text-white/60" : "text-slate-405"}`}>{plan.period}</span>
                 </div>
 
                 <ul className="space-y-3 flex-1 mb-8">
@@ -168,13 +168,13 @@ export default function PricingPage() {
           {faq.map((item) => (
             <div key={item.q} className="border border-slate-200 rounded-xl p-6">
               <h3 className="text-sm font-bold text-slate-900">{item.q}</h3>
-              <p className="text-sm text-slate-500 mt-2 leading-relaxed">{item.a}</p>
+              <p className="text-sm text-slate-505 mt-2 leading-relaxed">{item.a}</p>
             </div>
           ))}
         </div>
 
         <div className="mt-12 text-center">
-          <p className="text-sm text-slate-500">Have more questions?</p>
+          <p className="text-sm text-slate-505">Have more questions?</p>
           <Link href="/trust" className="text-sm font-semibold text-primary hover:underline mt-1 inline-block">View our security and trust documentation →</Link>
         </div>
       </section>

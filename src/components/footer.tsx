@@ -106,24 +106,24 @@ export default function Footer() {
             </h4>
             <ul className="flex flex-col gap-3.5 text-sm">
               <li>
-                <span title="Coming soon" className="hover:text-white transition-colors cursor-pointer">
+                <Link href="/about" className="hover:text-white transition-colors">
                   About
-                </span>
+                </Link>
               </li>
               <li>
-                <span title="Coming soon" className="hover:text-white transition-colors cursor-pointer">
+                <Link href="/blog" className="hover:text-white transition-colors">
                   Blog
-                </span>
+                </Link>
               </li>
               <li>
-                <span title="Coming soon" className="hover:text-white transition-colors cursor-pointer">
+                <Link href="/careers" className="hover:text-white transition-colors">
                   Careers
-                </span>
+                </Link>
               </li>
               <li>
-                <span title="Coming soon" className="hover:text-white transition-colors cursor-pointer">
+                <Link href="/contact" className="hover:text-white transition-colors">
                   Contact
-                </span>
+                </Link>
               </li>
             </ul>
           </div>

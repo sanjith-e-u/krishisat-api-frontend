@@ -21,7 +21,7 @@ interface SidebarProps {
 
 const menuItems = [
   { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
-  { name: "APIs", href: "/dashboard/apis", icon: Code },
+  { name: "APIs", href: "/marketplace", icon: Code },
   { name: "API Keys", href: "/dashboard/api-keys", icon: Key },
   { name: "Usage", href: "/dashboard/usage", icon: BarChart3 },
   { name: "Billing", href: "/dashboard/billing", icon: CreditCard },

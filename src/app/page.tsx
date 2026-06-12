@@ -54,16 +54,16 @@ export default function Home() {
               {/* CTA Buttons */}
               <div className="flex flex-wrap items-center gap-4 mb-14">
                 <Link
-                  href="/register"
+                  href="/developers/quickstart"
                   className="bg-[#22C55E] hover:bg-[#1cbd53] text-white px-6 py-3 rounded-lg text-sm font-bold transition-colors shadow-sm flex items-center gap-2"
                 >
-                  Get API Key <ArrowRight className="w-4 h-4" />
+                  Start Building <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
                   href="/docs"
                   className="border border-slate-600 hover:border-slate-400 text-slate-300 hover:text-white px-6 py-3 rounded-lg text-sm font-medium transition-colors bg-transparent"
                 >
-                  View Docs
+                  View Documentation
                 </Link>
                 <Link
                   href="/contact-sales"
@@ -572,22 +572,25 @@ export default function Home() {
 
           {/* Pricing Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch mb-12">
-            {/* Sandbox */}
+            {/* Sandbox / Free */}
             <div className="bg-white border border-[#E2E8F0] rounded-lg p-8 flex flex-col justify-between custom-shadow relative">
               <div>
-                <h3 className="text-lg font-bold text-[#0F172A] mb-1 font-mono uppercase tracking-wide">Sandbox</h3>
+                <h3 className="text-lg font-bold text-[#0F172A] mb-1 font-mono uppercase tracking-wide">Free</h3>
                 <div className="flex items-baseline gap-1 my-6 pb-6 border-b border-[#E2E8F0]">
                   <span className="text-4xl font-extrabold text-[#0F172A] tracking-tight">Free</span>
                 </div>
                 <ul className="flex flex-col gap-4 text-sm text-slate-600 mb-8">
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600">✓</span> 5 registered farms
+                    <span className="text-emerald-600">✓</span> 1,000 API calls / month
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-600">✓</span> No credit card required
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-emerald-600">✓</span> Core vegetation indices
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600">✓</span> 1,000 API calls / month
+                    <span className="text-emerald-600">✓</span> 5 registered farms
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-emerald-600">✓</span> Community support
@@ -595,33 +598,33 @@ export default function Home() {
                 </ul>
               </div>
               <Link
-                href="/pricing"
+                href="/register"
                 className="w-full text-center border border-slate-300 hover:border-slate-500 text-slate-700 font-medium py-2.5 rounded-lg text-sm transition-colors mt-auto"
               >
                 Start for Free →
               </Link>
             </div>
 
-            {/* Pro */}
+            {/* Pay-as-you-go */}
             <div className="bg-white border-2 border-[#2563EB] rounded-lg p-8 flex flex-col justify-between custom-shadow relative">
               <span className="bg-[#2563EB] text-white text-[10px] uppercase font-mono font-semibold px-2 py-0.5 rounded absolute top-4 right-4">
                 Most Popular
               </span>
               <div>
-                <h3 className="text-lg font-bold text-[#0F172A] mb-1 font-mono uppercase tracking-wide">Pro</h3>
+                <h3 className="text-lg font-bold text-[#0F172A] mb-1 font-mono uppercase tracking-wide">Pay-as-you-go</h3>
                 <div className="flex items-baseline gap-1 my-6 pb-6 border-b border-[#E2E8F0]">
                   <span className="text-4xl font-extrabold text-[#0F172A] tracking-tight">$0.004</span>
-                  <span className="text-slate-500 font-mono text-sm">/ credit</span>
+                  <span className="text-slate-500 font-mono text-sm">/ API call</span>
                 </div>
                 <ul className="flex flex-col gap-4 text-sm text-slate-600 mb-8">
+                  <li className="flex items-center gap-2">
+                    <span className="text-[#2563EB] font-semibold">✓</span> $0.004 per call after free tier
+                  </li>
                   <li className="flex items-center gap-2">
                     <span className="text-[#2563EB] font-semibold">✓</span> Unlimited farms
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-[#2563EB] font-semibold">✓</span> Full API access
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="text-[#2563EB] font-semibold">✓</span> Pooled credit model
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-[#2563EB] font-semibold">✓</span> Email support + SLA
@@ -632,7 +635,7 @@ export default function Home() {
                 </ul>
               </div>
               <Link
-                href="/pricing"
+                href="/register"
                 className="w-full text-center bg-[#2563EB] hover:bg-[#1d4ed8] text-white font-medium py-2.5 rounded-lg text-sm transition-colors mt-auto shadow-sm"
               >
                 Start Building →
@@ -648,7 +651,7 @@ export default function Home() {
                 </div>
                 <ul className="flex flex-col gap-4 text-sm text-slate-600 mb-8">
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600">✓</span> Volume pricing
+                    <span className="text-emerald-600">✓</span> Custom volume pricing
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-emerald-600">✓</span> Dedicated SLA
@@ -730,7 +733,7 @@ export default function Home() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              href="/developers"
+              href="/developers/quickstart"
               className="bg-[#2563EB] hover:bg-[#1d4ed8] text-white px-6 py-3 rounded-lg text-sm font-medium transition-colors shadow-sm"
             >
               Start Building →

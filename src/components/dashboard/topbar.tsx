@@ -147,7 +147,10 @@ export default function DashboardTopbar({ onMenuToggle }: TopbarProps) {
               <div className="border-t border-slate-100 my-1" />
               <Link
                 href="/login"
-                onClick={() => setProfileOpen(false)}
+                onClick={() => {
+                  setProfileOpen(false)
+                  document.cookie = "auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+                }}
                 className="w-full px-3 py-2 rounded-lg text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center gap-2.5"
               >
                 <LogOut className="w-3.5 h-3.5 text-rose-500" />

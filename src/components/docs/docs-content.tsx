@@ -69,9 +69,11 @@ export default function DocsContent({
           {/* Descriptive texts */}
           <div className="space-y-4 mb-8">
             {section.description.map((para, idx) => (
-              <p key={idx} className="text-slate-700 text-base leading-[1.8] max-w-4xl">
-                {para}
-              </p>
+              <p 
+                key={idx} 
+                className="text-slate-700 text-base leading-[1.8] max-w-4xl"
+                dangerouslySetInnerHTML={{ __html: para }}
+              />
             ))}
           </div>
 

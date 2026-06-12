@@ -37,7 +37,7 @@ const navGroups = [
       { id: "ndre",              label: "NDRE" },
       { id: "savi",              label: "SAVI" },
       { id: "ndwi",              label: "NDWI" },
-      { id: "ci",                label: "CI" },
+      { id: "ci",                label: "CI Index" },
       { id: "weather",           label: "Weather" },
     ],
   },
@@ -791,7 +791,7 @@ export default function DocsPage() {
                     Quickstart <ArrowRight className="w-4 h-4" />
                   </Link>
                   <Link
-                    href="/developers"
+                    href="/register"
                     className="border border-slate-200 hover:border-[#14532D] text-slate-850 hover:text-[#14532D] px-6 py-3 rounded-lg text-sm font-semibold transition-all bg-transparent shadow-sm hover:bg-slate-50"
                   >
                     Get API Key
@@ -941,7 +941,7 @@ export default function DocsPage() {
                   <div className="flex-1 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
                     <h4 className="text-sm font-bold text-[#0F172A] mb-1 font-mono uppercase tracking-wide">Production</h4>
                     <p className="text-xs text-[#64748B] leading-relaxed mb-3">
-                      Pay-as-you-go credits model. Unlimited farms. 100,000 calls per day. Rate limited to 600 requests per minute.
+                      Pay-as-you-go model ($0.004 per call after free tier). Unlimited farms. 100,000 calls per day. Rate limited to 600 requests per minute.
                     </p>
                     <div className="text-[10px] font-mono font-semibold text-[#22C55E] bg-[#22C55E]/10 border border-[#22C55E]/20 px-1.5 py-0.5 rounded inline-block">
                       ks_live_
@@ -949,7 +949,7 @@ export default function DocsPage() {
                   </div>
                 </div>
 
-                <Link href="/developers" className="text-[#14532D] hover:text-[#114524] text-sm font-semibold inline-flex items-center gap-1.5 transition-colors">
+                <Link href="/register" className="text-[#14532D] hover:text-[#114524] text-sm font-semibold inline-flex items-center gap-1.5 transition-colors">
                   Get your API key <ArrowRight className="w-4 h-4" />
                 </Link>
 
@@ -1800,9 +1800,14 @@ export default function DocsPage() {
                         Found an error or missing information in the docs? Open an issue on GitHub.
                       </p>
                     </div>
-                    <span className="text-xs font-semibold text-[#14532D] hover:text-[#114524] inline-flex items-center gap-1 transition-colors cursor-pointer select-none">
+                    <a
+                      href="https://github.com/sanjith-e-u/krishisat-api-frontend/issues"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-semibold text-[#14532D] hover:text-[#114524] inline-flex items-center gap-1 transition-colors select-none"
+                    >
                       Open an issue →
-                    </span>
+                    </a>
                   </div>
                   {/* Card 2 */}
                   <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col justify-between">

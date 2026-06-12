@@ -63,6 +63,27 @@ export default function UsageAnalytics() {
 
   const activeData = timeRange === "30d" ? data30d : data7d
 
+  // CSV Exporter
+  const handleExportCSV = () => {
+    const headers = ["Date", "Requests", "Latency (ms)"];
+    const rows = activeData.requests.map((r) => [r.date, r.value, r.latency]);
+    
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((e) => e.join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `krishisat-usage-${timeRange}-${new Date().toISOString().split("T")[0]}.csv`);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   // Chart Rendering calculations
   const width = 600
   const height = 180
@@ -141,36 +162,46 @@ export default function UsageAnalytics() {
     <div className="space-y-8">
         
         {/* Header Section */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6 select-none">
           <div>
             <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Usage Analytics</h1>
             <p className="text-sm text-slate-500 mt-1">Detailed logging and consumption metrics for your API applications.</p>
           </div>
 
-          {/* Timeframe selector */}
-          <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200/60 self-start sm:self-auto">
+          <div className="flex items-center gap-3 self-start sm:self-auto">
+            {/* Export CSV Button */}
             <button
-              onClick={() => setTimeRange("7d")}
-              className={cn(
-                "px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all",
-                timeRange === "7d"
-                  ? "bg-white text-slate-900 shadow-sm"
-                  : "text-slate-500 hover:text-slate-800"
-              )}
+              onClick={handleExportCSV}
+              className="h-9 border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 px-3.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-colors cursor-pointer"
             >
-              7 Days
+              Export CSV
             </button>
-            <button
-              onClick={() => setTimeRange("30d")}
-              className={cn(
-                "px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all",
-                timeRange === "30d"
-                  ? "bg-white text-slate-900 shadow-sm"
-                  : "text-slate-500 hover:text-slate-800"
-              )}
-            >
-              30 Days
-            </button>
+
+            {/* Timeframe selector */}
+            <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200/60">
+              <button
+                onClick={() => setTimeRange("7d")}
+                className={cn(
+                  "px-3 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer",
+                  timeRange === "7d"
+                    ? "bg-white text-slate-900 shadow-sm"
+                    : "text-slate-500 hover:text-slate-800"
+                )}
+              >
+                7 Days
+              </button>
+              <button
+                onClick={() => setTimeRange("30d")}
+                className={cn(
+                  "px-3 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer",
+                  timeRange === "30d"
+                    ? "bg-white text-slate-900 shadow-sm"
+                    : "text-slate-500 hover:text-slate-800"
+                )}
+              >
+                30 Days
+              </button>
+            </div>
           </div>
         </div>
 

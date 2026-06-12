@@ -15,10 +15,91 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [loading, setLoading] = useState(false)
 
+  // Validation States
+  const [nameError, setNameError] = useState("")
+  const [companyError, setCompanyError] = useState("")
+  const [emailError, setEmailError] = useState("")
+  const [passwordError, setPasswordError] = useState("")
+  const [confirmPasswordError, setConfirmPasswordError] = useState("")
+
+  const validateName = (val: string) => {
+    if (!val.trim()) {
+      setNameError("Full name is required")
+      return false
+    }
+    setNameError("")
+    return true
+  }
+
+  const validateCompany = (val: string) => {
+    if (!val.trim()) {
+      setCompanyError("Company name is required")
+      return false
+    }
+    setCompanyError("")
+    return true
+  }
+
+  const validateEmail = (val: string) => {
+    if (!val) {
+      setEmailError("Email is required")
+      return false
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+      setEmailError("Please enter a valid email address")
+      return false
+    }
+    setEmailError("")
+    return true
+  }
+
+  const validatePassword = (val: string) => {
+    if (!val) {
+      setPasswordError("Password is required")
+      return false
+    } else if (val.length < 8) {
+      setPasswordError("Password must be at least 8 characters")
+      return false
+    }
+    setPasswordError("")
+    // If confirm password has value, re-validate match
+    if (confirmPassword && val !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match")
+    } else if (confirmPassword) {
+      setConfirmPasswordError("")
+    }
+    return true
+  }
+
+  const validateConfirmPassword = (val: string) => {
+    if (!val) {
+      setConfirmPasswordError("Please confirm your password")
+      return false
+    } else if (val !== password) {
+      setConfirmPasswordError("Passwords do not match")
+      return false
+    }
+    setConfirmPasswordError("")
+    return true
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!fullName || !email || !password || password !== confirmPassword) return
+
+    const isNameValid = validateName(fullName)
+    const isCompanyValid = validateCompany(companyName)
+    const isEmailValid = validateEmail(email)
+    const isPassValid = validatePassword(password)
+    const isConfirmValid = validateConfirmPassword(confirmPassword)
+
+    if (!isNameValid || !isCompanyValid || !isEmailValid || !isPassValid || !isConfirmValid) {
+      return
+    }
+
     setLoading(true)
+
+    // Set mock cookie
+    document.cookie = "auth-token=mock-token; path=/; max-age=86400"
+
     setTimeout(() => {
       router.push("/dashboard")
     }, 800)
@@ -49,8 +130,14 @@ export default function RegisterPage() {
                 placeholder="Jane Doe"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                onBlur={() => validateName(fullName)}
+                className={`w-full h-10 px-3 text-sm bg-white border ${
+                  nameError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-[#14532D]/10 focus:border-[#14532D]"
+                } rounded-lg focus:outline-none focus:ring-2 transition-all`}
               />
+              {nameError && (
+                <p className="text-xs font-medium text-red-500 mt-0.5">{nameError}</p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="company" className="text-xs font-semibold text-slate-700">
@@ -63,8 +150,14 @@ export default function RegisterPage() {
                 placeholder="Acme Agritech"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
-                className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                onBlur={() => validateCompany(companyName)}
+                className={`w-full h-10 px-3 text-sm bg-white border ${
+                  companyError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-[#14532D]/10 focus:border-[#14532D]"
+                } rounded-lg focus:outline-none focus:ring-2 transition-all`}
               />
+              {companyError && (
+                <p className="text-xs font-medium text-red-500 mt-0.5">{companyError}</p>
+              )}
             </div>
           </div>
 
@@ -79,8 +172,14 @@ export default function RegisterPage() {
               placeholder="jane@company.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+              onBlur={() => validateEmail(email)}
+              className={`w-full h-10 px-3 text-sm bg-white border ${
+                emailError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-[#14532D]/10 focus:border-[#14532D]"
+              } rounded-lg focus:outline-none focus:ring-2 transition-all`}
             />
+            {emailError && (
+              <p className="text-xs font-medium text-red-500 mt-0.5">{emailError}</p>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -95,8 +194,14 @@ export default function RegisterPage() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                onBlur={() => validatePassword(password)}
+                className={`w-full h-10 px-3 text-sm bg-white border ${
+                  passwordError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-[#14532D]/10 focus:border-[#14532D]"
+                } rounded-lg focus:outline-none focus:ring-2 transition-all`}
               />
+              {passwordError && (
+                <p className="text-xs font-medium text-red-500 mt-0.5">{passwordError}</p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="confirmPassword" className="text-xs font-semibold text-slate-700">
@@ -109,8 +214,14 @@ export default function RegisterPage() {
                 placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                onBlur={() => validateConfirmPassword(confirmPassword)}
+                className={`w-full h-10 px-3 text-sm bg-white border ${
+                  confirmPasswordError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-[#14532D]/10 focus:border-[#14532D]"
+                } rounded-lg focus:outline-none focus:ring-2 transition-all`}
               />
+              {confirmPasswordError && (
+                <p className="text-xs font-medium text-red-500 mt-0.5">{confirmPasswordError}</p>
+              )}
             </div>
           </div>
 
@@ -135,7 +246,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-10 mt-2 bg-[#14532D] hover:bg-[#114524] disabled:bg-[#14532D]/70 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center shadow-sm"
+            className="w-full h-10 mt-2 bg-[#14532D] hover:bg-[#114524] disabled:bg-[#14532D]/70 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center shadow-sm cursor-pointer"
           >
             {loading ? (
               <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">

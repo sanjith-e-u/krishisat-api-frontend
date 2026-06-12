@@ -10,8 +10,8 @@ import Logo from "@/components/brand/logo";
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "APIs", href: "/marketplace" },
-  { name: "Pricing", href: "/pricing" },
   { name: "Docs", href: "/docs" },
+  { name: "Pricing", href: "/pricing" },
   { name: "Dashboard", href: "/dashboard" },
 ];
 
@@ -58,7 +58,7 @@ export default function Nav() {
                   "text-sm font-medium transition-colors relative h-full flex items-center self-stretch",
                   isActive
                     ? "text-[#14532D] font-semibold"
-                    : "text-slate-600 hover:text-slate-900"
+                    : "text-slate-650 hover:text-[#14532D]"
                 )}
               >
                 {link.name}
@@ -74,7 +74,7 @@ export default function Nav() {
         <div className="hidden md:flex items-center gap-4">
           <Link
             href="/login"
-            className="text-sm font-medium text-slate-600 hover:text-slate-900 px-3 py-1.5 transition-colors"
+            className="text-sm font-medium text-slate-650 hover:text-slate-900 px-3 py-1.5 transition-colors"
           >
             Sign In
           </Link>
@@ -88,60 +88,81 @@ export default function Nav() {
 
         {/* Mobile menu toggle */}
         <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-[#14532D]"
-          aria-label="Toggle Menu"
+          onClick={() => setMobileMenuOpen(true)}
+          className="md:hidden p-2 rounded-lg border border-slate-200 text-slate-655 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-[#14532D]"
+          aria-label="Open Menu"
         >
-          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          <Menu className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Full-screen Mobile Dropdown */}
+      {/* Drawer Overlay for Mobile */}
       {mobileMenuOpen && (
         <div
-          className={cn(
-            "md:hidden fixed inset-0 z-40 bg-white flex flex-col border-t border-slate-200 p-6 animate-in fade-in slide-in-from-top-4 duration-200",
-            scrolled ? "top-[72px]" : "top-[72px] md:top-[88px]"
-          )}
-        >
-          <nav className="flex flex-col gap-6 mt-4">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={cn(
-                    "text-lg font-medium py-2 border-b border-slate-100",
-                    isActive
-                      ? "text-[#14532D] font-semibold"
-                      : "text-slate-600"
-                  )}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
-          </nav>
-          <div className="mt-auto flex flex-col gap-4 mb-10">
-            <Link
-              href="/login"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full text-center border border-slate-200 py-3 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/register"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full text-center bg-[#14532D] hover:bg-[#114524] text-white py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm"
-            >
-              Get API Key
-            </Link>
-          </div>
-        </div>
+          className="md:hidden fixed inset-0 bg-slate-900/45 backdrop-blur-sm z-40 transition-opacity duration-200"
+          onClick={() => setMobileMenuOpen(false)}
+        />
       )}
+
+      {/* Sliding Mobile Drawer Drawer */}
+      <div
+        className={cn(
+          "md:hidden fixed top-0 right-0 h-full w-[280px] bg-white border-l border-slate-200 shadow-2xl z-50 p-6 flex flex-col transition-transform duration-350 ease-in-out transform",
+          mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+        )}
+      >
+        {/* Drawer Header */}
+        <div className="flex justify-between items-center mb-8 border-b border-slate-100 pb-4 select-none">
+          <Logo size="sm" dark={false} />
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className="p-2 rounded-lg hover:bg-slate-50 text-slate-500 hover:text-slate-800 transition-colors"
+            aria-label="Close menu"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Drawer Links */}
+        <nav className="flex flex-col gap-5">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={cn(
+                  "text-base font-semibold py-1 transition-colors border-b border-slate-50/50 pb-1",
+                  isActive
+                    ? "text-[#14532D]"
+                    : "text-slate-655 hover:text-[#14532D]"
+                )}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Drawer Footer Actions */}
+        <div className="mt-auto flex flex-col gap-3 pb-8">
+          <Link
+            href="/login"
+            onClick={() => setMobileMenuOpen(false)}
+            className="w-full text-center border border-slate-200 py-3 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+          >
+            Sign In
+          </Link>
+          <Link
+            href="/register"
+            onClick={() => setMobileMenuOpen(false)}
+            className="w-full text-center bg-[#14532D] hover:bg-[#114524] text-white py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm"
+          >
+            Get API Key
+          </Link>
+        </div>
+      </div>
     </header>
   );
 }

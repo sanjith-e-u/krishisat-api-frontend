@@ -211,8 +211,9 @@ export default function TrustPage() {
               </div>
             ))}
           </div>
-          <p className="text-xs text-slate-400 mt-6">
-            Live status available at <a href="https://status.krishisat.dev" className="text-primary underline">status.krishisat.dev</a>
+          <p className="text-xs text-slate-400 mt-6 font-semibold flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-[#22C55E]" />
+            All systems operational — 99.98% uptime this month (mock data)
           </p>
         </div>
       </section>

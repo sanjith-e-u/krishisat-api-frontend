@@ -1,23 +1,66 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, Suspense } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Logo from "@/components/brand/logo"
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const returnTo = searchParams.get("return_to") || "/dashboard"
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
 
+  // Validation States
+  const [emailError, setEmailError] = useState("")
+  const [passwordError, setPasswordError] = useState("")
+
+  const validateEmail = (val: string) => {
+    if (!val) {
+      setEmailError("Email is required")
+      return false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+      setEmailError("Please enter a valid email address")
+      return false;
+    } else {
+      setEmailError("")
+      return true;
+    }
+  }
+
+  const validatePassword = (val: string) => {
+    if (!val) {
+      setPasswordError("Password is required")
+      return false;
+    } else if (val.length < 8) {
+      setPasswordError("Password must be at least 8 characters")
+      return false;
+    } else {
+      setPasswordError("")
+      return true;
+    }
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email || !password) return
+    
+    const isEmailValid = validateEmail(email)
+    const isPassValid = validatePassword(password)
+
+    if (!isEmailValid || !isPassValid) return
+
     setLoading(true)
-    // Simulating redirect
+
+    // Set mock cookie
+    document.cookie = "auth-token=mock-token; path=/; max-age=86400"
+
+    // Simulate redirect
     setTimeout(() => {
-      router.push("/dashboard")
+      const target = returnTo.startsWith("/") ? returnTo : "/dashboard"
+      router.push(target)
     }, 800)
   }
 
@@ -47,8 +90,14 @@ export default function LoginPage() {
             placeholder="name@company.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+            onBlur={() => validateEmail(email)}
+            className={`w-full h-10 px-3 text-sm bg-white border ${
+              emailError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-[#14532D]/10 focus:border-[#14532D]"
+            } rounded-lg focus:outline-none focus:ring-2 transition-all`}
           />
+          {emailError && (
+            <p className="text-xs font-medium text-red-500 mt-0.5">{emailError}</p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -70,8 +119,14 @@ export default function LoginPage() {
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+            onBlur={() => validatePassword(password)}
+            className={`w-full h-10 px-3 text-sm bg-white border ${
+              passwordError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-[#14532D]/10 focus:border-[#14532D]"
+            } rounded-lg focus:outline-none focus:ring-2 transition-all`}
           />
+          {passwordError && (
+            <p className="text-xs font-medium text-red-500 mt-0.5">{passwordError}</p>
+          )}
         </div>
 
         {/* Remember me option */}
@@ -90,7 +145,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full h-10 bg-[#14532D] hover:bg-[#114524] disabled:bg-[#14532D]/70 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center shadow-sm"
+          className="w-full h-10 bg-[#14532D] hover:bg-[#114524] disabled:bg-[#14532D]/70 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center shadow-sm cursor-pointer"
         >
           {loading ? (
             <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
@@ -110,15 +165,15 @@ export default function LoginPage() {
         <div className="flex-grow border-t border-slate-200"></div>
       </div>
 
-      {/* Mock Social Logins */}
-      <div className="flex flex-col gap-2">
+      {/* Mock Social Logins with Tooltip */}
+      <div className="relative group flex flex-col gap-2">
         <button
           disabled
           type="button"
-          className="relative w-full h-10 border border-slate-200 bg-slate-50 text-[#64748B] text-xs font-semibold rounded-lg flex items-center justify-center gap-2 select-none cursor-not-allowed"
+          className="w-full h-10 border border-slate-200 bg-slate-50 text-[#94A3B8] text-xs font-semibold rounded-lg flex items-center justify-center gap-2 select-none cursor-not-allowed opacity-60"
         >
           {/* Mock Google Icon */}
-          <svg className="w-4 h-4" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+          <svg className="w-4 h-4 opacity-50" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
             <g transform="matrix(1, 0, 0, 1, 0, 0)">
               <path d="M21.35,11.1H12v2.7h5.38c-0.24,1.28 -0.96,2.37 -2.04,3.1v2.58h3.3c1.93,-1.78 3.04,-4.4 3.04,-7.4C21.68,11.83 21.56,11.45 21.35,11.1z" fill="#4285F4" />
               <path d="M12,20.72c2.43,0 4.47,-0.8 5.96,-2.2l-3.3,-2.58c-0.91,0.61 -2.08,0.98 -3.3,0.98 -2.35,0 -4.34,-1.59 -5.05,-3.72H2.9v2.66C4.38,18.8 7.98,20.72 12,20.72z" fill="#34A853" />
@@ -128,9 +183,13 @@ export default function LoginPage() {
           </svg>
           Continue with Google
           <span className="absolute right-3 px-1.5 py-0.5 rounded text-[8px] font-mono bg-slate-200 text-slate-500 uppercase tracking-wide">
-            Soon
+            Disabled
           </span>
         </button>
+        {/* Tooltip */}
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-slate-800 text-white text-[11px] rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+          Google authentication is disabled for this release.
+        </div>
       </div>
 
       {/* Footer redirects */}
@@ -141,5 +200,20 @@ export default function LoginPage() {
         </Link>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="w-full max-w-[420px] bg-white border border-slate-200 rounded-2xl shadow-xl p-8 flex items-center justify-center min-h-[300px]">
+        <div className="animate-pulse flex flex-col items-center gap-4">
+          <div className="h-10 w-10 bg-slate-200 rounded-full"></div>
+          <div className="h-4 w-32 bg-slate-200 rounded"></div>
+        </div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }

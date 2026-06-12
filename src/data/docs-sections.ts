@@ -304,7 +304,7 @@ export const docsSections: DocSection[] = [
     description: [
       "Need help integrating KrishiSat telemetry? Connect with our developer success team through the following channels:",
       "• Dashboard Help desk: Open a ticket directly inside the developer workspace.",
-      "• Email Support: support@krishisat.dev (SLA targets: 2 hours for production accounts, 1 business day for sandbox testers).",
+      "• Email Support: <a href=\"mailto:support@krishisat.dev\" class=\"text-primary hover:underline font-semibold\">support@krishisat.dev</a> (SLA targets: 2 hours for production accounts, 1 business day for sandbox testers).",
       "• SLA Status Dashboard: Keep track of incidents or service warnings on the active Status route."
     ],
     code: {

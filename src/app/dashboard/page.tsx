@@ -84,11 +84,14 @@ export default function DashboardOverview() {
   const handleCopyKey = () => {
     navigator.clipboard.writeText(apiKey)
     setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    setTimeout(() => setCopied(false), 1500)
     showToast("API Key copied to clipboard!")
   }
 
   const handleRegenerateKey = () => {
+    if (!window.confirm("Regenerating your key will immediately invalidate the current one.\nAll integrations using it will break. Are you sure?")) {
+      return
+    }
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
     let randomString = ""
     for (let i = 0; i < 17; i++) {
@@ -165,7 +168,7 @@ export default function DashboardOverview() {
           />
           <MetricCard
             title="Current Plan"
-            value="Developer"
+            value="Free"
             icon={<Database className="w-5 h-5" />}
           />
           <MetricCard
@@ -305,10 +308,20 @@ export default function DashboardOverview() {
                   </button>
                   <button
                     onClick={handleCopyKey}
-                    className="p-1 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none"
+                    className="p-1 text-slate-400 hover:text-slate-650 transition-colors focus:outline-none flex items-center gap-1"
                     title="Copy API key"
                   >
-                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copied ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="text-[10px] font-bold text-emerald-600">Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span className="text-[10px] font-medium text-slate-400">Copy</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
@@ -398,7 +411,7 @@ export default function DashboardOverview() {
             subtitle="Current operational telemetry indexes"
             action={
               <Link
-                href="/dashboard/apis"
+                href="/marketplace"
                 className="text-xs font-semibold text-[#14532D] hover:underline flex items-center gap-1"
               >
                 Open API Catalog <ArrowRight className="w-3.5 h-3.5" />
