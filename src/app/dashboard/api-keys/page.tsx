@@ -17,7 +17,7 @@ const initialKeys: ApiKeyItem[] = [
   {
     id: "1",
     name: "Development Sandbox Key",
-    key: "ks_test_9jF2k8L1m9P4w0XqZ",
+    key: "ks_sandbox_9jF2k8L1m9P4w0XqZ",
     env: "Sandbox",
     created: "2026-06-10",
     status: "Active"
@@ -46,7 +46,7 @@ export default function DashboardApiKeys() {
     e.preventDefault()
     if (!newKeyName) return
 
-    const prefix = newKeyEnv === "Sandbox" ? "ks_test_" : "ks_live_"
+    const prefix = newKeyEnv === "Sandbox" ? "ks_sandbox_" : "ks_live_"
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
     let randomString = ""
     for (let i = 0; i < 17; i++) {

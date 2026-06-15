@@ -888,7 +888,7 @@ export default function DocsPage() {
                     Production key format: <code className="font-mono text-xs bg-slate-50 border border-slate-200 px-1.5 py-0.5 rounded text-[#14532D] font-semibold">ks_live_xxxxxxxxxxxx</code>
                   </li>
                   <li>
-                    Sandbox key format: <code className="font-mono text-xs bg-slate-50 border border-slate-200 px-1.5 py-0.5 rounded text-[#14532D] font-semibold">ks_test_xxxxxxxxxxxx</code>
+                    Sandbox key format: <code className="font-mono text-xs bg-slate-50 border border-slate-200 px-1.5 py-0.5 rounded text-[#14532D] font-semibold">ks_sandbox_xxxxxxxxxxxx</code>
                   </li>
                 </ul>
 
@@ -930,7 +930,7 @@ export default function DocsPage() {
                       Free tier. 5 farms maximum. 1,000 API calls per month. Rate limited to 60 requests per minute.
                     </p>
                     <div className="text-[10px] font-mono font-semibold text-[#14532D] bg-[#14532D]/5 border border-[#14532D]/10 px-1.5 py-0.5 rounded inline-block">
-                      ks_test_
+                      ks_sandbox_
                     </div>
                   </div>
                   {/* Card 2 */}

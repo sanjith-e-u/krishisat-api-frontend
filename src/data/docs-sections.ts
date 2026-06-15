@@ -61,12 +61,12 @@ export const docsSections: DocSection[] = [
     group: "getting-started",
     description: [
       "KrishiSat supports dual environments using key prefixes. Sandbox keys are intended for testing and development, pointing to mock satellite tiles. Production keys invoke real sensor computation pipelines.",
-      "• Sandbox Keys: Prefixed with \`ks_test_\`. Free, capped at 1,000 requests per month.",
+      "• Sandbox Keys: Prefixed with \`ks_sandbox_\`. Free, capped at 1,000 requests per month.",
       "• Production Keys: Prefixed with \`ks_live_\`. Billed based on index credit consumption.",
       "Keep API keys private. Never hardcode them in browser applications or commit them to version control."
     ],
     code: {
-      curl: `# Set environment variables in your terminal\nexport KSAT_API_KEY="ks_test_your_secret_key"`,
+      curl: `# Set environment variables in your terminal\nexport KSAT_API_KEY="ks_sandbox_your_secret_key"`,
       python: `import os\n\n# Read key from local environment configuration\napi_key = os.environ.get("KSAT_API_KEY")`,
       node: `// Read key from process environment variables\nconst apiKey = process.env.KSAT_API_KEY;`
     },
@@ -80,15 +80,15 @@ export const docsSections: DocSection[] = [
     description: [
       "Requests are throttled to ensure infrastructure stability. The sandbox tier allows up to 10 requests per second. The production tier scales based on SLA agreements.",
       "Additionally, endpoints consume credits based on compute load:",
-      "• Basic Registry & Weather: 1 credit per call.",
-      "• Crop Health & Moisture Indices (NDVI, SAVI, NDWI, NDMI, NDRE): 2 credits per call.",
+      "• Weather API: 1 credit per call (Farm Registration is 0 credits).",
+      "• Crop Health & Moisture Indices (NDVI: 1 credit; SAVI, NDWI, NDMI, NDRE: 2 credits).",
       "• High-resolution Chlorophyll Index (CI): 3 credits per call.",
       "Look for the following headers in API responses to check remaining capacity:"
     ],
     code: {
-      curl: `curl -I ${API_URL}/v1/weather \\\n  -H "Authorization: Bearer ks_test_key"`,
-      python: `import requests\n\nres = requests.post("${API_URL}/v1/weather", headers={"Authorization": "Bearer ks_test_key"})\nprint(res.headers.get("X-RateLimit-Remaining"))`,
-      node: `const axios = require('axios');\n\naxios.post('${API_URL}/v1/weather', {}, {\n  headers: { 'Authorization': 'Bearer ks_test_key' }\n}).then(res => {\n  console.log(res.headers['x-ratelimit-remaining']);\n});`
+      curl: `curl -I ${API_URL}/v1/weather \\\n  -H "Authorization: Bearer ks_sandbox_key"`,
+      python: `import requests\n\nres = requests.post("${API_URL}/v1/weather", headers={"Authorization": "Bearer ks_sandbox_key"})\nprint(res.headers.get("X-RateLimit-Remaining"))`,
+      node: `const axios = require('axios');\n\naxios.post('${API_URL}/v1/weather', {}, {\n  headers: { 'Authorization': 'Bearer ks_sandbox_key' }\n}).then(res => {\n  console.log(res.headers['x-ratelimit-remaining']);\n});`
     },
     response: `HTTP/2 200 OK\nContent-Type: application/json\nX-RateLimit-Limit: 100\nX-RateLimit-Remaining: 98\nX-RateLimit-Reset: 1776204000\nX-Credits-Remaining: 840`
   },
@@ -100,7 +100,7 @@ export const docsSections: DocSection[] = [
     endpoint: {
       method: "POST",
       path: "/v1/farms",
-      credits: 1
+      credits: 0
     },
     description: [
       "Farms are represented by boundaries. Submit a name and GeoJSON polygon boundary. The system creates a spatial index and gathers historical satellite imagery.",
@@ -121,7 +121,7 @@ export const docsSections: DocSection[] = [
     endpoint: {
       method: "POST",
       path: "/v1/vegetation/ndvi",
-      credits: 2
+      credits: 1
     },
     description: [
       "The Normalized Difference Vegetation Index (NDVI) is computed from Sentinel-2 Multi-Spectral bands: \`(NIR - Red) / (NIR + Red)\`.",
@@ -274,8 +274,8 @@ export const docsSections: DocSection[] = [
       "Error responses return a detailed diagnostic payload:"
     ],
     code: {
-      curl: `# Example request prompting a 404 response\ncurl ${API_URL}/v1/vegetation/ndvi \\\n  -H "Authorization: Bearer ks_test_key" \\\n  -d '{"farm_id":"farm_invalid"}'`,
-      python: `import requests\n\n# Simulated payload query triggering a rate throttle\nres = requests.post(\n    "${API_URL}/v1/vegetation/ndvi",\n    headers={"Authorization": "Bearer ks_test_key"},\n    json={"farm_id": "farm_invalid"}\n)\nprint(res.status_code)\nprint(res.json())`,
+      curl: `# Example request prompting a 404 response\ncurl ${API_URL}/v1/vegetation/ndvi \\\n  -H "Authorization: Bearer ks_sandbox_key" \\\n  -d '{"farm_id":"farm_invalid"}'`,
+      python: `import requests\n\n# Simulated payload query triggering a rate throttle\nres = requests.post(\n    "${API_URL}/v1/vegetation/ndvi",\n    headers={"Authorization": "Bearer ks_sandbox_key"},\n    json={"farm_id": "farm_invalid"}\n)\nprint(res.status_code)\nprint(res.json())`,
       node: `// Querying with an invalid token\nconst axios = require('axios');\n\naxios.post('${API_URL}/v1/vegetation/ndvi', { farm_id: 'farm_invalid' }, {\n  headers: { 'Authorization': 'Bearer ks_invalid_token' }\n}).catch(err => {\n  console.log(err.response.status);\n  console.log(err.response.data);\n});`
     },
     response: `{\n  "error": {\n    "code": "resource_not_found",\n    "message": "No farm registration matching farm_id 'farm_invalid' was found.",\n    "param": "farm_id"\n  }\n}`

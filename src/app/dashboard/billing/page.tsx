@@ -41,7 +41,7 @@ export default function DashboardBilling() {
 
   const planCredits = {
     Free: { limit: 1000, remaining: 850, price: "$0/mo" },
-    "Pay-as-you-go": { limit: 100000, remaining: 98450, price: "$0.004/call" },
+    "Pay-as-you-go": { limit: 100000, remaining: 98450, price: "$0.005/credit" },
     Enterprise: { limit: 1000000, remaining: 998500, price: "Custom" }
   }
 
@@ -327,14 +327,14 @@ export default function DashboardBilling() {
                   <p className="text-[10px] text-slate-400 leading-relaxed mt-1">For production monitoring applications.</p>
                   
                   <div className="my-4">
-                    <span className="text-2xl font-black text-slate-900">$0.004</span>
-                    <span className="text-xs text-slate-400 font-medium"> / API call</span>
+                    <span className="text-2xl font-black text-slate-900">$0.005</span>
+                    <span className="text-xs text-slate-400 font-medium"> / credit</span>
                   </div>
 
                   <ul className="space-y-2 text-xs text-slate-600 border-t border-slate-200/50 pt-4">
                     <li className="flex items-center gap-2">
                       <Check className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
-                      <span>$0.004/call after free tier</span>
+                      <span>$0.005 per credit consumed</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />

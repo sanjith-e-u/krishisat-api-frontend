@@ -17,13 +17,13 @@ const endpointHealth = [
 ]
 
 const logTemplates = [
-  { endpoint: "POST /v1/vegetation/ndvi", status: "200", latency: "247ms", credits: "2cr", keyHint: "ks_live_***Xq9", type: "success" },
-  { endpoint: "POST /v1/weather", status: "200", latency: "183ms", credits: "1cr", keyHint: "ks_test_***4mR", type: "success" },
+  { endpoint: "POST /v1/vegetation/ndvi", status: "200", latency: "247ms", credits: "1cr", keyHint: "ks_live_***Xq9", type: "success" },
+  { endpoint: "POST /v1/weather", status: "200", latency: "183ms", credits: "1cr", keyHint: "ks_sandbox_***4mR", type: "success" },
   { endpoint: "POST /v1/water/ndwi", status: "200", latency: "261ms", credits: "2cr", keyHint: "ks_live_***8pL", type: "success" },
   { endpoint: "POST /v1/vegetation/ndre", status: "200", latency: "254ms", credits: "2cr", keyHint: "ks_live_***2kF", type: "success" },
-  { endpoint: "POST /v1/farms", status: "201", latency: "312ms", credits: "1cr", keyHint: "ks_test_***7bN", type: "success" },
+  { endpoint: "POST /v1/farms", status: "201", latency: "312ms", credits: "0cr", keyHint: "ks_sandbox_***7bN", type: "success" },
   { endpoint: "POST /v1/vegetation/savi", status: "200", latency: "243ms", credits: "2cr", keyHint: "ks_live_***5wM", type: "success" },
-  { endpoint: "POST /v1/vegetation/ci", status: "200", latency: "238ms", credits: "2cr", keyHint: "ks_test_***3nT", type: "success" }
+  { endpoint: "POST /v1/vegetation/ci", status: "200", latency: "238ms", credits: "3cr", keyHint: "ks_sandbox_***3nT", type: "success" }
 ]
 
 function getTimestamp() {

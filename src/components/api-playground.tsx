@@ -38,6 +38,12 @@ const MOCK_RESPONSES: Record<string, object> = {
   }
 };
 
+const API_COSTS: Record<string, number> = {
+  ndvi: 1,
+  ndmi: 2,
+  weather: 1
+};
+
 export function ApiPlayground() {
   const [selected, setSelected] = useState<string>("ndvi");
   const [loading, setLoading] = useState(false);
@@ -88,22 +94,37 @@ export function ApiPlayground() {
       </div>
 
       <div className="space-y-4">
-        {/* Request endpoint display */}
-        <div className="flex items-center gap-2 bg-slate-950/70 border border-slate-800/60 rounded-xl px-4 py-3">
-          <CornerDownRight className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-          <span className="font-mono text-xs text-white bg-slate-800 px-2 py-0.5 rounded uppercase font-bold tracking-wider select-none shrink-0">
-            POST
+        {/* Request Headers */}
+        <div className="flex flex-col gap-1.5 bg-slate-950/45 border border-slate-800/40 rounded-xl px-4 py-3">
+          <label className="text-[9px] font-mono font-bold text-slate-500 uppercase tracking-widest select-none">HTTP Request Headers</label>
+          <div className="flex flex-wrap items-center gap-2 font-mono text-xs overflow-x-auto whitespace-nowrap scrollbar-none">
+            <span className="text-slate-400 select-none">Authorization:</span>
+            <span className="text-slate-500 select-none">Bearer</span>
+            <span className="text-[#22C55E] font-bold select-all">ks_sandbox_demo_key_92m4b</span>
+          </div>
+        </div>
+
+        {/* Request endpoint & cost preview */}
+        <div className="flex items-center justify-between gap-2 bg-slate-950/70 border border-slate-800/60 rounded-xl px-4 py-3 overflow-hidden">
+          <div className="flex items-center gap-2 min-w-0">
+            <CornerDownRight className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+            <span className="font-mono text-xs text-white bg-slate-800 px-2 py-0.5 rounded uppercase font-bold tracking-wider select-none shrink-0">
+              POST
+            </span>
+            <code className="font-mono text-xs text-slate-300 overflow-x-auto whitespace-nowrap scrollbar-none select-text">
+              https://api.krishisat.dev/v1/{selected === "weather" ? "weather" : `vegetation/${selected}`}
+            </code>
+          </div>
+          <span className="text-[10px] font-bold text-slate-350 bg-slate-900 border border-slate-800 px-2.5 py-0.5 rounded font-mono shrink-0 select-none">
+            Cost: {API_COSTS[selected]} {API_COSTS[selected] === 1 ? "credit" : "credits"}
           </span>
-          <code className="font-mono text-xs text-slate-300 overflow-x-auto whitespace-nowrap scrollbar-none">
-            https://api.krishisat.dev/v1/{selected === "weather" ? "weather" : `vegetation/${selected}`}
-          </code>
         </div>
 
         {/* Trigger Button */}
         <button
           onClick={handleTry}
           disabled={loading}
-          className="w-full py-2.5 rounded-xl bg-[#22C55E] hover:bg-[#1cbd53] disabled:bg-[#22C55E]/60 text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full py-2.5 rounded-xl bg-[#22C55E] hover:bg-[#1cbd53] disabled:bg-[#22C55E]/60 text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer select-none"
         >
           {loading ? (
             <>
@@ -130,7 +151,7 @@ export function ApiPlayground() {
                 {copied ? (
                   <>
                     <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-emerald-400">Copied!</span>
+                    <span className="text-emerald-400 font-bold">Copied!</span>
                   </>
                 ) : (
                   <>
@@ -153,7 +174,7 @@ export function ApiPlayground() {
         </div>
 
         {result && !loading && (
-          <p className="text-[11px] text-slate-500 mt-2 text-center">
+          <p className="text-[11px] text-slate-500 mt-2 text-center select-none">
             This is a mock response.{" "}
             <a href="/register" className="text-[#22C55E] hover:underline font-bold transition-colors">
               Get your free API key →

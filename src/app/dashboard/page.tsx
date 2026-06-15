@@ -71,7 +71,7 @@ function SectionHeader({ title, subtitle, action }: { title: string; subtitle?: 
 export default function DashboardOverview() {
   const [hoveredPoint, setHoveredPoint] = useState<{ x: number; y: number; label: string; value: number } | null>(null)
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
-  const [apiKey, setApiKey] = useState("ks_test_9jF2k8L1m9P4w0XqZ")
+  const [apiKey, setApiKey] = useState("ks_sandbox_9jF2k8L1m9P4w0XqZ")
   const [revealKey, setRevealKey] = useState(false)
   const [copied, setCopied] = useState(false)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
@@ -97,7 +97,7 @@ export default function DashboardOverview() {
     for (let i = 0; i < 17; i++) {
       randomString += characters.charAt(Math.floor(Math.random() * characters.length))
     }
-    const newKey = "ks_test_" + randomString
+    const newKey = "ks_sandbox_" + randomString
     setApiKey(newKey)
     showToast("API Key regenerated successfully!")
   }
@@ -354,7 +354,7 @@ export default function DashboardOverview() {
                       <p className="text-[10px] text-slate-405 font-mono mt-0.5">POST /v1/vegetation/ndvi</p>
                     </div>
                     <div className="text-right">
-                      <span className="text-xs font-semibold text-[#14532D]">2 credits</span>
+                      <span className="text-xs font-semibold text-[#14532D]">1 credit</span>
                       <p className="text-[10px] text-slate-405 font-mono mt-0.5">Success 200</p>
                     </div>
                   </li>
@@ -384,7 +384,7 @@ export default function DashboardOverview() {
                       <p className="text-[10px] text-slate-405 font-mono mt-0.5">POST /v1/farms</p>
                     </div>
                     <div className="text-right">
-                      <span className="text-xs font-semibold text-[#14532D]">1 credit</span>
+                      <span className="text-xs font-semibold text-[#14532D]">0 credits</span>
                       <p className="text-[10px] text-slate-405 font-mono mt-0.5">Success 201</p>
                     </div>
                   </li>
@@ -432,7 +432,7 @@ export default function DashboardOverview() {
               </div>
               <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400">
                 <span className="font-mono">/v1/vegetation/ndvi</span>
-                <span className="font-semibold text-slate-700">2 credits</span>
+                <span className="font-semibold text-slate-700">1 credit</span>
               </div>
             </div>
 

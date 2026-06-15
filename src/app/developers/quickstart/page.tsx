@@ -58,7 +58,7 @@ const steps = [
     step: "02",
     title: "Generate an API key",
     description: "Navigate to Dashboard → API Keys and generate your first key. Select Sandbox for testing.",
-    code: `# Your key will look like this\nks_test_Xq9mR4bL...`,
+    code: `# Your key will look like this\nks_sandbox_Xq9mR4bL...`,
     link: "/dashboard/api-keys",
     linkLabel: "Open API Keys →"
   },

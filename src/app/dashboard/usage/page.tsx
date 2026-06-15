@@ -116,7 +116,7 @@ export default function UsageAnalytics() {
       method: "POST",
       calls: 64271,
       percentage: 50,
-      credits: 128542,
+      credits: 64271,
       successRate: "99.99%",
       avgLatency: "248ms"
     },
@@ -143,12 +143,12 @@ export default function UsageAnalytics() {
       method: "POST",
       calls: 8504,
       percentage: 7,
-      credits: 8504,
+      credits: 0,
       successRate: "100.00%",
       avgLatency: "312ms"
     },
     {
-      path: "/v1/vegetation/ndwi",
+      path: "/v1/water/ndwi",
       method: "POST",
       calls: 4351,
       percentage: 3,

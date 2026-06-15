@@ -33,7 +33,7 @@ export default function DevelopersHubPage() {
   const sdkCodeSnippets = {
     python: `import krishisat
 
-client = krishisat.Client(api_key="ks_test_your_secret_key")
+client = krishisat.Client(api_key="ks_sandbox_your_secret_key")
 
 # Fetch latest crop health metrics
 ndvi = client.vegetation.ndvi(
@@ -45,7 +45,7 @@ print(f"Crop Health (NDVI): {ndvi.value} - {ndvi.interpretation}")`,
     node: `import KrishiSat from '@krishisat/sdk';
 
 const client = new KrishiSat({
-  apiKey: 'ks_test_your_secret_key'
+  apiKey: 'ks_sandbox_your_secret_key'
 });
 
 // Fetch latest crop health metrics
@@ -64,7 +64,7 @@ import (
 )
 
 func main() {
-	client := krishisat.NewClient("ks_test_your_secret_key")
+	client := krishisat.NewClient("ks_sandbox_your_secret_key")
 	ctx := context.Background()
 
 	ndvi, _ := client.Vegetation.NDVI(ctx, "farm_abc123", "2026-06-12")

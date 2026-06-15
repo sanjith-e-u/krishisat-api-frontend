@@ -14,9 +14,9 @@ const plans = [
     price: "$0",
     period: "/ month",
     description: "For testing, prototyping, and early sandbox agritech developments.",
-    credits: "1,000 API calls",
+    credits: "1,000 credits/mo",
     features: [
-      "1,000 monthly API calls",
+      "1,000 free credits per month",
       "No credit card required",
       "Core vegetation indices (NDVI, NDRE)",
       "Standard response latency",
@@ -36,6 +36,7 @@ const plans = [
     credits: "Flexible",
     features: [
       `${formatUsd(creditsToUsd(1))} per credit consumed`,
+      "1,000 credits = ~500 NDVI scans",
       "Endpoints cost 1-3 credits per call",
       "Unlimited farms",
       "Full API access",
