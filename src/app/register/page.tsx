@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import Logo from "@/components/brand/logo"
 import { Layers, Zap, Shield, BookOpen } from "lucide-react"
+import { supabase } from "@/lib/supabase"
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -14,6 +15,8 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [loading, setLoading] = useState(false)
+  const [generalError, setGeneralError] = useState("")
+  const [successMessage, setSuccessMessage] = useState("")
 
   // Validation States
   const [nameError, setNameError] = useState("")
@@ -82,8 +85,10 @@ export default function RegisterPage() {
     return true
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setGeneralError("")
+    setSuccessMessage("")
 
     const isNameValid = validateName(fullName)
     const isCompanyValid = validateCompany(companyName)
@@ -97,12 +102,33 @@ export default function RegisterPage() {
 
     setLoading(true)
 
-    // Set mock cookie
-    document.cookie = "auth-token=mock-token; path=/; max-age=86400"
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: {
+            full_name: fullName,
+            company_name: companyName
+          }
+        }
+      })
 
-    setTimeout(() => {
-      router.push("/dashboard")
-    }, 800)
+      if (error) {
+        setGeneralError(error.message)
+        setLoading(false)
+        return
+      }
+
+      setSuccessMessage("Check your email to confirm your account")
+      
+      setTimeout(() => {
+        router.push("/login")
+      }, 3500)
+    } catch (err: any) {
+      setGeneralError(err.message || "An unexpected registration error occurred.")
+      setLoading(false)
+    }
   }
 
   return (
@@ -259,6 +285,20 @@ export default function RegisterPage() {
           </button>
         </form>
 
+        {/* General Error Message under the form */}
+        {generalError && (
+          <p className="text-sm font-semibold text-red-550 text-center tracking-tight bg-red-50 border border-red-100 rounded-lg p-2.5">
+            {generalError}
+          </p>
+        )}
+
+        {/* Success Message under the form */}
+        {successMessage && (
+          <p className="text-sm font-semibold text-emerald-600 text-center tracking-tight bg-emerald-50 border border-emerald-100 rounded-lg p-2.5">
+            {successMessage}
+          </p>
+        )}
+
         <div className="text-center md:text-left text-xs text-[#64748B] mt-2">
           Already have a developer account?{" "}
           <Link href="/login" className="font-semibold text-[#14532D] hover:underline">
@@ -269,7 +309,7 @@ export default function RegisterPage() {
 
       {/* Right Column: Benefits Panel */}
       <div className="col-span-1 md:col-span-5 bg-[#14532D] text-white p-8 md:p-12 flex flex-col justify-between relative overflow-hidden select-none">
-        {/* Background topography-like subtle grid design */}
+        {/* Background topography-like grid design */}
         <div className="absolute inset-0 bg-emerald-950 opacity-20 pointer-events-none topo-pattern" />
 
         <div className="relative z-10 space-y-6">

@@ -1,26 +1,32 @@
 "use client"
 
-import React, { useState } from "react"
-import { CreditCard, Check, Download, ArrowUpRight, Lock, X } from "lucide-react"
+import React, { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { CreditCard, Check, Download, Zap, X, ShieldAlert } from "lucide-react"
+import { supabase } from "@/lib/supabase"
 import { cn } from "@/lib/utils"
 
-interface InvoiceItem {
+interface TransactionItem {
   id: string;
-  date: string;
-  amount: string;
-  status: "Paid" | "Pending" | "Failed";
+  profile_id: string;
+  amount: number;
+  type: string;
+  payment_provider: string | null;
+  payment_reference: string | null;
+  created_at: string;
 }
 
-const initialInvoices: InvoiceItem[] = [
-  { id: "INV-2026-003", date: "Jun 10, 2026", amount: "$15.40", status: "Paid" },
-  { id: "INV-2026-002", date: "May 10, 2026", amount: "$8.20", status: "Paid" },
-  { id: "INV-2026-001", date: "Apr 10, 2026", amount: "$12.80", status: "Paid" }
-]
-
 export default function DashboardBilling() {
-  const [plan, setPlan] = useState<"Free" | "Pay-as-you-go" | "Enterprise">("Free")
-  const [modalOpen, setModalOpen] = useState(false)
-  const [selectedPlanTier, setSelectedPlanTier] = useState<"Free" | "Pay-as-you-go" | "Enterprise">("Free")
+  const router = useRouter()
+  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<any>(null)
+  
+  // Supabase states
+  const [balance, setBalance] = useState<number>(0)
+  const [transactions, setTransactions] = useState<TransactionItem[]>([])
+  
+  // Modals
+  const [buyCreditsOpen, setBuyCreditsOpen] = useState(false)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
 
   const showToast = (msg: string) => {
@@ -28,25 +34,69 @@ export default function DashboardBilling() {
     setTimeout(() => setToastMessage(null), 3000)
   }
 
-  const handleUpgrade = (tier: "Free" | "Pay-as-you-go" | "Enterprise") => {
-    setPlan(tier)
-    setSelectedPlanTier(tier)
-    setModalOpen(false)
-    showToast(`Successfully switched to the ${tier} Plan!`)
+  useEffect(() => {
+    async function loadBillingData() {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        setLoading(false)
+        router.push("/login")
+        return
+      }
+      setUser(session.user)
+
+      try {
+        const userId = session.user.id
+
+        // 1. Fetch balance
+        const balanceRes = await supabase
+          .from("credit_balances")
+          .select("balance")
+          .eq("profile_id", userId)
+          .single()
+          
+        setBalance(balanceRes.data?.balance ?? 0)
+
+        // 2. Fetch transaction history
+        const txRes = await supabase
+          .from("credit_transactions")
+          .select("*")
+          .eq("profile_id", userId)
+          .order("created_at", { ascending: false })
+          
+        setTransactions(txRes.data || [])
+
+      } catch (err) {
+        console.error("Failed to load billing data:", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadBillingData()
+  }, [router])
+
+  // Helper to generate dynamic friendly descriptions based on transaction schema fields
+  const getTransactionDescription = (tx: TransactionItem) => {
+    if (tx.amount > 0) {
+      if (tx.payment_provider && tx.payment_provider !== "none") {
+        return `Top up via ${tx.payment_provider.toUpperCase()}`
+      }
+      return "Initial quota registration bonus"
+    } else {
+      return "API Endpoint usage charge"
+    }
   }
 
-  const handleDownloadInvoice = (invId: string) => {
-    showToast(`Downloading invoice ${invId} PDF...`)
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <svg className="animate-spin h-8 w-8 text-[#14532D]" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+        </svg>
+      </div>
+    )
   }
-
-  const planCredits = {
-    Free: { limit: 1000, remaining: 850, price: "$0/mo" },
-    "Pay-as-you-go": { limit: 100000, remaining: 98450, price: "$0.005/credit" },
-    Enterprise: { limit: 1000000, remaining: 998500, price: "Custom" }
-  }
-
-  const currentPlanDetails = planCredits[plan]
-  const usagePercentage = ((currentPlanDetails.limit - currentPlanDetails.remaining) / currentPlanDetails.limit) * 100
 
   return (
     <div className="space-y-8 relative">
@@ -60,391 +110,183 @@ export default function DashboardBilling() {
       )}
 
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6 select-none">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Billing & Quota</h1>
-          <p className="text-sm text-slate-500 mt-1">Manage subscriptions, invoice histories, and payment information.</p>
+          <p className="text-sm text-slate-500 mt-1">Manage credit wallets, transaction history, and API usage budget limits.</p>
         </div>
         
         <button
-          onClick={() => {
-            setSelectedPlanTier(plan)
-            setModalOpen(true)
-          }}
-          className="h-10 bg-[#14532D] hover:bg-[#114524] text-white px-4 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-1.5 shadow-sm focus:outline-none"
+          onClick={() => setBuyCreditsOpen(true)}
+          className="h-10 bg-[#14532D] hover:bg-[#114524] text-white px-4 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-1.5 shadow-sm focus:outline-none cursor-pointer"
         >
-          <span>Upgrade Subscription</span>
+          <span>Buy Credits</span>
         </button>
       </div>
 
-      {/* Top Grid: Plan Info + Payment Info */}
+      {/* Top Wallet Card */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl">
-        
-        {/* Active Subscription Plan */}
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex flex-col justify-between">
+        {/* Wallet Balance Card */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
           <div>
-            <div className="flex justify-between items-start">
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Active Plan</span>
-                <h3 className="text-xl font-extrabold text-slate-900 mt-0.5">{plan} Plan</h3>
-              </div>
-              <span className="text-sm font-extrabold text-[#14532D] bg-[#14532D]/5 px-3 py-1 rounded-full font-mono">
-                {currentPlanDetails.price}
-              </span>
+            <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest select-none">Shared Wallet Balance</span>
+            <div className="flex items-baseline gap-2 mt-3 select-all">
+              <span className="text-4xl font-extrabold text-slate-950 tracking-tight">{balance.toLocaleString()}</span>
+              <span className="text-sm font-bold text-[#14532D]">credits</span>
             </div>
-
-            {/* Progress bar info */}
-            <div className="mt-6">
-              <div className="flex justify-between text-xs font-semibold text-slate-600 mb-2">
-                <span>Quota Consumed</span>
-                <span>{currentPlanDetails.remaining.toLocaleString()} of {currentPlanDetails.limit.toLocaleString()} calls left</span>
-              </div>
-              <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200/40">
-                <div
-                  className="bg-[#22C55E] h-2.5 rounded-full transition-all duration-500"
-                  style={{ width: `${Math.max(5, 100 - usagePercentage)}%` }}
-                />
-              </div>
-              <p className="text-[10px] text-slate-400 mt-2">
-                Renews automatically on <span className="font-semibold text-slate-600">July 10, 2026</span>.
-              </p>
-            </div>
+            <p className="text-xs text-slate-450 mt-3.5 select-none leading-relaxed">
+              These credits are shared across all active API keys generated on your account. Calls deduct credits dynamically per query cost.
+            </p>
           </div>
 
-          <div className="pt-6 border-t border-slate-100 mt-6 flex gap-3">
+          <div className="pt-6 border-t border-slate-100 mt-6 select-none">
             <button
-              onClick={() => {
-                setSelectedPlanTier(plan)
-                setModalOpen(true)
-              }}
-              className="flex-1 h-9 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-bold transition-all focus:outline-none flex items-center justify-center gap-1.5"
+              onClick={() => setBuyCreditsOpen(true)}
+              className="w-full h-9 bg-[#14532D] hover:bg-[#114524] text-white rounded-lg text-xs font-semibold shadow-sm transition-colors cursor-pointer"
             >
-              Change Plan <ArrowUpRight className="w-3.5 h-3.5" />
+              Add Wallet Funds
             </button>
           </div>
         </div>
 
-        {/* Payment Method Details */}
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex flex-col justify-between">
+        {/* Credit Cost Reference */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between select-none">
           <div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Default Payment Method</span>
-            
-            <div className="flex gap-4 mt-5 items-center">
-              <div className="w-14 h-9 bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-center text-white shrink-0 shadow-inner">
-                <CreditCard className="w-5 h-5 text-slate-300" />
+            <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest">Pricing Reference</span>
+            <div className="mt-4 space-y-2 text-xs">
+              <div className="flex justify-between items-center py-1 border-b border-slate-100">
+                <span className="text-slate-500 font-medium">Farm boundary registration</span>
+                <span className="font-bold text-slate-800">0 cr (Free)</span>
               </div>
-              <div>
-                <h4 className="text-sm font-bold text-slate-800 font-sans">Visa ending in 4242</h4>
-                <p className="text-[10px] text-slate-400 mt-0.5">Expires 12 / 2028</p>
+              <div className="flex justify-between items-center py-1 border-b border-slate-100">
+                <span className="text-slate-500 font-medium">NDVI Index / Weather</span>
+                <span className="font-bold text-slate-800">1 cr</span>
+              </div>
+              <div className="flex justify-between items-center py-1 border-b border-slate-100">
+                <span className="text-slate-500 font-medium">NDRE / SAVI / NDWI / NDMI</span>
+                <span className="font-bold text-slate-800">2 cr</span>
+              </div>
+              <div className="flex justify-between items-center py-1">
+                <span className="text-slate-500 font-medium">CI Index</span>
+                <span className="font-bold text-slate-800">3 cr</span>
               </div>
             </div>
-
-            <div className="mt-5 space-y-1 text-xs text-slate-505 leading-normal">
-              <p className="font-semibold text-slate-705">Billing Address:</p>
-              <p>KrishiSat Agritech solutions, Sector 5</p>
-              <p>New Delhi, DL 110001</p>
-            </div>
-          </div>
-
-          <div className="pt-6 border-t border-slate-100 mt-6 flex gap-3">
-            <button
-              onClick={() => showToast("Payment editor is disabled in prototype mode.")}
-              className="flex-1 h-9 border border-slate-200 hover:bg-slate-50 text-slate-605 rounded-lg text-xs font-bold transition-all focus:outline-none"
-            >
-              Update Details
-            </button>
           </div>
         </div>
       </div>
 
-      {/* Invoice Logs */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden max-w-5xl">
-        <div className="p-6 border-b border-slate-100">
-          <h3 className="text-sm font-bold text-slate-900">Billing History</h3>
-          <p className="text-xs text-slate-400 mt-1">Audit billing logs and download historical invoice files.</p>
+      {/* Transaction History Log Table */}
+      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden max-w-5xl">
+        <div className="p-6 border-b border-slate-100 select-none">
+          <h3 className="text-sm font-bold text-slate-900">Wallet Transaction History</h3>
+          <p className="text-xs text-slate-400 mt-1">Audit billing logs and quota top-ups.</p>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-sm border-collapse text-left">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-505 uppercase tracking-wider">
-                <th className="py-3 px-6 font-sans">Invoice ID</th>
-                <th className="py-3 px-6 font-sans">Billing Date</th>
+              <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-505 uppercase tracking-wider select-none">
+                <th className="py-3 px-6 font-sans">Date</th>
+                <th className="py-3 px-6 font-sans">Type</th>
                 <th className="py-3 px-6 font-sans">Amount</th>
-                <th className="py-3 px-6 font-sans">Status</th>
-                <th className="py-3 px-6 text-right font-sans">Actions</th>
+                <th className="py-3 px-6 font-sans">Description</th>
+                <th className="py-3 px-6 font-sans">Payment Reference</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {initialInvoices.map((inv) => (
-                <tr key={inv.id} className="hover:bg-slate-50/40 transition-colors">
-                  {/* ID */}
-                  <td className="py-4 px-6 font-mono text-xs font-semibold text-slate-805">
-                    {inv.id}
-                  </td>
+              {transactions.map((tx) => {
+                const isDebit = tx.amount < 0
+                return (
+                  <tr key={tx.id} className="hover:bg-slate-50/40 transition-colors">
+                    {/* Date */}
+                    <td className="py-4 px-6 text-slate-505 font-medium select-none">
+                      {new Date(tx.created_at).toLocaleDateString()} {new Date(tx.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </td>
 
-                  {/* Date */}
-                  <td className="py-4 px-6 text-slate-505 font-medium">
-                    {inv.date}
-                  </td>
+                    {/* Type */}
+                    <td className="py-4 px-6 select-none">
+                      <span className={cn(
+                        "text-[9px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider",
+                        isDebit ? "bg-rose-50 text-rose-700 border-rose-100" : "bg-emerald-50 text-emerald-700 border-emerald-100"
+                      )}>
+                        {tx.type || (isDebit ? "debit" : "credit")}
+                      </span>
+                    </td>
 
-                  {/* Amount */}
-                  <td className="py-4 px-6 text-slate-705 font-bold">
-                    {inv.amount}
-                  </td>
+                    {/* Amount */}
+                    <td className={cn(
+                      "py-4 px-6 font-mono text-xs font-bold select-all",
+                      isDebit ? "text-rose-650" : "text-emerald-600"
+                    )}>
+                      {isDebit ? "" : "+"}{tx.amount} cr
+                    </td>
 
-                  {/* Status */}
-                  <td className="py-4 px-6">
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-[#14532D] inline-flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />
-                      {inv.status}
-                    </span>
-                  </td>
+                    {/* Description */}
+                    <td className="py-4 px-6 text-slate-650 font-medium select-none">
+                      {getTransactionDescription(tx)}
+                    </td>
 
-                  {/* Action */}
-                  <td className="py-4 px-6 text-right">
-                    <button
-                      onClick={() => handleDownloadInvoice(inv.id)}
-                      className="p-1.5 border border-slate-200 text-slate-505 hover:text-slate-905 bg-white hover:bg-slate-50 rounded-lg transition-colors focus:outline-none inline-flex items-center gap-1.5 text-xs font-semibold shadow-sm"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>PDF</span>
-                    </button>
+                    {/* Payment Reference */}
+                    <td className="py-4 px-6 font-mono text-xs text-slate-400 select-all">
+                      {tx.payment_reference || "N/A"}
+                    </td>
+                  </tr>
+                )}
+              )}
+              {transactions.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="py-12 text-center text-slate-400 select-none">
+                    <CreditCard className="w-8 h-8 mx-auto mb-2 text-slate-300" />
+                    <p className="text-xs font-semibold">No transaction ledger entries recorded.</p>
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Upgrade Plan Modal */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+      {/* Upgrade Plan Modal (Placeholder/Coming Soon) */}
+      {buyCreditsOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 select-none animate-in fade-in duration-200">
           {/* Backdrop */}
           <div
-            onClick={() => setModalOpen(false)}
-            className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300 animate-in fade-in"
+            onClick={() => setBuyCreditsOpen(false)}
+            className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm"
           />
 
-          {/* Modal Card */}
-          <div className="relative bg-white border border-slate-200 rounded-2xl shadow-2xl w-full max-w-[850px] z-50 animate-in slide-in-from-top-4 duration-300 flex flex-col max-h-[90vh] overflow-y-auto">
-            
-            {/* Modal Header */}
-            <div className="p-6 border-b border-slate-200 flex justify-between items-start">
+          {/* Modal Container */}
+          <div className="relative bg-white border border-slate-200 rounded-3xl shadow-2xl p-7 w-full max-w-[420px] z-50 animate-in slide-in-from-top-4 duration-300 flex flex-col gap-5">
+            <div className="flex flex-col items-center text-center gap-3">
+              <div className="p-3 bg-emerald-50 border border-emerald-100 text-[#14532D] rounded-full">
+                <CreditCard className="w-6 h-6 text-[#14532D]" />
+              </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-900 tracking-tight">Select Developer Plan</h3>
-                <p className="text-xs text-[#64748B] mt-0.5">Scale your agricultural computational bandwidth with flexible limits.</p>
+                <h3 className="text-lg font-bold text-slate-950 tracking-tight">
+                  Buy Quota Credits
+                </h3>
+                <p className="text-xs text-slate-500 mt-1.5 leading-normal max-w-xs mx-auto">
+                  Self-serve Stripe billing packages are coming soon to the platform checkout portal.
+                </p>
               </div>
+            </div>
+
+            <div className="flex gap-3 p-3.5 bg-amber-50 border border-amber-200/50 rounded-2xl select-none">
+              <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+              <p className="text-[11px] text-amber-700 leading-normal font-medium">
+                Need more credits immediately for testing? Please contact support@krishisat.ai to request a free developer quota grant.
+              </p>
+            </div>
+
+            {/* Close */}
+            <div className="flex justify-center mt-2">
               <button
-                onClick={() => setModalOpen(false)}
-                className="p-1 border border-slate-100 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-50 focus:outline-none"
+                onClick={() => setBuyCreditsOpen(false)}
+                className="h-10 bg-[#14532D] hover:bg-[#114524] text-white px-6 rounded-xl text-xs font-semibold shadow-sm transition-colors cursor-pointer"
               >
-                <X className="w-4 h-4" />
+                Understood
               </button>
             </div>
-
-            {/* Plans Tier Comparison List */}
-            <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-              
-              {/* Plan: Free Tier */}
-              <div
-                onClick={() => setSelectedPlanTier("Free")}
-                className={cn(
-                  "border rounded-xl p-5 flex flex-col justify-between cursor-pointer transition-all relative",
-                  selectedPlanTier === "Free"
-                    ? "border-[#14532D] bg-[#14532D]/5 ring-2 ring-[#14532D]/10"
-                    : "border-slate-200 hover:bg-slate-50"
-                )}
-              >
-                {plan === "Free" && (
-                  <span className="absolute top-3 right-3 text-[9px] font-bold text-[#14532D] bg-[#14532D]/10 px-2 py-0.5 rounded uppercase tracking-wide">
-                    Active
-                  </span>
-                )}
-                <div>
-                  <h4 className="text-sm font-extrabold text-slate-900">Free</h4>
-                  <p className="text-[10px] text-slate-400 leading-relaxed mt-1">Perfect for prototype and pre-seed developers.</p>
-                  
-                  <div className="my-4">
-                    <span className="text-2xl font-black text-slate-900">$0</span>
-                    <span className="text-xs text-slate-400 font-medium"> / month</span>
-                  </div>
-
-                  <ul className="space-y-2 text-xs text-slate-600 border-t border-slate-200/50 pt-4">
-                    <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
-                      <span>1,000 monthly calls</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
-                      <span>Core vegetation indexes</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
-                      <span>Standard API Latency</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleUpgrade("Free")
-                  }}
-                  className={cn(
-                    "w-full h-9 rounded-lg text-xs font-bold transition-colors mt-6 border focus:outline-none",
-                    plan === "Free"
-                      ? "bg-white border-slate-200 text-slate-505 cursor-default"
-                      : "bg-[#14532D] hover:bg-[#114524] text-white border-transparent"
-                  )}
-                  disabled={plan === "Free"}
-                >
-                  {plan === "Free" ? "Current Plan" : "Choose Plan"}
-                </button>
-              </div>
-
-              {/* Plan: Pay-as-you-go Tier */}
-              <div
-                onClick={() => setSelectedPlanTier("Pay-as-you-go")}
-                className={cn(
-                  "border rounded-xl p-5 flex flex-col justify-between cursor-pointer transition-all relative",
-                  selectedPlanTier === "Pay-as-you-go"
-                    ? "border-[#14532D] bg-[#14532D]/5 ring-2 ring-[#14532D]/10"
-                    : "border-slate-200 hover:bg-slate-50"
-                )}
-              >
-                {plan === "Pay-as-you-go" && (
-                  <span className="absolute top-3 right-3 text-[9px] font-bold text-[#14532D] bg-[#14532D]/10 px-2 py-0.5 rounded uppercase tracking-wide">
-                    Active
-                  </span>
-                )}
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <h4 className="text-sm font-extrabold text-slate-900">Pay-as-you-go</h4>
-                    <span className="bg-emerald-50 border border-emerald-100 text-[#14532D] text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">Popular</span>
-                  </div>
-                  <p className="text-[10px] text-slate-400 leading-relaxed mt-1">For production monitoring applications.</p>
-                  
-                  <div className="my-4">
-                    <span className="text-2xl font-black text-slate-900">$0.005</span>
-                    <span className="text-xs text-slate-400 font-medium"> / credit</span>
-                  </div>
-
-                  <ul className="space-y-2 text-xs text-slate-600 border-t border-slate-200/50 pt-4">
-                    <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
-                      <span>$0.005 per credit consumed</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
-                      <span>All index registers + forecasts</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
-                      <span>Prioritized API speeds</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
-                      <span>Email & Slack support</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleUpgrade("Pay-as-you-go")
-                  }}
-                  className={cn(
-                    "w-full h-9 rounded-lg text-xs font-bold transition-colors mt-6 border focus:outline-none",
-                    plan === "Pay-as-you-go"
-                      ? "bg-white border-slate-200 text-slate-505 cursor-default"
-                      : "bg-[#14532D] hover:bg-[#114524] text-white border-transparent"
-                  )}
-                  disabled={plan === "Pay-as-you-go"}
-                >
-                  {plan === "Pay-as-you-go" ? "Current Plan" : "Choose Plan"}
-                </button>
-              </div>
-
-              {/* Plan: Enterprise Tier */}
-              <div
-                onClick={() => setSelectedPlanTier("Enterprise")}
-                className={cn(
-                  "border rounded-xl p-5 flex flex-col justify-between cursor-pointer transition-all relative",
-                  selectedPlanTier === "Enterprise"
-                    ? "border-[#14532D] bg-[#14532D]/5 ring-2 ring-[#14532D]/10"
-                    : "border-slate-200 hover:bg-slate-50"
-                )}
-              >
-                {plan === "Enterprise" && (
-                  <span className="absolute top-3 right-3 text-[9px] font-bold text-[#14532D] bg-[#14532D]/10 px-2 py-0.5 rounded uppercase tracking-wide">
-                    Active
-                  </span>
-                )}
-                <div>
-                  <h4 className="text-sm font-extrabold text-slate-900">Enterprise</h4>
-                  <p className="text-[10px] text-slate-400 leading-relaxed mt-1">For corporate scale sensory grid pipelines.</p>
-                  
-                  <div className="my-4">
-                    <span className="text-2xl font-black text-slate-900">Custom</span>
-                    <span className="text-xs text-slate-400 font-medium"> / contact us</span>
-                  </div>
-
-                  <ul className="space-y-2 text-xs text-slate-600 border-t border-slate-200/50 pt-4">
-                    <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
-                      <span>Custom volume limits</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
-                      <span>Dedicated analytical math grids</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
-                      <span>Sub-150ms response guarantees</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
-                      <span>Dedicated solutions architect</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleUpgrade("Enterprise")
-                  }}
-                  className={cn(
-                    "w-full h-9 rounded-lg text-xs font-bold transition-colors mt-6 border focus:outline-none",
-                    plan === "Enterprise"
-                      ? "bg-white border-slate-200 text-slate-550 cursor-default"
-                      : "bg-[#14532D] hover:bg-[#114524] text-white border-transparent"
-                  )}
-                  disabled={plan === "Enterprise"}
-                >
-                  {plan === "Enterprise" ? "Current Plan" : "Contact Sales"}
-                </button>
-              </div>
-
-            </div>
-
-            {/* Secure Notice */}
-            <div className="p-6 bg-slate-50 border-t border-slate-200 flex justify-between items-center text-xs text-[#64748B]">
-              <div className="flex items-center gap-2">
-                <Lock className="w-3.5 h-3.5 text-slate-400" />
-                <span>Secure 256-bit SSL checkout. Cancel or modify anytime.</span>
-              </div>
-              <button
-                onClick={() => setModalOpen(false)}
-                className="h-8 px-4 text-xs font-semibold hover:bg-slate-100 rounded-lg text-slate-605 transition-colors focus:outline-none"
-              >
-                Dismiss
-              </button>
-            </div>
-
           </div>
         </div>
       )}

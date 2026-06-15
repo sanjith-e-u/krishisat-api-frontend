@@ -1,7 +1,8 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   Code,
   TrendingUp,
@@ -14,6 +15,8 @@ import {
   Check,
   Copy
 } from "lucide-react"
+import { supabase } from "@/lib/supabase"
+import { cn } from "@/lib/utils"
 
 // Reusable Metric Card component
 interface MetricCardProps {
@@ -69,38 +72,86 @@ function SectionHeader({ title, subtitle, action }: { title: string; subtitle?: 
 }
 
 export default function DashboardOverview() {
+  const router = useRouter()
+  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<any>(null)
+  
+  // Real data states
+  const [creditBalance, setCreditBalance] = useState<number>(0)
+  const [totalKeysCount, setTotalKeysCount] = useState<number>(0)
+  const [callsThisMonth, setCallsThisMonth] = useState<number>(0)
+  const [apisPurchasedCount, setApisPurchasedCount] = useState<number>(0)
+  const [recentLogs, setRecentLogs] = useState<any[]>([])
+
+  // Chart state
   const [hoveredPoint, setHoveredPoint] = useState<{ x: number; y: number; label: string; value: number } | null>(null)
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
-  const [apiKey, setApiKey] = useState("ks_sandbox_9jF2k8L1m9P4w0XqZ")
-  const [revealKey, setRevealKey] = useState(false)
-  const [copied, setCopied] = useState(false)
-  const [toastMessage, setToastMessage] = useState<string | null>(null)
 
-  const showToast = (msg: string) => {
-    setToastMessage(msg)
-    setTimeout(() => setToastMessage(null), 3050)
-  }
+  useEffect(() => {
+    async function loadOverviewData() {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        setLoading(false)
+        router.push("/login")
+        return
+      }
+      setUser(session.user)
 
-  const handleCopyKey = () => {
-    navigator.clipboard.writeText(apiKey)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
-    showToast("API Key copied to clipboard!")
-  }
+      try {
+        const userId = session.user.id
 
-  const handleRegenerateKey = () => {
-    if (!window.confirm("Regenerating your key will immediately invalidate the current one.\nAll integrations using it will break. Are you sure?")) {
-      return
+        // 1. Fetch credit balance
+        const balanceRes = await supabase
+          .from("credit_balances")
+          .select("balance")
+          .eq("profile_id", userId)
+          .single()
+          
+        setCreditBalance(balanceRes.data?.balance ?? 0)
+
+        // 2. Fetch total API keys
+        const keysRes = await supabase
+          .from("api_keys")
+          .select("id, api_id, status")
+          .eq("profile_id", userId)
+          
+        const keysList = keysRes.data || []
+        setTotalKeysCount(keysList.length)
+
+        // 3. Count APIs purchased (distinct api_id with active keys)
+        const activeKeys = keysList.filter((k) => k.status === "active")
+        const distinctApiIds = new Set(activeKeys.map((k) => k.api_id))
+        setApisPurchasedCount(distinctApiIds.size)
+
+        // 4. Fetch logs this month
+        const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
+        const monthlyCallsRes = await supabase
+          .from("api_request_logs")
+          .select("id")
+          .eq("profile_id", userId)
+          .gte("created_at", startOfMonth)
+          
+        setCallsThisMonth(monthlyCallsRes.data?.length ?? 0)
+
+        // 5. Fetch last 5 logs joined with apis
+        const recentLogsRes = await supabase
+          .from("api_request_logs")
+          .select("*, apis(name, endpoint)")
+          .eq("profile_id", userId)
+          .order("created_at", { ascending: false })
+          .limit(5)
+          
+        setRecentLogs(recentLogsRes.data || [])
+
+      } catch (err) {
+        console.error("Error loading workspace overview data:", err)
+      } finally {
+        setLoading(false)
+      }
     }
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-    let randomString = ""
-    for (let i = 0; i < 17; i++) {
-      randomString += characters.charAt(Math.floor(Math.random() * characters.length))
-    }
-    const newKey = "ks_sandbox_" + randomString
-    setApiKey(newKey)
-    showToast("API Key regenerated successfully!")
-  }
+
+    loadOverviewData()
+  }, [router])
 
   // Chart Mock Data: 30 Days of API Requests
   const chartData = [
@@ -133,16 +184,19 @@ export default function DashboardOverview() {
   const points = chartData.map((d, i) => `${getX(i)},${getY(d.value)}`).join(" ")
   const areaPoints = `${getX(0)},${height - padding} ${points} ${getX(maxX)},${height - padding}`
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <svg className="animate-spin h-8 w-8 text-[#14532D]" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+        </svg>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-8 relative">
-      
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 border border-slate-800 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />
-          <span className="text-xs font-semibold">{toastMessage}</span>
-        </div>
-      )}
         
         {/* Title */}
         <div>
@@ -150,31 +204,27 @@ export default function DashboardOverview() {
           <p className="text-sm text-slate-500 mt-1">Real-time status of your agricultural telemetry operations.</p>
         </div>
 
-        {/* Phase 3 KPI Metric Cards */}
+        {/* Dynamic KPI Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <MetricCard
-            title="Total API Calls"
-            value="128,542"
-            trend="+12.4%"
-            trendType="up"
-            icon={<Activity className="w-5 h-5" />}
-          />
-          <MetricCard
             title="Credits Remaining"
-            value="9,850"
-            trend="-150 today"
-            trendType="none"
+            value={creditBalance.toLocaleString()}
             icon={<Zap className="w-5 h-5" />}
           />
           <MetricCard
-            title="Current Plan"
-            value="Free"
-            icon={<Database className="w-5 h-5" />}
+            title="Total API Keys"
+            value={totalKeysCount.toString()}
+            icon={<Code className="w-5 h-5" />}
           />
           <MetricCard
-            title="Active APIs"
-            value="6"
-            icon={<Code className="w-5 h-5" />}
+            title="API Calls (Month)"
+            value={callsThisMonth.toLocaleString()}
+            icon={<Activity className="w-5 h-5" />}
+          />
+          <MetricCard
+            title="APIs Purchased"
+            value={apisPurchasedCount.toString()}
+            icon={<Database className="w-5 h-5" />}
           />
         </div>
 
@@ -286,116 +336,53 @@ export default function DashboardOverview() {
             </div>
           </div>
 
-          {/* Right Column - Stacked API Key + Recent Activity */}
+          {/* Right Column - Recent Activity */}
           <div className="xl:col-span-4 flex flex-col gap-6">
-            {/* API Key Card */}
-            <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex flex-col gap-4">
-              <SectionHeader
-                title="Primary API Key"
-                subtitle="Sandbox developer credentials"
-              />
-              <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5 flex items-center justify-between font-mono text-xs text-slate-650">
-                <span className="truncate max-w-[170px] select-all">
-                  {revealKey ? apiKey : `${apiKey.substring(0, 8)}••••••••••••••••`}
-                </span>
-                <div className="flex items-center gap-2 shrink-0">
-                  <button
-                    onClick={() => setRevealKey(!revealKey)}
-                    className="p-1 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none"
-                    title={revealKey ? "Hide API key" : "Show API key"}
-                  >
-                    {revealKey ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                  </button>
-                  <button
-                    onClick={handleCopyKey}
-                    className="p-1 text-slate-400 hover:text-slate-650 transition-colors focus:outline-none flex items-center gap-1"
-                    title="Copy API key"
-                  >
-                    {copied ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 text-emerald-600" />
-                        <span className="text-[10px] font-bold text-emerald-600">Copied!</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3.5 h-3.5" />
-                        <span className="text-[10px] font-medium text-slate-400">Copy</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center text-xs pt-1">
-                <button
-                  onClick={handleRegenerateKey}
-                  className="text-primary hover:text-[#114524] font-semibold transition-colors focus:outline-none"
-                >
-                  Regenerate Key
-                </button>
-                <Link
-                  href="/dashboard/api-keys"
-                  className="text-slate-400 hover:text-slate-650 font-medium transition-colors"
-                >
-                  Manage Keys →
-                </Link>
-              </div>
-            </div>
-
-            {/* Recent Activity Card */}
             <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex flex-col justify-between flex-grow">
               <div>
                 <SectionHeader title="Recent Activity" subtitle="Outbound developer request logs" />
                 
-                <ul className="space-y-4">
-                  <li className="flex justify-between items-start py-1 border-b border-slate-50 last:border-b-0">
-                    <div>
-                      <h4 className="text-xs font-bold text-slate-800">NDVI API Called</h4>
-                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">POST /v1/vegetation/ndvi</p>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-xs font-semibold text-[#14532D]">1 credit</span>
-                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">Success 200</p>
-                    </div>
-                  </li>
-                  <li className="flex justify-between items-start py-1 border-b border-slate-50 last:border-b-0">
-                    <div>
-                      <h4 className="text-xs font-bold text-slate-800">Weather API Called</h4>
-                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">POST /v1/weather</p>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-xs font-semibold text-[#14532D]">1 credit</span>
-                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">Success 200</p>
-                    </div>
-                  </li>
-                  <li className="flex justify-between items-start py-1 border-b border-slate-50 last:border-b-0">
-                    <div>
-                      <h4 className="text-xs font-bold text-slate-800">NDRE API Called</h4>
-                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">POST /v1/vegetation/ndre</p>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-xs font-semibold text-[#14532D]">2 credits</span>
-                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">Success 200</p>
-                    </div>
-                  </li>
-                  <li className="flex justify-between items-start py-1">
-                    <div>
-                      <h4 className="text-xs font-bold text-slate-800">Farm Registration</h4>
-                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">POST /v1/farms</p>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-xs font-semibold text-[#14532D]">0 credits</span>
-                      <p className="text-[10px] text-slate-405 font-mono mt-0.5">Success 201</p>
-                    </div>
-                  </li>
-                </ul>
+                {recentLogs.length === 0 ? (
+                  <div className="py-12 text-center text-slate-400 select-none">
+                    <Activity className="w-8 h-8 mx-auto mb-2 text-slate-350" />
+                    <p className="text-xs font-semibold">No recent activity logs recorded.</p>
+                  </div>
+                ) : (
+                  <ul className="space-y-4">
+                    {recentLogs.map((log) => {
+                      const apiName = log.apis?.name || "Unknown API"
+                      const endpoint = log.apis?.endpoint || log.endpoint || "/v1"
+                      const cost = log.success ? "Charged" : "0 credits"
+
+                      return (
+                        <li key={log.id} className="flex justify-between items-start py-1 border-b border-slate-50 last:border-b-0">
+                          <div>
+                            <h4 className="text-xs font-bold text-slate-800">{apiName} API Called</h4>
+                            <p className="text-[10px] text-slate-400 font-mono mt-0.5">POST {endpoint}</p>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-[10px] text-slate-500 font-medium font-sans block">
+                              {new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                            <span className={cn(
+                              "text-[10px] font-bold mt-0.5 inline-block px-1.5 py-0.5 rounded",
+                              log.success ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-600"
+                            )}>
+                              {log.success ? "Success" : "Failed"}
+                            </span>
+                          </div>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                )}
               </div>
 
-              <div className="pt-4 border-t border-slate-100 mt-6 flex justify-between items-center">
-                <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-1 rounded inline-block select-none animate-pulse">
-                  ● Connected (mock)
+              <div className="pt-4 border-t border-slate-100 mt-6 flex justify-between items-center select-none text-[10px]">
+                <span className="font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-1 rounded inline-block">
+                  ● Gateway Connected
                 </span>
-                <span className="text-[10px] text-slate-405 font-mono">
+                <span className="text-slate-400 font-mono">
                   region: ap-south-1
                 </span>
               </div>
@@ -404,11 +391,11 @@ export default function DashboardOverview() {
 
         </div>
 
-        {/* API Catalog Grid */}
+        {/* API Catalog Quick Links */}
         <div>
           <SectionHeader
-            title="API Index Catalog"
-            subtitle="Current operational telemetry indexes"
+            title="Operational Indices"
+            subtitle="Current active telemetry index products available"
             action={
               <Link
                 href="/marketplace"
@@ -420,49 +407,49 @@ export default function DashboardOverview() {
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* API 1: NDVI */}
-            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-slate-350 transition-colors flex flex-col justify-between">
+            {/* NDVI Card */}
+            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col justify-between">
               <div>
-                <div className="flex justify-between items-start mb-3">
+                <div className="flex justify-between items-start mb-3 select-none">
                   <span className="font-mono text-[9px] font-bold text-[#14532D] bg-[#14532D]/10 px-2 py-0.5 rounded uppercase tracking-wide">POST</span>
                   <span className="bg-emerald-50 border border-emerald-150 text-[#14532D] text-[10px] font-semibold px-2 py-0.5 rounded-full select-none">Active</span>
                 </div>
                 <h4 className="text-sm font-bold text-slate-900">NDVI API</h4>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">Vegetation density index to monitor overall canopy vigor.</p>
+                <p className="text-xs text-slate-505 mt-1 leading-relaxed">Vegetation density index representing overall canopy greenness, biomass and chlorophyll.</p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400">
+              <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 select-none">
                 <span className="font-mono">/v1/vegetation/ndvi</span>
                 <span className="font-semibold text-slate-700">1 credit</span>
               </div>
             </div>
 
-            {/* API 2: NDRE */}
-            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-slate-350 transition-colors flex flex-col justify-between">
+            {/* NDRE Card */}
+            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col justify-between">
               <div>
-                <div className="flex justify-between items-start mb-3">
+                <div className="flex justify-between items-start mb-3 select-none">
                   <span className="font-mono text-[9px] font-bold text-[#14532D] bg-[#14532D]/10 px-2 py-0.5 rounded uppercase tracking-wide">POST</span>
                   <span className="bg-emerald-50 border border-emerald-150 text-[#14532D] text-[10px] font-semibold px-2 py-0.5 rounded-full select-none">Active</span>
                 </div>
                 <h4 className="text-sm font-bold text-slate-900">NDRE API</h4>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">Canopy chlorophyll and nitrogen status monitoring.</p>
+                <p className="text-xs text-slate-505 mt-1 leading-relaxed">Red Edge Index optimized for crop nitrogen logging and dense canopy insights.</p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400">
+              <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 select-none">
                 <span className="font-mono">/v1/vegetation/ndre</span>
                 <span className="font-semibold text-slate-700">2 credits</span>
               </div>
             </div>
 
-            {/* API 3: Weather */}
-            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-slate-350 transition-colors flex flex-col justify-between">
+            {/* Weather Card */}
+            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col justify-between">
               <div>
-                <div className="flex justify-between items-start mb-3">
+                <div className="flex justify-between items-start mb-3 select-none">
                   <span className="font-mono text-[9px] font-bold text-[#14532D] bg-[#14532D]/10 px-2 py-0.5 rounded uppercase tracking-wide">POST</span>
                   <span className="bg-emerald-50 border border-emerald-150 text-[#14532D] text-[10px] font-semibold px-2 py-0.5 rounded-full select-none">Active</span>
                 </div>
                 <h4 className="text-sm font-bold text-slate-900">Weather API</h4>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">Centroid degree days, relative humidity and wind forecasts.</p>
+                <p className="text-xs text-slate-505 mt-1 leading-relaxed">Hyperlocal meteorological telemetry including GDD calculations, rainfall, and wind speeds.</p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400">
+              <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 select-none">
                 <span className="font-mono">/v1/weather</span>
                 <span className="font-semibold text-slate-700">1 credit</span>
               </div>

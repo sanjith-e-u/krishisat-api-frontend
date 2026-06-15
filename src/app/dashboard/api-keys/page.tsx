@@ -1,108 +1,209 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
+import Link from "next/link"
 import { Eye, EyeOff, Copy, Trash2, Key, Check, Plus, AlertCircle } from "lucide-react"
+import { supabase } from "@/lib/supabase"
 import { cn } from "@/lib/utils"
 
 interface ApiKeyItem {
   id: string;
+  profile_id: string;
   name: string;
-  key: string;
-  env: "Sandbox" | "Production";
-  created: string;
-  status: "Active" | "Inactive" | "Revoked";
+  key_hash: string;
+  status: "active" | "revoked" | "inactive";
+  rate_limit_per_minute: number;
+  created_at: string;
+  env_scope: "sandbox" | "live";
+  api_id: string;
+  apis?: {
+    name: string;
+    endpoint: string;
+  };
 }
 
-const initialKeys: ApiKeyItem[] = [
-  {
-    id: "1",
-    name: "Development Sandbox Key",
-    key: "ks_sandbox_9jF2k8L1m9P4w0XqZ",
-    env: "Sandbox",
-    created: "2026-06-10",
-    status: "Active"
-  },
-  {
-    id: "2",
-    name: "Production Main API Key",
-    key: "ks_live_3aD7s5N2p8K0w1YvR",
-    env: "Production",
-    created: "2026-06-11",
-    status: "Active"
-  }
-]
+interface ApiOption {
+  id: string;
+  name: string;
+  endpoint: string;
+}
 
 export default function DashboardApiKeys() {
-  const [keys, setKeys] = useState<ApiKeyItem[]>(initialKeys)
+  const [keys, setKeys] = useState<ApiKeyItem[]>([])
+  const [apis, setApis] = useState<ApiOption[]>([])
+  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<any>(null)
+  
+  // Key Generation Modal
   const [modalOpen, setModalOpen] = useState(false)
   const [newKeyName, setNewKeyName] = useState("")
-  const [newKeyEnv, setNewKeyEnv] = useState<"Sandbox" | "Production">("Sandbox")
-  const [revealKeyId, setRevealKeyId] = useState<string | null>(null)
-  const [copiedKeyId, setCopiedKeyId] = useState<string | null>(null)
+  const [selectedApiId, setSelectedApiId] = useState("")
+  const [newKeyEnv, setNewKeyEnv] = useState<"sandbox" | "live">("sandbox")
+  const [generating, setGenerating] = useState(false)
+  const [newPlaintextKey, setNewPlaintextKey] = useState<string | null>(null)
+  
+  // Revocation Confirmation
   const [revokingKeyId, setRevokingKeyId] = useState<string | null>(null)
 
-  // Handle generation of a new key
-  const handleGenerateKey = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!newKeyName) return
+  // Copy Tooltips
+  const [copiedKeyId, setCopiedKeyId] = useState<string | null>(null)
+  const [copiedGeneratedKey, setCopiedGeneratedKey] = useState(false)
 
-    const prefix = newKeyEnv === "Sandbox" ? "ks_sandbox_" : "ks_live_"
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-    let randomString = ""
-    for (let i = 0; i < 17; i++) {
-      randomString += characters.charAt(Math.floor(Math.random() * characters.length))
+  // Fetch session, keys, and apis
+  useEffect(() => {
+    async function loadData() {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        setLoading(false)
+        return
+      }
+      setUser(session.user)
+
+      try {
+        // Fetch keys joined with apis
+        const keysRes = await supabase
+          .from("api_keys")
+          .select("*, apis(name, endpoint)")
+          .eq("profile_id", session.user.id)
+          .order("created_at", { ascending: false })
+          
+
+        // Fetch api catalog for generation dropdown
+        const apisRes = await supabase
+          .from("apis")
+          .select("id, name, endpoint")
+          
+
+        if (keysRes.data) setKeys(keysRes.data)
+        if (apisRes.data) {
+          setApis(apisRes.data)
+          if (apisRes.data.length > 0) {
+            setSelectedApiId(apisRes.data[0].id)
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load dashboard api keys:", err)
+      } finally {
+        setLoading(false)
+      }
     }
 
-    const newKey: ApiKeyItem = {
-      id: Math.random().toString(36).substring(2, 9),
-      name: newKeyName,
-      key: prefix + randomString,
-      env: newKeyEnv,
-      created: new Date().toISOString().split("T")[0],
-      status: "Active"
-    }
+    loadData()
+  }, [])
 
-    setKeys([newKey, ...keys])
-    setNewKeyName("")
-    setNewKeyEnv("Sandbox")
-    setModalOpen(false)
+  const refreshKeys = async (userId: string) => {
+    const keysRes = await supabase
+      .from("api_keys")
+      .select("*, apis(name, endpoint)")
+      .eq("profile_id", userId)
+      .order("created_at", { ascending: false })
+      
+    if (keysRes.data) setKeys(keysRes.data)
   }
 
-  // Toggle activation state of a key
-  const handleToggleStatus = (id: string) => {
-    setKeys(
-      keys.map((k) => {
-        if (k.id === id && k.status !== "Revoked") {
-          return { ...k, status: k.status === "Active" ? "Inactive" : "Active" }
-        }
-        return k
+  // Handle generation of a new key via gateway
+  const handleGenerateKey = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!newKeyName || !selectedApiId || !user) return
+
+    setGenerating(true)
+    try {
+      const selectedApi = apis.find((a) => a.id === selectedApiId)
+      if (!selectedApi) return
+
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) return
+
+      const response = await fetch("http://localhost:8000/v1/keys/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify({
+          api_name: selectedApi.name,
+          env_scope: newKeyEnv
+        })
       })
-    )
+
+      if (!response.ok) {
+        const errData = await response.json()
+        throw new Error(errData.detail?.error?.message || "Failed to generate key.")
+      }
+
+      const result = await response.json()
+      if (result.key) {
+        setNewPlaintextKey(result.key)
+        await refreshKeys(user.id)
+      }
+    } catch (err: any) {
+      alert(err.message || "An error occurred while generating key.")
+    } finally {
+      setGenerating(false)
+    }
   }
 
   // Revoke a key permanently
-  const handleRevokeKey = (id: string) => {
-    setKeys(
-      keys.map((k) => {
-        if (k.id === id) {
-          return { ...k, status: "Revoked" }
-        }
-        return k
-      })
-    )
-    setRevokingKeyId(null)
+  const handleRevokeKey = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from("api_keys")
+        .update({ status: "revoked" })
+        .eq("id", id)
+        
+
+      if (error) throw error
+
+      if (user) await refreshKeys(user.id)
+    } catch (err) {
+      alert("Failed to revoke API key.")
+    } finally {
+      setRevokingKeyId(null)
+    }
   }
 
-  // Delete a key
-  const handleDeleteKey = (id: string) => {
-    setKeys(keys.filter((k) => k.id !== id))
-  }
-
-  // Copy key to clipboard
-  const handleCopy = (id: string, keyValue: string) => {
-    navigator.clipboard.writeText(keyValue)
+  // Copy key preview
+  const handleCopyPreview = (id: string, previewStr: string) => {
+    navigator.clipboard.writeText(previewStr)
     setCopiedKeyId(id)
     setTimeout(() => setCopiedKeyId(null), 1500)
+  }
+
+  const handleCopyGeneratedKey = () => {
+    if (newPlaintextKey) {
+      navigator.clipboard.writeText(newPlaintextKey)
+      setCopiedGeneratedKey(true)
+      setTimeout(() => setCopiedGeneratedKey(false), 1500)
+    }
+  }
+
+  const handleCloseModal = () => {
+    setModalOpen(false)
+    setNewPlaintextKey(null)
+    setNewKeyName("")
+  }
+
+  // Group keys by API Name
+  const groupedKeys: { [apiName: string]: ApiKeyItem[] } = {}
+  keys.forEach((k) => {
+    const apiName = k.apis?.name || "Unknown API"
+    if (!groupedKeys[apiName]) {
+      groupedKeys[apiName] = []
+    }
+    groupedKeys[apiName].push(k)
+  })
+
+  const apiNames = Object.keys(groupedKeys)
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <svg className="animate-spin h-8 w-8 text-[#14532D]" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+        </svg>
+      </div>
+    )
   }
 
   return (
@@ -130,268 +231,311 @@ export default function DashboardApiKeys() {
         <div>
           <h4 className="text-xs font-bold text-amber-900">Keep secret keys protected</h4>
           <p className="text-xs text-amber-700 leading-relaxed mt-0.5">
-            These credentials grant full programmatic access to your KrishiSat indices quota and farm registers. Do not store keys in public code bases or client-side assets.
+            API keys are hashed securely in the database. Full keys can only be shown and copied once on generation. Do not check keys into public source repositories.
           </p>
         </div>
       </div>
 
-      {/* Keys List Table */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden max-w-5xl">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
-            <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider select-none">
-                <th className="text-left py-3 px-5 font-sans">Name</th>
-                <th className="text-left py-3 px-5 font-sans">Environment</th>
-                <th className="text-left py-3 px-5 font-sans">API Key Token</th>
-                <th className="text-left py-3 px-5 font-sans">Created</th>
-                <th className="text-left py-3 px-5 font-sans">Status</th>
-                <th className="text-right py-3 px-5 font-sans">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {keys.map((k) => {
-                const isRevealed = revealKeyId === k.id
-                const isCopied = copiedKeyId === k.id
-                const isRevoked = k.status === "Revoked"
-                const isCurrentlyRevoking = revokingKeyId === k.id
+      {/* Empty State */}
+      {keys.length === 0 ? (
+        <div className="py-16 text-center select-none bg-white border border-slate-200 rounded-xl max-w-3xl">
+          <Key className="w-10 h-10 mx-auto mb-3 text-slate-300" />
+          <p className="text-sm font-semibold text-slate-800">No active API credentials found.</p>
+          <p className="text-xs text-slate-450 mt-1.5 max-w-xs mx-auto">
+            You need to purchase access to an API from the catalog to generate a secret credential.
+          </p>
+          <Link
+            href="/marketplace"
+            className="inline-flex items-center gap-1.5 mt-5 h-9 px-4 bg-[#14532D] hover:bg-[#114524] text-white rounded-lg text-xs font-semibold shadow-sm transition-colors"
+          >
+            Browse API Catalog
+          </Link>
+        </div>
+      ) : (
+        /* Grouped Keys Lists */
+        <div className="space-y-8 max-w-5xl">
+          {apiNames.map((apiName) => (
+            <div key={apiName} className="space-y-4">
+              <h2 className="text-sm font-extrabold text-slate-900 uppercase tracking-widest bg-slate-100/60 p-2 rounded-lg border border-slate-200/50 w-fit">
+                {apiName} Keys
+              </h2>
 
-                return (
-                  <tr
-                    key={k.id}
-                    className={cn(
-                      "hover:bg-slate-50/50 transition-colors",
-                      isRevoked && "opacity-55 bg-slate-50/50"
-                    )}
-                  >
-                    {/* Name */}
-                    <td className={cn("py-4.5 px-5 font-semibold text-slate-800", isRevoked && "line-through text-slate-400")}>
-                      {k.name}
-                    </td>
-                    
-                    {/* Environment Badge */}
-                    <td className="py-4.5 px-5 select-none">
-                      <span
-                        className={cn(
-                          "text-[10px] font-bold px-2.5 py-0.5 rounded font-mono uppercase tracking-wide",
-                          isRevoked
-                            ? "bg-slate-200 text-slate-400"
-                            : k.env === "Production"
-                            ? "bg-[#22C55E]/10 text-[#22C55E]"
-                            : "bg-[#14532D]/5 text-[#14532D]"
-                        )}
-                      >
-                        {k.env}
-                      </span>
-                    </td>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {groupedKeys[apiName].map((k) => {
+                  const isRevoked = k.status === "revoked"
+                  const isCurrentlyRevoking = revokingKeyId === k.id
+                  const isCopied = copiedKeyId === k.id
 
-                    {/* Obfuscated Key */}
-                    <td className="py-4.5 px-5 font-mono text-xs text-slate-650">
-                      <div className="flex items-center gap-2">
-                        <span className="select-all">
-                          {isRevealed ? k.key : `${k.key.substring(0, 8)}••••••••••••••••`}
-                        </span>
-                        {!isRevoked && (
-                          <button
-                            onClick={() => setRevealKeyId(isRevealed ? null : k.id)}
-                            className="p-1 rounded text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
-                            title={isRevealed ? "Hide API key" : "Show API key"}
+                  // Create key preview
+                  const envTag = k.env_scope === "live" ? "live" : "sandbox"
+                  const keyPreview = `ks_${envTag}_${apiName.toLowerCase().replace(" ", "_")}_xxxx`
+
+                  return (
+                    <div
+                      key={k.id}
+                      className={cn(
+                        "bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between transition-all",
+                        isRevoked && "opacity-55 bg-slate-50/50"
+                      )}
+                    >
+                      <div>
+                        <div className="flex justify-between items-start mb-3 select-none">
+                          <span
+                            className={cn(
+                              "text-[9px] font-bold px-2 py-0.5 rounded font-mono uppercase tracking-wide",
+                              isRevoked
+                                ? "bg-slate-200 text-slate-400"
+                                : k.env_scope === "live"
+                                ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
+                                : "bg-blue-50 text-blue-700 border border-blue-100"
+                            )}
                           >
-                            {isRevealed ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                            {k.env_scope}
+                          </span>
+
+                          <span
+                            className={cn(
+                              "text-[9px] font-bold px-2 py-0.5 rounded-full",
+                              isRevoked ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-700"
+                            )}
+                          >
+                            {k.status}
+                          </span>
+                        </div>
+
+                        <h3 className={cn("text-sm font-extrabold text-slate-800", isRevoked && "line-through text-slate-400")}>
+                          {k.name}
+                        </h3>
+
+                        {/* Obfuscated Key Preview */}
+                        <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between font-mono text-xs text-slate-650 mt-3 select-all">
+                          <span className="truncate max-w-[190px]">
+                            {keyPreview}
+                          </span>
+                          <button
+                            onClick={() => handleCopyPreview(k.id, keyPreview)}
+                            className="p-1 rounded text-slate-400 hover:text-slate-850 cursor-pointer focus:outline-none"
+                            title="Copy Key Preview"
+                          >
+                            {isCopied ? (
+                              <Check className="w-3.5 h-3.5 text-emerald-600" />
+                            ) : (
+                              <Copy className="w-3.5 h-3.5 text-slate-500" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Card Footer Actions */}
+                      <div className="mt-5 pt-3 border-t border-slate-100 flex justify-between items-center select-none text-xs">
+                        <span className="text-[10px] text-slate-400 font-medium">
+                          Created {new Date(k.created_at).toLocaleDateString()}
+                        </span>
+
+                        {isRevoked ? (
+                          <span className="text-slate-405 font-bold italic">Revoked</span>
+                        ) : isCurrentlyRevoking ? (
+                          <div className="flex items-center gap-1.5 animate-in fade-in slide-in-from-right-1 duration-150">
+                            <span className="text-[10px] font-semibold text-rose-650">Confirm?</span>
+                            <button
+                              onClick={() => handleRevokeKey(k.id)}
+                              className="px-2 py-1 bg-rose-650 hover:bg-rose-700 text-white rounded text-[10px] font-bold transition-colors cursor-pointer"
+                            >
+                              Yes
+                            </button>
+                            <button
+                              onClick={() => setRevokingKeyId(null)}
+                              className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-[10px] font-semibold transition-colors cursor-pointer"
+                            >
+                              No
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => setRevokingKeyId(k.id)}
+                            className="text-rose-600 hover:text-rose-700 font-bold transition-colors cursor-pointer"
+                          >
+                            Revoke Key
                           </button>
                         )}
                       </div>
-                    </td>
-
-                    {/* Created date */}
-                    <td className="py-4.5 px-5 text-slate-500 font-medium select-none">{k.created}</td>
-
-                    {/* Status */}
-                    <td className="py-4.5 px-5 select-none">
-                      {isRevoked ? (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-600 flex items-center gap-1 w-fit">
-                          <span className="w-1.5 h-1.5 rounded-full bg-rose-550" />
-                          Revoked
-                        </span>
-                      ) : (
-                        <button
-                          onClick={() => handleToggleStatus(k.id)}
-                          className={cn(
-                            "text-[10px] font-bold px-2 py-0.5 rounded-full select-none focus:outline-none flex items-center gap-1 cursor-pointer",
-                            k.status === "Active"
-                              ? "bg-emerald-50 text-[#14532D]"
-                              : "bg-slate-100 text-slate-400"
-                          )}
-                        >
-                          <span className={cn("w-1 h-1 rounded-full", k.status === "Active" ? "bg-[#22C55E]" : "bg-slate-400")} />
-                          {k.status}
-                        </button>
-                      )}
-                    </td>
-
-                    {/* Actions */}
-                    <td className="py-4.5 px-5 text-right">
-                      {isCurrentlyRevoking ? (
-                        <div className="flex items-center justify-end gap-2 select-none animate-in fade-in slide-in-from-right-1 duration-150">
-                          <span className="text-[10px] font-semibold text-rose-650">
-                            Revoke this key?
-                          </span>
-                          <button
-                            onClick={() => handleRevokeKey(k.id)}
-                            className="px-2 py-1 bg-rose-650 hover:bg-rose-700 text-white rounded text-xs font-bold transition-colors cursor-pointer"
-                          >
-                            Confirm
-                          </button>
-                          <button
-                            onClick={() => setRevokingKeyId(null)}
-                            className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-xs font-semibold transition-colors cursor-pointer"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => handleCopy(k.id, k.key)}
-                            disabled={isRevoked}
-                            className="p-2 rounded-lg border border-slate-200 text-slate-500 hover:text-slate-800 bg-white hover:bg-slate-50 transition-colors focus:outline-none flex items-center gap-1.5 text-xs font-semibold shadow-sm disabled:opacity-45 disabled:cursor-not-allowed cursor-pointer"
-                            title="Copy key token"
-                          >
-                            {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                            <span>{isCopied ? "Copied!" : "Copy"}</span>
-                          </button>
-                          
-                          {!isRevoked && (
-                            <button
-                              onClick={() => setRevokingKeyId(k.id)}
-                              className="p-2 rounded-lg border border-slate-200 text-slate-500 hover:text-rose-650 hover:border-rose-200 bg-white hover:bg-slate-50 transition-colors focus:outline-none text-xs font-semibold shadow-sm cursor-pointer"
-                              title="Revoke secret credential key"
-                            >
-                              Revoke
-                            </button>
-                          )}
-
-                          <button
-                            onClick={() => handleDeleteKey(k.id)}
-                            className="p-2 rounded-lg border border-slate-200 text-slate-400 hover:text-rose-600 hover:border-rose-200 bg-white hover:bg-rose-50 transition-colors focus:outline-none cursor-pointer"
-                            title="Delete key credentials"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                )
-              })}
-              {keys.length === 0 && (
-                <tr>
-                  <td colSpan={6} className="py-12 text-center text-slate-400 select-none">
-                    <Key className="w-8 h-8 mx-auto mb-2 text-slate-300 animate-pulse" />
-                    <p className="text-sm font-semibold">No active API credentials found.</p>
-                    <p className="text-xs text-slate-400 mt-1">Generate a key above to start query integrations.</p>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
+      )}
 
       {/* Modal: Generate API Key */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 select-none">
           {/* Backdrop */}
           <div
-            onClick={() => setModalOpen(false)}
-            className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300 animate-in fade-in"
+            onClick={handleCloseModal}
+            className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300"
           />
 
           {/* Modal Card */}
           <div className="relative bg-white border border-slate-200 rounded-2xl shadow-2xl p-6 w-full max-w-[440px] z-50 animate-in slide-in-from-top-4 duration-300 flex flex-col gap-5">
             <div>
               <h3 className="text-base font-bold text-slate-900 tracking-tight">Generate API Key</h3>
-              <p className="text-xs text-[#64748B] mt-0.5">Select scopes and labels for the new credential token.</p>
+              <p className="text-xs text-[#64748B] mt-0.5">Select target API and labeling scopes for the new credential.</p>
             </div>
 
-            <form onSubmit={handleGenerateKey} className="flex flex-col gap-4">
-              {/* Key Name */}
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor="keyName" className="text-xs font-semibold text-slate-700">
-                  Key Name
-                </label>
-                <input
-                  id="keyName"
-                  type="text"
-                  required
-                  placeholder="e.g. Sandbox Testing"
-                  value={newKeyName}
-                  onChange={(e) => setNewKeyName(e.target.value)}
-                  className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
-                />
-              </div>
+            {newPlaintextKey ? (
+              /* Success display */
+              <div className="flex flex-col gap-4">
+                <div className="flex gap-3 p-3.5 bg-rose-50 border border-rose-100 rounded-xl">
+                  <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-xs font-bold text-rose-900">Security Warning</h4>
+                    <p className="text-xs text-rose-700 leading-normal mt-0.5">
+                      Copy this key now. It will not be shown again.
+                    </p>
+                  </div>
+                </div>
 
-              {/* Scope Environment */}
-              <div className="flex flex-col gap-1.5">
-                <span className="text-xs font-semibold text-slate-700">Environment Scope</span>
-                <div className="flex gap-3">
-                  <label
-                    className={cn(
-                      "flex-1 border rounded-lg p-3 flex flex-col gap-1 cursor-pointer select-none transition-all",
-                      newKeyEnv === "Sandbox"
-                        ? "border-[#14532D] bg-[#14532D]/5 ring-2 ring-[#14532D]/10"
-                        : "border-slate-200 hover:bg-slate-50"
-                    )}
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex items-center justify-between font-mono text-xs text-slate-800">
+                  <span className="truncate max-w-[260px] select-all font-semibold text-slate-900">
+                    {newPlaintextKey}
+                  </span>
+                  <button
+                    onClick={handleCopyGeneratedKey}
+                    className="p-1 rounded text-slate-400 hover:text-slate-800 transition-colors flex items-center gap-1 focus:outline-none cursor-pointer"
                   >
-                    <input
-                      type="radio"
-                      name="envType"
-                      checked={newKeyEnv === "Sandbox"}
-                      onChange={() => setNewKeyEnv("Sandbox")}
-                      className="sr-only"
-                    />
-                    <span className="text-xs font-bold text-slate-800">Sandbox</span>
-                    <span className="text-[10px] text-slate-400 leading-normal">Query mock indexes. Quotas limited to 1,000 calls.</span>
-                  </label>
+                    {copiedGeneratedKey ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-600 animate-in zoom-in-50" />
+                        <span className="text-[10px] font-bold text-emerald-600">Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5 text-slate-500" />
+                        <span className="text-[10px] font-semibold text-slate-500">Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
 
-                  <label
-                    className={cn(
-                      "flex-1 border rounded-lg p-3 flex flex-col gap-1 cursor-pointer select-none transition-all",
-                      newKeyEnv === "Production"
-                        ? "border-[#14532D] bg-[#14532D]/5 ring-2 ring-[#14532D]/10"
-                        : "border-slate-200 hover:bg-slate-50"
-                    )}
+                <div className="flex justify-end mt-2">
+                  <button
+                    onClick={handleCloseModal}
+                    className="h-10 bg-[#14532D] hover:bg-[#114524] text-white px-5 rounded-lg text-xs font-semibold shadow-sm transition-colors cursor-pointer"
                   >
-                    <input
-                      type="radio"
-                      name="envType"
-                      checked={newKeyEnv === "Production"}
-                      onChange={() => setNewKeyEnv("Production")}
-                      className="sr-only"
-                    />
-                    <span className="text-xs font-bold text-slate-800">Production</span>
-                    <span className="text-[10px] text-slate-400 leading-normal">Invoke real satellite sensory math grids. Billing active.</span>
-                  </label>
+                    Close
+                  </button>
                 </div>
               </div>
+            ) : (
+              /* Generator Form */
+              <form onSubmit={handleGenerateKey} className="flex flex-col gap-4">
+                {/* Key Label */}
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="keyName" className="text-xs font-semibold text-slate-700">
+                    Key Label Name
+                  </label>
+                  <input
+                    id="keyName"
+                    type="text"
+                    required
+                    placeholder="e.g. NDVI sandbox client"
+                    value={newKeyName}
+                    onChange={(e) => setNewKeyName(e.target.value)}
+                    className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                  />
+                </div>
 
-              {/* Modal Buttons */}
-              <div className="flex justify-end gap-2.5 mt-3">
-                <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
-                  className="h-10 px-4 border border-slate-200 rounded-lg text-slate-650 hover:bg-slate-50 text-sm font-semibold transition-colors focus:outline-none cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="h-10 px-4 bg-[#14532D] hover:bg-[#114524] text-white rounded-lg text-sm font-semibold transition-colors focus:outline-none shadow-sm cursor-pointer"
-                >
-                  Generate Key
-                </button>
-              </div>
-            </form>
+                {/* Target API Selection */}
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="targetApi" className="text-xs font-semibold text-slate-700">
+                    Target Endpoint API
+                  </label>
+                  <select
+                    id="targetApi"
+                    value={selectedApiId}
+                    onChange={(e) => setSelectedApiId(e.target.value)}
+                    className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                  >
+                    {apis.map((api) => (
+                      <option key={api.id} value={api.id}>
+                        {api.name} Index ({api.endpoint})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Scope Selection */}
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-xs font-semibold text-slate-700">Environment Scope</span>
+                  <div className="flex gap-3">
+                    <label
+                      className={cn(
+                        "flex-1 border rounded-lg p-3 flex flex-col gap-1 cursor-pointer select-none transition-all",
+                        newKeyEnv === "sandbox"
+                          ? "border-[#14532D] bg-[#14532D]/5 ring-2 ring-[#14532D]/10"
+                          : "border-slate-200 hover:bg-slate-50"
+                      )}
+                    >
+                      <input
+                        type="radio"
+                        name="envType"
+                        checked={newKeyEnv === "sandbox"}
+                        onChange={() => setNewKeyEnv("sandbox")}
+                        className="sr-only"
+                      />
+                      <span className="text-xs font-bold text-slate-800">Sandbox</span>
+                      <span className="text-[10px] text-slate-400 leading-normal">Mock indices. Quotas limited to 1,000 calls.</span>
+                    </label>
+
+                    <label
+                      className={cn(
+                        "flex-1 border rounded-lg p-3 flex flex-col gap-1 cursor-pointer select-none transition-all",
+                        newKeyEnv === "live"
+                          ? "border-[#14532D] bg-[#14532D]/5 ring-2 ring-[#14532D]/10"
+                          : "border-slate-200 hover:bg-slate-50"
+                      )}
+                    >
+                      <input
+                        type="radio"
+                        name="envType"
+                        checked={newKeyEnv === "live"}
+                        onChange={() => setNewKeyEnv("live")}
+                        className="sr-only"
+                      />
+                      <span className="text-xs font-bold text-slate-800">Production</span>
+                      <span className="text-[10px] text-slate-400 leading-normal">Real Sentinel satellite pipelines. Billing active.</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Modal Buttons */}
+                <div className="flex justify-end gap-2.5 mt-3">
+                  <button
+                    type="button"
+                    onClick={handleCloseModal}
+                    className="h-10 px-4 border border-slate-200 rounded-lg text-slate-650 hover:bg-slate-50 text-sm font-semibold transition-colors focus:outline-none cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={generating}
+                    className="h-10 px-4 bg-[#14532D] hover:bg-[#114524] disabled:bg-[#14532D]/50 text-white rounded-lg text-sm font-semibold transition-colors focus:outline-none shadow-sm cursor-pointer flex items-center justify-center min-w-[100px]"
+                  >
+                    {generating ? (
+                      <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                    ) : (
+                      "Generate"
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       )}

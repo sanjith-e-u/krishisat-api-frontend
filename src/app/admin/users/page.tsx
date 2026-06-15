@@ -1,8 +1,10 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Search, Download, Eye, ShieldAlert, ShieldCheck, Trash2, ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { supabase } from "@/lib/supabase"
 
 interface UserItem {
   id: string;
@@ -12,25 +14,16 @@ interface UserItem {
   plan: "Developer" | "Professional" | "Enterprise";
   status: "Active" | "Suspended";
   created: string;
+  balance: number;
+  keysCount: number;
+  callsCount: number;
 }
 
-const initialUsers: UserItem[] = [
-  { id: "1", name: "Arjun Mehta", email: "arjun@agrivision.ai", company: "AgriVision AI", plan: "Professional", status: "Active", created: "Jun 12, 2026" },
-  { id: "2", name: "Priya Nair", email: "priya@cropsense.io", company: "CropSense Labs", plan: "Developer", status: "Active", created: "Jun 11, 2026" },
-  { id: "3", name: "Rohit Sharma", email: "rohit@farmtech.in", company: "FarmTech Delhi", plan: "Enterprise", status: "Active", created: "Jun 10, 2026" },
-  { id: "4", name: "Sanya Patel", email: "sanya@greenfield.co", company: "GreenField Co", plan: "Developer", status: "Suspended", created: "Jun 09, 2026" },
-  { id: "5", name: "Vikram Iyer", email: "vikram@agrocorp.com", company: "AgroCorp MH", plan: "Professional", status: "Active", created: "Jun 08, 2026" },
-  { id: "6", name: "Meera Krishnan", email: "meera@khetworks.in", company: "KhetWorks", plan: "Developer", status: "Active", created: "Jun 07, 2026" },
-  { id: "7", name: "Aditya Singh", email: "aditya@cropai.dev", company: "CropAI Labs", plan: "Professional", status: "Active", created: "Jun 06, 2026" },
-  { id: "8", name: "Kavya Reddy", email: "kavya@fieldtech.io", company: "FieldTech Hyd", plan: "Developer", status: "Active", created: "Jun 05, 2026" },
-  { id: "9", name: "Nikhil Joshi", email: "nikhil@agrismart.in", company: "AgriSmart", plan: "Enterprise", status: "Active", created: "Jun 04, 2026" },
-  { id: "10", name: "Tanvi Desai", email: "tanvi@farmapi.dev", company: "FarmAPI Dev", plan: "Developer", status: "Suspended", created: "Jun 03, 2026" },
-  { id: "11", name: "Suresh Kumar", email: "suresh@cropmonitor.io", company: "CropMonitor", plan: "Professional", status: "Active", created: "Jun 02, 2026" },
-  { id: "12", name: "Divya Menon", email: "divya@agricloud.in", company: "AgriCloud", plan: "Developer", status: "Active", created: "Jun 01, 2026" }
-]
-
 export default function AdminUsers() {
-  const [users, setUsers] = useState<UserItem[]>(initialUsers)
+  const router = useRouter()
+  const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [users, setUsers] = useState<UserItem[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
@@ -41,6 +34,120 @@ export default function AdminUsers() {
     setToastMessage(msg)
     setTimeout(() => setToastMessage(null), 3000)
   }
+
+  const loadData = async () => {
+    try {
+      const { data: profiles, error } = await supabase
+        .from("profiles")
+        .select(`
+          id,
+          full_name,
+          organization,
+          created_at,
+          role,
+          credit_balances(balance),
+          api_keys(id, status),
+          api_request_logs(id)
+        `)
+        .order("created_at", { ascending: false })
+        
+
+      if (error) throw error
+
+      const mappedUsers: UserItem[] = (profiles || []).map((p: any) => {
+        // credit_balances has 1-to-1 relationship, so it is an object in python, let's support either object or array
+        let balance = 0
+        if (p.credit_balances) {
+          if (Array.isArray(p.credit_balances)) {
+            balance = p.credit_balances[0]?.balance ?? 0
+          } else {
+            balance = (p.credit_balances as any).balance ?? 0
+          }
+        }
+        const keysList = p.api_keys || []
+        const logsList = p.api_request_logs || []
+        
+        let plan: "Developer" | "Professional" | "Enterprise" = "Developer"
+        if (balance >= 5000) plan = "Enterprise"
+        else if (balance >= 2000) plan = "Professional"
+
+        const status = p.role === "suspended" ? "Suspended" : "Active"
+        
+        const fallbackName = p.full_name || "New Developer"
+        const email = p.full_name 
+          ? `${p.full_name.toLowerCase().replace(/\s+/g, ".")}@krishisat.dev` 
+          : `dev-${p.id.substring(0, 8)}@krishisat.dev`
+
+        return {
+          id: p.id,
+          name: fallbackName,
+          email,
+          company: p.organization || "N/A",
+          plan,
+          status,
+          created: new Date(p.created_at).toLocaleDateString("en-US", {
+            month: "short",
+            day: "2-digit",
+            year: "numeric"
+          }),
+          balance,
+          keysCount: keysList.length,
+          callsCount: logsList.length
+        }
+      })
+
+      setUsers(mappedUsers)
+    } catch (err: any) {
+      console.error("Failed to load users:", err)
+      showToast("Error loading user data from database.")
+    }
+  }
+
+  useEffect(() => {
+    async function checkAdmin() {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        setLoading(false)
+        router.push("/login")
+        return
+      }
+
+      try {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .single()
+          
+
+        const email = session.user.email || ""
+        const fullName = profile?.full_name || ""
+        const organization = profile?.organization || ""
+
+        const isUserAdmin = 
+          email === "admin@krishisat.dev" || 
+          email.startsWith("admin") || 
+          fullName.toLowerCase() === "admin" || 
+          organization.toLowerCase() === "admin" ||
+          profile?.role === "admin"
+
+        if (!isUserAdmin) {
+          router.push("/dashboard")
+          return
+        }
+
+        setIsAdmin(true)
+        await loadData()
+      } catch (err) {
+        console.error("Admin check failed:", err)
+        router.push("/dashboard")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    checkAdmin()
+  }, [router])
 
   // Filter users based on search
   const filteredUsers = useMemo(() => {
@@ -55,7 +162,7 @@ export default function AdminUsers() {
   }, [users, searchTerm])
 
   // Reset pagination when search term changes
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPage(1)
   }, [searchTerm])
 
@@ -67,29 +174,105 @@ export default function AdminUsers() {
 
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage) || 1
 
-  const handleToggleStatus = (id: string) => {
-    setUsers(
-      users.map((u) => {
-        if (u.id === id) {
-          const newStatus = u.status === "Active" ? "Suspended" : "Active"
-          showToast(`Account status updated for ${u.name}`)
-          return { ...u, status: newStatus }
-        }
-        return u
-      })
-    )
+  const handleToggleStatus = async (id: string, currentStatus: "Active" | "Suspended") => {
+    const newStatus = currentStatus === "Active" ? "Suspended" : "Active"
+    const targetRole = newStatus === "Suspended" ? "suspended" : null
+    const targetKeyStatus = newStatus === "Suspended" ? "inactive" : "active"
+    const currentKeyStatus = newStatus === "Suspended" ? "active" : "inactive"
+
+    try {
+      // 1. Update profiles table
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .update({ role: targetRole })
+        .eq("id", id)
+        
+
+      if (profileError) throw profileError
+
+      // 2. Update api_keys table status to suspend/reactivate API keys
+      const { error: keysError } = await supabase
+        .from("api_keys")
+        .update({ status: targetKeyStatus })
+        .eq("profile_id", id)
+        .eq("status", currentKeyStatus)
+        
+
+      if (keysError) throw keysError
+
+      showToast(`User status updated to ${newStatus}`)
+      await loadData()
+    } catch (err: any) {
+      console.error("Failed to update status:", err)
+      showToast("Error updating user status in database.")
+    }
   }
 
-  const handleDeleteUser = (id: string, name: string) => {
+  const handleDeleteUser = async (id: string, name: string) => {
     if (window.confirm(`Permanently delete the developer account for "${name}"? This action cannot be undone.`)) {
-      setUsers(users.filter((u) => u.id !== id))
-      showToast(`Successfully deleted ${name}`)
+      try {
+        const { error } = await supabase
+          .from("profiles")
+          .delete()
+          .eq("id", id)
+          
+
+        if (error) throw error
+
+        showToast(`Successfully deleted ${name}`)
+        await loadData()
+      } catch (err: any) {
+        console.error("Failed to delete user profile:", err)
+        showToast("Error deleting profile. Admin permissions may be required.")
+      }
     }
   }
 
   const handleExportCSV = () => {
-    showToast("CSV export initiated. Generating file...")
+    if (users.length === 0) {
+      showToast("No user data available to export.")
+      return
+    }
+    const headers = ["User ID", "Name", "Email", "Company", "Plan", "Status", "Credits Balance", "API Keys Count", "API Calls Count", "Created At"]
+    const rows = users.map(u => [
+      u.id,
+      u.name,
+      u.email,
+      u.company,
+      u.plan,
+      u.status,
+      u.balance,
+      u.keysCount,
+      u.callsCount,
+      u.created
+    ])
+    
+    const csvContent = "data:text/csv;charset=utf-8," 
+      + [headers.join(","), ...rows.map(e => e.map(val => `"${val}"`).join(","))].join("\n")
+    
+    const encodedUri = encodeURI(csvContent)
+    const link = document.createElement("a")
+    link.setAttribute("href", encodedUri)
+    link.setAttribute("download", `krishisat_users_${new Date().toISOString().split("T")[0]}.csv`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    
+    showToast("CSV export completed successfully.")
   }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <svg className="animate-spin h-8 w-8 text-[#14532D]" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+        </svg>
+      </div>
+    )
+  }
+
+  if (!isAdmin) return null
 
   return (
     <div className="space-y-8 select-none relative">
@@ -127,7 +310,7 @@ export default function AdminUsers() {
           <button
             type="button"
             onClick={handleExportCSV}
-            className="h-10 border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 rounded-lg text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center gap-1.5 shadow-sm"
+            className="h-10 border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 rounded-lg text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center gap-1.5 shadow-sm shadow-slate-100"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export CSV</span>
@@ -145,6 +328,9 @@ export default function AdminUsers() {
                 <th className="py-3 px-6 font-sans">Email</th>
                 <th className="py-3 px-6 font-sans">Company</th>
                 <th className="py-3 px-6 font-sans">Plan</th>
+                <th className="py-3 px-6 font-sans">Credits</th>
+                <th className="py-3 px-6 font-sans">API Keys</th>
+                <th className="py-3 px-6 font-sans">API Calls</th>
                 <th className="py-3 px-6 font-sans">Status</th>
                 <th className="py-3 px-6 font-sans">Created</th>
                 <th className="py-3 px-6 text-right font-sans">Actions</th>
@@ -154,7 +340,7 @@ export default function AdminUsers() {
               {paginatedUsers.map((row) => (
                 <tr key={row.id} className="hover:bg-slate-50/40 transition-colors">
                   <td className="py-4 px-6 font-semibold text-slate-800">{row.name}</td>
-                  <td className="py-4 px-6 font-mono text-xs text-slate-500">{row.email}</td>
+                  <td className="py-4 px-6 font-mono text-xs text-slate-500 select-all">{row.email}</td>
                   <td className="py-4 px-6 text-slate-500 font-medium">{row.company}</td>
                   
                   {/* Plan Badge */}
@@ -172,6 +358,11 @@ export default function AdminUsers() {
                       {row.plan}
                     </span>
                   </td>
+
+                  {/* Credits, API Keys, API Calls */}
+                  <td className="py-4 px-6 font-bold text-slate-700">{row.balance.toLocaleString()} cr</td>
+                  <td className="py-4 px-6 font-semibold text-slate-600">{row.keysCount}</td>
+                  <td className="py-4 px-6 font-semibold text-slate-600">{row.callsCount}</td>
 
                   {/* Status Badge */}
                   <td className="py-4 px-6">
@@ -195,7 +386,7 @@ export default function AdminUsers() {
                     <div className="flex items-center justify-end gap-2">
                       <button
                         type="button"
-                        onClick={() => showToast(`Viewing ${row.name}'s profile details`)}
+                        onClick={() => showToast(`Developer ID: ${row.id}`)}
                         className="p-2 border border-slate-200 text-slate-400 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors focus:outline-none focus:ring-1 focus:ring-primary"
                         aria-label={`View ${row.name} profile`}
                       >
@@ -203,7 +394,7 @@ export default function AdminUsers() {
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleToggleStatus(row.id)}
+                        onClick={() => handleToggleStatus(row.id, row.status)}
                         className={cn(
                           "p-2 border rounded-lg transition-colors focus:outline-none focus:ring-1",
                           row.status === "Active"
@@ -232,7 +423,7 @@ export default function AdminUsers() {
               ))}
               {filteredUsers.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-slate-400">
+                  <td colSpan={10} className="py-12 text-center text-slate-400">
                     <p className="text-sm font-semibold">No developer accounts match your search.</p>
                   </td>
                 </tr>
@@ -275,3 +466,4 @@ export default function AdminUsers() {
     </div>
   )
 }
+

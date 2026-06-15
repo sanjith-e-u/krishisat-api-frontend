@@ -4,6 +4,7 @@ import React, { useState, Suspense } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import Logo from "@/components/brand/logo"
+import { supabase } from "@/lib/supabase"
 
 function LoginForm() {
   const router = useRouter()
@@ -13,6 +14,7 @@ function LoginForm() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
+  const [generalError, setGeneralError] = useState("")
 
   // Validation States
   const [emailError, setEmailError] = useState("")
@@ -21,31 +23,32 @@ function LoginForm() {
   const validateEmail = (val: string) => {
     if (!val) {
       setEmailError("Email is required")
-      return false;
+      return false
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
       setEmailError("Please enter a valid email address")
-      return false;
+      return false
     } else {
       setEmailError("")
-      return true;
+      return true
     }
   }
 
   const validatePassword = (val: string) => {
     if (!val) {
       setPasswordError("Password is required")
-      return false;
+      return false
     } else if (val.length < 8) {
       setPasswordError("Password must be at least 8 characters")
-      return false;
+      return false
     } else {
       setPasswordError("")
-      return true;
+      return true
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setGeneralError("")
     
     const isEmailValid = validateEmail(email)
     const isPassValid = validatePassword(password)
@@ -54,14 +57,29 @@ function LoginForm() {
 
     setLoading(true)
 
-    // Set mock cookie
-    document.cookie = "auth-token=mock-token; path=/; max-age=86400"
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+      })
 
-    // Simulate redirect
-    setTimeout(() => {
+      if (error) {
+        setGeneralError(error.message)
+        setLoading(false)
+        return
+      }
+
+      if (data?.session) {
+        // Set cookie for Next.js route middleware auth
+        document.cookie = `auth-token=${data.session.access_token}; path=/; max-age=86400`
+      }
+
       const target = returnTo.startsWith("/") ? returnTo : "/dashboard"
       router.push(target)
-    }, 800)
+    } catch (err: any) {
+      setGeneralError(err.message || "An unexpected authentication error occurred.")
+      setLoading(false)
+    }
   }
 
   return (
@@ -157,6 +175,13 @@ function LoginForm() {
           )}
         </button>
       </form>
+
+      {/* General Error Message under the form */}
+      {generalError && (
+        <p className="text-sm font-semibold text-red-550 text-center tracking-tight bg-red-50 border border-red-100 rounded-lg p-2.5">
+          {generalError}
+        </p>
+      )}
 
       {/* Divider */}
       <div className="relative flex py-1 items-center">

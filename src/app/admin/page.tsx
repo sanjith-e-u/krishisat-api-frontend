@@ -1,145 +1,214 @@
 "use client"
 
-import React from "react"
-import MetricCard from "@/components/shared/metric-card"
-import LineChart from "@/components/shared/line-chart"
-import { Users, TrendingUp, Activity, CreditCard, ArrowRight } from "lucide-react"
+import React, { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { Users, Code, Activity, Zap, ShieldAlert, ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { supabase } from "@/lib/supabase"
 import { cn } from "@/lib/utils"
 
-const revenueData = [
-  { label: "Jul 25", value: 6.2 },
-  { label: "Aug 25", value: 7.1 },
-  { label: "Sep 25", value: 7.8 },
-  { label: "Oct 25", value: 8.4 },
-  { label: "Nov 25", value: 9.2 },
-  { label: "Dec 25", value: 10.1 },
-  { label: "Jan 26", value: 9.8 },
-  { label: "Feb 26", value: 10.6 },
-  { label: "Mar 26", value: 11.2 },
-  { label: "Apr 26", value: 11.9 },
-  { label: "May 26", value: 12.3 },
-  { label: "Jun 26", value: 12.84 }
-]
+// Reusable Metric Card component
+interface MetricCardProps {
+  title: string;
+  value: string;
+  trend?: string;
+  trendType?: "up" | "down" | "none";
+  icon: React.ReactNode;
+}
 
-const recentSignups = [
-  { name: "Arjun Mehta", company: "AgriVision AI", plan: "Professional", date: "Jun 12, 2026" },
-  { name: "Priya Nair", company: "CropSense Labs", plan: "Developer", date: "Jun 11, 2026" },
-  { name: "Rohit Sharma", company: "FarmTech Delhi", plan: "Enterprise", date: "Jun 10, 2026" },
-  { name: "Sanya Patel", company: "GreenField Co", plan: "Developer", date: "Jun 09, 2026" },
-  { name: "Vikram Iyer", company: "AgroCorp MH", plan: "Professional", date: "Jun 08, 2026" }
-]
-
-const plansBreakdown = [
-  { name: "Developer Plan", count: 612, percentage: 48 },
-  { name: "Professional Plan", count: 198, percentage: 16 },
-  { name: "Enterprise Plan", count: 37, percentage: 3 },
-  { name: "Free Tier (Coming Soon)", count: 437, percentage: 34 }
-]
+function MetricCard({ title, value, trend, trendType = "none", icon }: MetricCardProps) {
+  return (
+    <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+      <div className="flex justify-between items-start">
+        <span className="text-xs font-semibold text-slate-500 tracking-wide uppercase">{title}</span>
+        <div className="p-2.5 bg-slate-50 border border-slate-100 rounded-lg text-slate-650">
+          {icon}
+        </div>
+      </div>
+      <div className="mt-3">
+        <div className="text-2xl font-bold text-slate-900 tracking-tight">{value}</div>
+        {trend && (
+          <div className="flex items-center gap-1 mt-1.5 text-xs text-slate-400 font-medium">
+            {trend}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
 
 export default function AdminOverview() {
+  const router = useRouter()
+  const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
+
+  // Platform metric states
+  const [totalUsers, setTotalUsers] = useState<number>(0)
+  const [totalKeys, setTotalKeys] = useState<number>(0)
+  const [callsToday, setCallsToday] = useState<number>(0)
+  const [callsMonth, setCallsMonth] = useState<number>(0)
+  const [creditsConsumedMonth, setCreditsConsumedMonth] = useState<number>(0)
+  
+  // Lists
+  const [recentUsers, setRecentUsers] = useState<any[]>([])
+
+  useEffect(() => {
+    async function checkAdminAndLoadData() {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        setLoading(false)
+        router.push("/login")
+        return
+      }
+
+      try {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .single()
+          
+
+        const email = session.user.email || ""
+        const fullName = profile?.full_name || ""
+        const organization = profile?.organization || ""
+
+        const isUserAdmin = 
+          email === "admin@krishisat.dev" || 
+          email.startsWith("admin") || 
+          fullName.toLowerCase() === "admin" || 
+          organization.toLowerCase() === "admin"
+
+        if (!isUserAdmin) {
+          router.push("/dashboard")
+          return
+        }
+
+        setIsAdmin(true)
+
+        // 1. Fetch total registered users
+        const usersCountRes = await supabase
+          .from("profiles")
+          .select("*", { count: "exact", head: true })
+          
+        setTotalUsers(usersCountRes.count ?? 0)
+
+        // 2. Fetch total API keys
+        const keysCountRes = await supabase
+          .from("api_keys")
+          .select("*", { count: "exact", head: true })
+          
+        setTotalKeys(keysCountRes.count ?? 0)
+
+        // 3. Fetch API calls today
+        const startOfToday = new Date().toISOString().split("T")[0] + "T00:00:00Z"
+        const todayCallsRes = await supabase
+          .from("api_request_logs")
+          .select("*", { count: "exact", head: true })
+          .gte("created_at", startOfToday)
+          
+        setCallsToday(todayCallsRes.count ?? 0)
+
+        // 4. Fetch API calls this month
+        const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
+        const monthCallsRes = await supabase
+          .from("api_request_logs")
+          .select("*", { count: "exact", head: true })
+          .gte("created_at", startOfMonth)
+          
+        setCallsMonth(monthCallsRes.count ?? 0)
+
+        // 5. Fetch total credits deducted this month (negative values)
+        const deductionsRes = await supabase
+          .from("credit_transactions")
+          .select("amount")
+          .lt("amount", 0)
+          .gte("created_at", startOfMonth)
+          
+        const totalDeducted = Math.abs(deductionsRes.data?.reduce((acc, t) => acc + (t.amount || 0), 0) || 0)
+        setCreditsConsumedMonth(totalDeducted)
+
+        // 6. Fetch 5 most recent signups
+        const recentUsersRes = await supabase
+          .from("profiles")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(5)
+          
+        setRecentUsers(recentUsersRes.data || [])
+
+      } catch (err) {
+        console.error("Admin overview fetch failed:", err)
+        router.push("/dashboard")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    checkAdminAndLoadData()
+  }, [router])
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <svg className="animate-spin h-8 w-8 text-[#14532D]" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+        </svg>
+      </div>
+    )
+  }
+
+  if (!isAdmin) return null
+
   return (
     <div className="space-y-8 select-none">
       
+      {/* Title */}
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Platform Admin Overview</h1>
+        <p className="text-sm text-slate-500 mt-1">Platform aggregate statistics and audit analytics.</p>
+      </div>
+
       {/* Overview Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
         <MetricCard
           title="Total Users"
-          value="1,284"
-          trend="+34 this month"
-          trendType="up"
+          value={totalUsers.toLocaleString()}
           icon={<Users className="w-5 h-5" />}
         />
         <MetricCard
-          title="Monthly Revenue"
-          value="₹12,84,000"
-          trend="+8.2% MoM"
-          trendType="up"
-          icon={<TrendingUp className="w-5 h-5" />}
+          title="API Keys Generated"
+          value={totalKeys.toLocaleString()}
+          icon={<Code className="w-5 h-5" />}
         />
         <MetricCard
-          title="API Requests"
-          value="4,821,093"
-          trend="+22.4% vs last month"
-          trendType="up"
+          title="Calls Today"
+          value={callsToday.toLocaleString()}
           icon={<Activity className="w-5 h-5" />}
         />
         <MetricCard
-          title="Active Subscriptions"
-          value="847"
-          trend="+12 this week"
-          trendType="up"
-          icon={<CreditCard className="w-5 h-5" />}
+          title="Calls (Month)"
+          value={callsMonth.toLocaleString()}
+          icon={<Activity className="w-5 h-5" />}
+        />
+        <MetricCard
+          title="Credits Consumed (Month)"
+          value={`${creditsConsumedMonth.toLocaleString()} cr`}
+          icon={<Zap className="w-5 h-5" />}
         />
       </div>
 
-      {/* Main Sections: Chart + Top Plans */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
-        
-        {/* Revenue Trend Chart Card */}
-        <div className="xl:col-span-8 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h3 className="text-sm font-bold text-slate-900">Revenue Trend (FY26)</h3>
-              <p className="text-xs text-slate-400 mt-0.5">Monthly revenue trends mapped in lakhs (₹)</p>
-            </div>
-            <Link
-              href="/admin/revenue"
-              className="text-xs font-semibold text-primary hover:underline flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-primary rounded px-1"
-            >
-              Full Revenue Audit <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          <div className="h-56">
-            <LineChart
-              data={revenueData}
-              color="#22C55E"
-              tooltipFormatter={(v) => `₹ ${v.toFixed(2)} Lakhs`}
-            />
-          </div>
-        </div>
-
-        {/* Top Plans Breakdown Card */}
-        <div className="xl:col-span-4 bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex flex-col justify-between">
-          <div>
-            <h3 className="text-sm font-bold text-slate-900 mb-6">Plan Allocations</h3>
-            <div className="space-y-4">
-              {plansBreakdown.map((item, idx) => (
-                <div key={idx} className="space-y-1.5">
-                  <div className="flex justify-between text-xs font-semibold text-slate-700">
-                    <span>{item.name}</span>
-                    <span className="text-slate-400 font-normal">{item.count} ({item.percentage}%)</span>
-                  </div>
-                  <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200/40">
-                    <div
-                      className="bg-agri h-2 rounded-full"
-                      style={{ width: `${item.percentage}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="pt-4 border-t border-slate-100 mt-6 text-center">
-            <span className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">
-              Subscription Mix audit
-            </span>
-          </div>
-        </div>
-
-      </div>
-
       {/* Recent Activity / Signups */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden max-w-5xl">
         <div className="p-6 border-b border-slate-100 flex justify-between items-center">
           <div>
-            <h3 className="text-sm font-bold text-slate-900">Recent Signups</h3>
+            <h3 className="text-sm font-bold text-slate-900">Recent Platform Signups</h3>
             <p className="text-xs text-slate-400 mt-0.5">Latest registrations across all packages.</p>
           </div>
           <Link
             href="/admin/users"
-            className="text-xs font-semibold text-primary hover:underline flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-primary rounded px-1"
+            className="text-xs font-semibold text-[#14532D] hover:underline flex items-center gap-1 focus:outline-none"
           >
             All Accounts <ArrowRight className="w-3.5 h-3.5" />
           </Link>
@@ -148,35 +217,32 @@ export default function AdminOverview() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm border-collapse text-left">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                <th className="py-3 px-6 font-sans">Name</th>
-                <th className="py-3 px-6 font-sans">Company</th>
-                <th className="py-3 px-6 font-sans">Plan</th>
-                <th className="py-3 px-6 font-sans">Joined</th>
+              <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-505 uppercase tracking-wider select-none">
+                <th className="py-3 px-6 font-sans">Full Name</th>
+                <th className="py-3 px-6 font-sans">Organization</th>
+                <th className="py-3 px-6 font-sans">User ID</th>
+                <th className="py-3 px-6 font-sans">Joined Date</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {recentSignups.map((row, idx) => (
-                <tr key={idx} className="hover:bg-slate-50/40 transition-colors">
-                  <td className="py-4 px-6 font-semibold text-slate-800">{row.name}</td>
-                  <td className="py-4 px-6 text-slate-500 font-medium">{row.company}</td>
-                  <td className="py-4 px-6">
-                    <span
-                      className={cn(
-                        "text-[10px] font-bold px-2.5 py-0.5 rounded font-mono uppercase tracking-wide",
-                        row.plan === "Enterprise"
-                          ? "bg-amber-100 text-amber-800"
-                          : row.plan === "Professional"
-                          ? "bg-sky-100 text-sky-800"
-                          : "bg-primary/10 text-primary"
-                      )}
-                    >
-                      {row.plan}
-                    </span>
+              {recentUsers.map((row, idx) => (
+                <tr key={row.id} className="hover:bg-slate-50/40 transition-colors">
+                  <td className="py-4 px-6 font-semibold text-slate-800">{row.full_name || "New Developer"}</td>
+                  <td className="py-4 px-6 text-slate-500 font-medium">{row.organization || "N/A"}</td>
+                  <td className="py-4 px-6 font-mono text-xs text-slate-400 select-all">{row.id}</td>
+                  <td className="py-4 px-6 text-slate-500 font-medium select-none">
+                    {new Date(row.created_at).toLocaleDateString()}
                   </td>
-                  <td className="py-4 px-6 text-slate-400 font-medium">{row.date}</td>
                 </tr>
               ))}
+              {recentUsers.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="py-12 text-center text-slate-400 select-none">
+                    <Users className="w-8 h-8 mx-auto mb-2 text-slate-300" />
+                    <p className="text-xs font-semibold">No registered users found in directory.</p>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
