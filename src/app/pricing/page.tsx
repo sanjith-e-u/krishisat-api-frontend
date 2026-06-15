@@ -1,10 +1,11 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Check, Zap, Building2, Code } from "lucide-react"
+import { creditsToUsd, formatUsd } from "@/lib/pricing"
 
 export const metadata: Metadata = {
-  title: "Pricing — KrishiSat API Platform",
-  description: "Transparent, usage-based pricing for agricultural intelligence APIs. Start free, scale as you grow.",
+  title: "Pricing",
+  description: "Transparent per-call pricing for NDVI, NDMI, weather, and farm analytics APIs. Start free, scale as you grow.",
 }
 
 const plans = [
@@ -29,12 +30,13 @@ const plans = [
   },
   {
     name: "Pay-as-you-go",
-    price: "$0.004",
-    period: "/ API call",
+    price: formatUsd(creditsToUsd(1)),
+    period: "/ credit",
     description: "For production-ready agricultural platforms and monitoring applications.",
     credits: "Flexible",
     features: [
-      "$0.004 per API call after free tier",
+      `${formatUsd(creditsToUsd(1))} per credit consumed`,
+      "Endpoints cost 1-3 credits per call",
       "Unlimited farms",
       "Full API access",
       "No monthly commitments",
@@ -68,10 +70,14 @@ const plans = [
 ]
 
 const faq = [
-  { q: "Do you offer a free tier?", a: "Yes. Our Free tier includes 1,000 API calls per month with no credit card required. Sign up at /register to get started immediately." },
-  { q: "How does the Pay-As-You-Go pricing work?", a: "Your first 1,000 API calls per month are free. Additional requests are billed at a flat rate of $0.004 per API call. You only pay for the telemetry queries your systems consume." },
+  { q: "Do you offer a free tier?", a: "Yes. Our Free tier includes 1,000 credits per month with no credit card required. Sign up at /register to get started immediately." },
+  { q: "How does the Pay-As-You-Go pricing work?", a: "Your first 1,000 credits per month are free. Additional requests are billed at a flat rate of $0.005 per credit (1 credit = $0.005 USD). Each API endpoint costs between 1-3 credits per call depending on the data type." },
   { q: "Are there any setup fees or monthly commitments?", a: "No. There are no setup fees, monthly minimums, or long-term contracts. You can start and stop using the API at any time." },
-  { q: "What payment methods are accepted?", a: "We accept all major credit cards, corporate bank wires, and can issue automated purchase order invoices for Enterprise clients." }
+  { q: "What payment methods are accepted?", a: "We accept all major credit cards, corporate bank wires, and can issue automated purchase order invoices for Enterprise clients." },
+  { q: "How often is satellite data updated?", a: "Sentinel-2 satellite imagery is processed every 5 days for most regions. Weather intelligence data refreshes every 6 hours. Historical data going back 24 months is available on all paid plans." },
+  { q: "What happens if there's cloud cover over my farm?", a: "On days with >70% cloud cover, the API returns a cloud_coverage flag in the response and does not deduct credits from your balance. You are never charged for obscured imagery." },
+  { q: "Can I access historical satellite data?", a: "Yes. All plans above Starter include up to 24 months of historical NDVI, NDMI, and NDWI data. Use the date_range parameter in your API call to specify a custom time window." },
+  { q: "What is a credit?", a: "1 credit = $0.005 USD. Credits never expire and are shared across your entire team. Each API endpoint costs between 1–3 credits per call depending on the data type." }
 ]
 
 export default function PricingPage() {
@@ -92,7 +98,7 @@ export default function PricingPage() {
           <div className="space-y-1 text-center md:text-left">
             <h3 className="text-sm font-extrabold text-slate-900">💡 Pay-As-You-Go System</h3>
             <p className="text-xs text-slate-505 leading-relaxed max-w-2xl">
-              KrishiSat uses a simple usage-based model. Your first 1,000 API calls each month are completely free. Subsequent requests are billed at a flat rate of <strong className="text-slate-800 font-bold">$0.004 per API call</strong>. No monthly fees, no overage shocks, and no service interruptions.
+              KrishiSat uses a simple usage-based model. Your first 1,000 credits each month are completely free. Subsequent requests are billed at a flat rate of <strong className="text-slate-800 font-bold">{formatUsd(creditsToUsd(1))} per credit</strong>. Endpoints cost between 1–3 credits per call depending on the data type. No monthly fees, no overage shocks, and no service interruptions.
             </p>
           </div>
           <Link href="/developers/reference" className="text-xs font-bold text-primary bg-primary/8 px-4 py-2.5 rounded-xl hover:bg-primary/10 transition-colors shrink-0">

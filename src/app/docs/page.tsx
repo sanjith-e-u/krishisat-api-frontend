@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useActiveSection } from "@/hooks/useActiveSection"
 import { cn } from "@/lib/utils"
 import {
   ChevronRight,
@@ -557,24 +558,9 @@ export default function DocsPage() {
     return data.title.toLowerCase().includes(term) || data.content.toLowerCase().includes(term)
   }
 
-  const activeSectionLabel = navGroups.flatMap(g => g.items).find(i => i.id === activeSection)?.label || "Menu"
+  const activeSectionLabel = navGroups.flatMap(g => g.items).find(i => i.id === (activeSection === "errors" ? "error-codes" : activeSection))?.label || "Menu"
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-20% 0px -70% 0px", threshold: 0 }
-    );
-
-    const sections = document.querySelectorAll("section[id]");
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, [searchQuery]);
+  useActiveSection(setActiveSection)
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -625,24 +611,29 @@ export default function DocsPage() {
                     {group.label.toUpperCase()}
                   </span>
                   <ul className="space-y-1">
-                    {visibleItems.map((item) => (
-                      <li key={item.id}>
-                        <button
-                          onClick={() => {
-                            setActiveSection(item.id)
-                            document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })
-                          }}
-                          className={cn(
-                            "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors block focus:outline-none",
-                            activeSection === item.id
-                              ? "bg-[#14532D]/5 text-[#14532D] font-semibold"
-                              : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                          )}
-                        >
-                          {item.label}
-                        </button>
-                      </li>
-                    ))}
+                    {visibleItems.map((item) => {
+                      const anchorId = item.id === "error-codes" ? "errors" : item.id;
+                      return (
+                        <li key={item.id}>
+                          <a
+                            href={`#${anchorId}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setActiveSection(anchorId);
+                              document.getElementById(anchorId)?.scrollIntoView({ behavior: "smooth" });
+                            }}
+                            className={cn(
+                              "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors block",
+                              activeSection === anchorId
+                                ? "bg-[#14532D]/5 text-[#14532D] font-semibold"
+                                : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                            )}
+                          >
+                            {item.label}
+                          </a>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               )
@@ -727,24 +718,29 @@ export default function DocsPage() {
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 block mb-1">
                     {group.label}
                   </span>
-                  {items.map(item => (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        setActiveSection(item.id)
-                        setMobileMenuOpen(false)
-                        document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })
-                      }}
-                      className={cn(
-                        "w-full text-left px-3 py-2 rounded-lg text-xs transition-colors block focus:outline-none",
-                        activeSection === item.id
-                          ? "bg-[#14532D]/5 text-[#14532D] font-semibold"
-                          : "text-slate-600 hover:text-slate-900"
-                      )}
-                    >
-                      {item.label}
-                    </button>
-                  ))}
+                  {items.map(item => {
+                    const anchorId = item.id === "error-codes" ? "errors" : item.id;
+                    return (
+                      <a
+                        key={item.id}
+                        href={`#${anchorId}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setActiveSection(anchorId);
+                          setMobileMenuOpen(false);
+                          document.getElementById(anchorId)?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className={cn(
+                          "w-full text-left px-3 py-2 rounded-lg text-xs transition-colors block",
+                          activeSection === anchorId
+                            ? "bg-[#14532D]/5 text-[#14532D] font-semibold"
+                            : "text-slate-600 hover:text-slate-900"
+                        )}
+                      >
+                        {item.label}
+                      </a>
+                    );
+                  })}
                 </div>
               )
             })}
@@ -804,7 +800,7 @@ export default function DocsPage() {
                 <span className="text-xs font-semibold text-[#22C55E] mb-2 block uppercase tracking-wider">
                   Getting Started
                 </span>
-                <h2 className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
+                <h2 id="introduction" className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
                   Introduction
                 </h2>
                 <div className="space-y-4 mb-4">
@@ -873,7 +869,7 @@ export default function DocsPage() {
                 <span className="text-xs font-semibold text-[#22C55E] mb-2 block uppercase tracking-wider">
                   Getting Started
                 </span>
-                <h2 className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
+                <h2 id="authentication" className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
                   Authentication
                 </h2>
                 <p className="text-slate-700 text-base leading-[1.8] mb-6 max-w-4xl">
@@ -919,7 +915,7 @@ export default function DocsPage() {
                 <span className="text-xs font-semibold text-[#22C55E] mb-2 block uppercase tracking-wider">
                   Getting Started
                 </span>
-                <h2 className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
+                <h2 id="api-keys" className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
                   API Keys
                 </h2>
                 <p className="text-slate-700 text-base leading-[1.8] mb-6 max-w-4xl">
@@ -969,7 +965,7 @@ export default function DocsPage() {
                 <span className="text-xs font-semibold text-[#22C55E] mb-2 block uppercase tracking-wider">
                   Getting Started
                 </span>
-                <h2 className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
+                <h2 id="rate-limits" className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
                   Rate Limits
                 </h2>
                 <p className="text-slate-700 text-base leading-[1.8] mb-6 max-w-4xl">
@@ -1036,7 +1032,7 @@ export default function DocsPage() {
                 <span className="text-xs font-semibold text-[#22C55E] mb-2 block uppercase tracking-wider">
                   Core APIs
                 </span>
-                <h2 className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
+                <h2 id="farm-registration" className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
                   Farm Registration
                 </h2>
                 
@@ -1120,8 +1116,8 @@ export default function DocsPage() {
                 <span className="text-xs font-semibold text-[#22C55E] mb-2 block uppercase tracking-wider">
                   Core APIs
                 </span>
-                <h2 className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
-                  NDVI — Normalized Difference Vegetation Index
+                <h2 id="ndvi" className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
+                  NDVI — Vegetation Index
                 </h2>
                 
                 {/* Redesigned endpoint card */}
@@ -1199,8 +1195,8 @@ export default function DocsPage() {
                 <span className="text-xs font-semibold text-[#22C55E] mb-2 block uppercase tracking-wider">
                   Core APIs
                 </span>
-                <h2 className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
-                  NDMI — Normalized Difference Moisture Index
+                <h2 id="ndmi" className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
+                  NDMI — Water Stress
                 </h2>
                 
                 {/* Redesigned endpoint card */}
@@ -1274,7 +1270,7 @@ export default function DocsPage() {
                 <span className="text-xs font-semibold text-[#22C55E] mb-2 block uppercase tracking-wider">
                   Core APIs
                 </span>
-                <h2 className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
+                <h2 id="ndre" className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
                   NDRE — Red Edge Index
                 </h2>
                 
@@ -1349,7 +1345,7 @@ export default function DocsPage() {
                 <span className="text-xs font-semibold text-[#22C55E] mb-2 block uppercase tracking-wider">
                   Core APIs
                 </span>
-                <h2 className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
+                <h2 id="savi" className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
                   SAVI — Soil Adjusted Vegetation Index
                 </h2>
                 
@@ -1424,7 +1420,7 @@ export default function DocsPage() {
                 <span className="text-xs font-semibold text-[#22C55E] mb-2 block uppercase tracking-wider">
                   Core APIs
                 </span>
-                <h2 className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
+                <h2 id="ndwi" className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
                   NDWI — Normalized Difference Water Index
                 </h2>
                 
@@ -1499,7 +1495,7 @@ export default function DocsPage() {
                 <span className="text-xs font-semibold text-[#22C55E] mb-2 block uppercase tracking-wider">
                   Core APIs
                 </span>
-                <h2 className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
+                <h2 id="ci" className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
                   CI — Chlorophyll Index
                 </h2>
                 
@@ -1574,7 +1570,7 @@ export default function DocsPage() {
                 <span className="text-xs font-semibold text-[#22C55E] mb-2 block uppercase tracking-wider">
                   Core APIs
                 </span>
-                <h2 className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
+                <h2 id="weather" className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
                   Weather Intelligence
                 </h2>
                 
@@ -1650,7 +1646,7 @@ export default function DocsPage() {
                 <span className="text-xs font-semibold text-[#22C55E] mb-2 block uppercase tracking-wider">
                   Reference
                 </span>
-                <h2 className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
+                <h2 id="response-schema" className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
                   Response Schema
                 </h2>
                 <p className="text-slate-700 text-base leading-[1.8] mb-6 max-w-4xl">
@@ -1707,7 +1703,7 @@ export default function DocsPage() {
                 <span className="text-xs font-semibold text-[#22C55E] mb-2 block uppercase tracking-wider">
                   Reference
                 </span>
-                <h2 className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
+                <h2 id="errors" className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
                   Error Codes
                 </h2>
                 <p className="text-slate-700 text-base leading-[1.8] mb-6 max-w-4xl">
@@ -1783,7 +1779,7 @@ export default function DocsPage() {
                 <span className="text-xs font-semibold text-[#22C55E] mb-2 block uppercase tracking-wider">
                   Reference
                 </span>
-                <h2 className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
+                <h2 id="support" className="text-3xl font-bold text-[#0F172A] mb-4 font-sans">
                   Support
                 </h2>
                 <p className="text-slate-700 text-base leading-[1.8] mb-6 max-w-4xl">

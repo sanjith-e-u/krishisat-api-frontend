@@ -2,8 +2,10 @@
 
 import React from "react"
 import { usePathname } from "next/navigation"
+import Link from "next/link"
 import Nav from "@/components/nav"
 import Footer from "@/components/footer"
+import Logo from "@/components/brand/logo"
 
 export default function PageWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -15,7 +17,21 @@ export default function PageWrapper({ children }: { children: React.ReactNode })
   }
 
   if (isAuth) {
-    return <div className="min-h-screen bg-slate-50 flex items-center justify-center py-12 px-6">{children}</div>
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+        <header className="h-14 border-b border-slate-200 bg-white flex items-center justify-between px-6 select-none shrink-0">
+          <Link href="/">
+            <Logo size="sm" />
+          </Link>
+          <Link href="/" className="text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors">
+            ← Back to site
+          </Link>
+        </header>
+        <div className="flex-grow flex items-center justify-center py-12 px-6">
+          {children}
+        </div>
+      </div>
+    )
   }
 
   return (

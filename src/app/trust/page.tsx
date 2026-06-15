@@ -1,10 +1,11 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ShieldCheck, Lock, Globe, Server, Clock, Award, Sprout, Droplets, Landmark } from "lucide-react"
+import DynamicDate from "@/components/shared/dynamic-date"
 
 export const metadata: Metadata = {
-  title: "Trust & Security — KrishiSat API Platform",
-  description: "KrishiSat security practices, data privacy, reliability commitments, and compliance certifications.",
+  title: "Trust & Security",
+  description: "KrishiSat security practices, uptime SLAs, data sovereignty, and compliance roadmap.",
 }
 
 const stats = [
@@ -17,7 +18,7 @@ const stats = [
 const pillars = [
   {
     icon: ShieldCheck,
-    title: "SOC 2 Type II Ready",
+    title: "SOC 2 Type II — Audit in Progress (Expected Q4 2026)",
     description: "Our infrastructure and operational procedures are aligned with SOC 2 Type II requirements. Third-party audit in progress for Q4 2026."
   },
   {
@@ -117,6 +118,9 @@ export default function TrustPage() {
             </div>
           ))}
         </div>
+        <p className="text-center text-xs text-slate-400 mt-6 font-medium">
+          Metrics updated monthly
+        </p>
       </section>
 
       {/* Security Pillars */}
@@ -211,10 +215,15 @@ export default function TrustPage() {
               </div>
             ))}
           </div>
-          <p className="text-xs text-slate-400 mt-6 font-semibold flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#22C55E]" />
-            All systems operational — 99.98% uptime this month (mock data)
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-6">
+            <p className="text-xs text-slate-400 font-semibold flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#22C55E]" />
+              All systems operational — 99.98% uptime this month
+            </p>
+            <p className="text-xs text-slate-400 font-medium">
+              Last updated: <DynamicDate />
+            </p>
+          </div>
         </div>
       </section>
 

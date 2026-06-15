@@ -15,7 +15,7 @@ import {
   Sprout,
 } from "lucide-react";
 import Terminal from "@/components/terminal";
-import CodeBlock from "@/components/code-block";
+import { ApiPlayground } from "@/components/api-playground";
 
 export default function Home() {
   return (
@@ -240,13 +240,22 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-[#0F172A] mb-3">Crop Health</h3>
                 <p className="text-[#64748B] text-sm leading-relaxed mb-6">
-                  NDVI, NDRE, SAVI and CI indices to monitor vegetation density, chlorophyll, and biomass.
+                  Satellite vegetation indices to monitor canopy health, density, and chlorophyll.
                 </p>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {["/ndvi", "/ndre", "/savi", "/ci"].map((tag) => (
-                    <span key={tag} className="font-mono text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-lg">
-                      {tag}
-                    </span>
+                <div className="space-y-4 mb-8">
+                  {[
+                    { tag: "NDVI", desc: "Detect crop health and growth stage from satellite imagery" },
+                    { tag: "NDRE", desc: "Identify early chlorophyll stress invisible to standard cameras" },
+                    { tag: "SAVI", desc: "Vegetation index adjusted for soil brightness in sparse cover areas" },
+                    { tag: "CI", desc: "Estimate chlorophyll concentration as a proxy for crop nitrogen level" },
+                    { tag: "EVI", desc: "Enhanced vegetation index for dense canopy and high-biomass crops" }
+                  ].map((item) => (
+                    <div key={item.tag} className="flex flex-col gap-0.5">
+                      <span className="font-mono text-xs bg-slate-100 text-[#14532D] px-2 py-0.5 rounded w-fit font-bold">
+                        {item.tag}
+                      </span>
+                      <span className="text-xs text-slate-500 font-medium">{item.desc}</span>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -271,13 +280,19 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-[#0F172A] mb-3">Water</h3>
                 <p className="text-[#64748B] text-sm leading-relaxed mb-6">
-                  NDMI and NDWI for canopy water content, surface water accumulation, and drought stress.
+                  Indices for crop moisture profiling, surface water boundaries, and drought stress.
                 </p>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {["/ndmi", "/ndwi"].map((tag) => (
-                    <span key={tag} className="font-mono text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-lg">
-                      {tag}
-                    </span>
+                <div className="space-y-4 mb-8">
+                  {[
+                    { tag: "NDMI", desc: "Measure soil and vegetation water content to guide irrigation" },
+                    { tag: "NDWI", desc: "Monitor surface water bodies and flood risk in farm boundaries" }
+                  ].map((item) => (
+                    <div key={item.tag} className="flex flex-col gap-0.5">
+                      <span className="font-mono text-xs bg-slate-100 text-[#14532D] px-2 py-0.5 rounded w-fit font-bold">
+                        {item.tag}
+                      </span>
+                      <span className="text-xs text-slate-500 font-medium">{item.desc}</span>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -306,13 +321,19 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-[#0F172A] mb-3">Weather</h3>
                 <p className="text-[#64748B] text-sm leading-relaxed mb-6">
-                  Hyperlocal forecasts, precipitation tracking, temperature grids, and growing-degree days.
+                  Hyperlocal meteorological forecasts, heat indicators, and accumulation grids.
                 </p>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {["/weather"].map((tag) => (
-                    <span key={tag} className="font-mono text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-lg">
-                      {tag}
-                    </span>
+                <div className="space-y-4 mb-8">
+                  {[
+                    { tag: "Weather", desc: "Hyperlocal forecasts, precipitation tracking, and growing-degree days" },
+                    { tag: "LST", desc: "Measure land surface temperature to detect heat stress zones" }
+                  ].map((item) => (
+                    <div key={item.tag} className="flex flex-col gap-0.5">
+                      <span className="font-mono text-xs bg-slate-100 text-[#14532D] px-2 py-0.5 rounded w-fit font-bold">
+                        {item.tag}
+                      </span>
+                      <span className="text-xs text-slate-500 font-medium">{item.desc}</span>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -344,11 +365,16 @@ export default function Home() {
                 <p className="text-[#64748B] text-sm leading-relaxed mb-6">
                   Register farm polygons, track per-plot telemetry, and schedule automated tile indexing.
                 </p>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {["/farms"].map((tag) => (
-                    <span key={tag} className="font-mono text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-lg">
-                      {tag}
-                    </span>
+                <div className="space-y-4 mb-8">
+                  {[
+                    { tag: "Farms", desc: "Register geographic farm coordinates using GeoJSON boundary polygons" }
+                  ].map((item) => (
+                    <div key={item.tag} className="flex flex-col gap-0.5">
+                      <span className="font-mono text-xs bg-slate-100 text-[#14532D] px-2 py-0.5 rounded w-fit font-bold">
+                        {item.tag}
+                      </span>
+                      <span className="text-xs text-slate-500 font-medium">{item.desc}</span>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -403,9 +429,9 @@ export default function Home() {
             <div className="flex flex-col relative">
               <div className="text-5xl font-extrabold text-[#E2E8F0] font-mono mb-4">03</div>
               <h3 className="text-lg font-bold text-[#0F172A] mb-3">Ship to production</h3>
-              <p className="text-[#64748B] text-sm leading-relaxed">
-                P95 latency stays under 500ms via our global edge cache. Configure webhooks to alert you immediately of crop stress anomalies or weather developments.
-              </p>
+                <p className="text-[#64748B] text-sm leading-relaxed">
+                  P95 latency stays under 500ms via our global edge cache. Webhooks coming soon — subscribe to field alerts and anomaly notifications directly in your application.
+                </p>
             </div>
           </div>
         </div>
@@ -457,23 +483,8 @@ export default function Home() {
             </div>
 
             {/* Right Column (65%) */}
-            <div className="w-full lg:w-[65%] grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-              <div className="flex flex-col">
-                <div className="text-[10px] font-mono font-bold text-slate-450 uppercase tracking-widest mb-2">
-                  Request Payload (cURL)
-                </div>
-                <div className="flex-grow flex items-stretch">
-                  <CodeBlock />
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <div className="text-[10px] font-mono font-bold text-slate-450 uppercase tracking-widest mb-2">
-                  Response Body (JSON)
-                </div>
-                <div className="flex-grow flex items-stretch">
-                  <Terminal />
-                </div>
-              </div>
+            <div className="w-full lg:w-[65%] flex flex-col justify-center">
+              <ApiPlayground />
             </div>
           </div>
         </div>
@@ -613,12 +624,12 @@ export default function Home() {
               <div>
                 <h3 className="text-lg font-bold text-[#0F172A] mb-1 font-mono uppercase tracking-wide">Pay-as-you-go</h3>
                 <div className="flex items-baseline gap-1 my-6 pb-6 border-b border-[#E2E8F0]">
-                  <span className="text-4xl font-extrabold text-[#0F172A] tracking-tight">$0.004</span>
-                  <span className="text-slate-500 font-mono text-sm">/ API call</span>
+                  <span className="text-4xl font-extrabold text-[#0F172A] tracking-tight">$0.005</span>
+                  <span className="text-slate-500 font-mono text-sm">/ credit</span>
                 </div>
                 <ul className="flex flex-col gap-4 text-sm text-slate-600 mb-8">
                   <li className="flex items-center gap-2">
-                    <span className="text-[#2563EB] font-semibold">✓</span> $0.004 per call after free tier
+                    <span className="text-[#2563EB] font-semibold">✓</span> $0.005 per credit consumed
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-[#2563EB] font-semibold">✓</span> Unlimited farms

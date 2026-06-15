@@ -111,9 +111,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="hover:text-white transition-colors">
-                  Blog
-                </Link>
+                <span className="text-slate-550 cursor-not-allowed select-none">
+                  Blog — launching soon
+                </span>
               </li>
               <li>
                 <Link href="/careers" className="hover:text-white transition-colors">

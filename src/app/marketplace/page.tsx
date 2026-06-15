@@ -1,10 +1,11 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Sprout, Droplets, Cloud, MapPin, TreePine, Leaf, BarChart2, ArrowRight } from "lucide-react"
+import { getApiCredits, creditsToUsd, formatUsd } from "@/lib/pricing"
 
 export const metadata: Metadata = {
-  title: "API Catalog — KrishiSat",
-  description: "Browse the complete KrishiSat agricultural intelligence API catalog. Vegetation indices, water stress, weather telemetry, and farm management.",
+  title: "API Catalog",
+  description: "Browse the full KrishiSat API catalog — vegetation indices, water stress, weather, and farm management endpoints.",
 }
 
 const categories = [
@@ -129,6 +130,9 @@ export default function MarketplacePage() {
                   const isComingSoon = api.status === "Coming Soon";
                   const href = `/developers/reference#${api.path.replace(/\//g, "-").replace(/^-/, "")}`;
 
+                  const credits = getApiCredits(api.name);
+                  const usdCost = creditsToUsd(credits);
+
                   const cardContent = (
                     <>
                       <div>
@@ -137,7 +141,7 @@ export default function MarketplacePage() {
                             {api.status}
                           </span>
                           <span className="text-[10px] font-bold text-slate-400 font-mono">
-                            {api.credits} cr (~${(api.credits * 0.005).toFixed(3)}) / call
+                            {credits} cr (~{formatUsd(usdCost)}) / call
                           </span>
                         </div>
                         <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-primary transition-colors">
@@ -191,7 +195,7 @@ export default function MarketplacePage() {
         <Leaf className="w-8 h-8 text-agri mx-auto mb-4" />
         <h2 className="text-2xl font-extrabold mb-3">Start building agricultural intelligence</h2>
         <p className="text-white/70 mb-8 max-w-md mx-auto text-sm leading-relaxed">
-          Join 847+ agritech developers using KrishiSat&apos;s satellite APIs to power smart farming applications.
+          Built for agritech developers, precision farming platforms, and agricultural research teams.
         </p>
         <Link href="/register" className="inline-flex items-center gap-2 bg-agri text-white h-11 px-8 rounded-xl font-bold text-sm hover:bg-agri/90 transition-colors">
           Get your free API key <ArrowRight className="w-4 h-4" />

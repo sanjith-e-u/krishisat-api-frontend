@@ -1,26 +1,10 @@
-import type { Metadata } from "next";
-import type { ReactNode } from "react";
+import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Quickstart — KrishiSat",
-  description: "Make your first KrishiSat API request in under 2 minutes.",
-  openGraph: {
-    title: "Quickstart — KrishiSat",
-    description: "Make your first KrishiSat API request in under 2 minutes.",
-    url: "https://krishisat.dev/developers/quickstart",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Quickstart — KrishiSat",
-    description: "Make your first KrishiSat API request in under 2 minutes.",
-  },
-};
+  title: "Quickstart Guide — KrishiSat Developers",
+  description: "Get started with the KrishiSat Satellite Intelligence API. Make your first NDVI call in under 5 minutes.",
+}
 
-export default function QuickstartLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  return children;
+export default function QuickstartLayout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>
 }

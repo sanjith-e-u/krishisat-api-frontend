@@ -16,8 +16,41 @@ export default function ContactSalesPage() {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Validation States
+  const [emailError, setEmailError] = useState("")
+  const [nameError, setNameError] = useState("")
+
+  const validateEmail = (val: string) => {
+    if (!val) {
+      setEmailError("Email is required")
+      return false
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+      setEmailError("Please enter a valid work email address")
+      return false
+    } else {
+      setEmailError("")
+      return true
+    }
+  }
+
+  const validateName = (val: string) => {
+    if (!val.trim()) {
+      setNameError("Contact name is required")
+      return false
+    } else {
+      setNameError("")
+      return true
+    }
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    const isEmailValid = validateEmail(formData.email)
+    const isNameValid = validateName(formData.name)
+
+    if (!isEmailValid || !isNameValid) return
+
     setLoading(true)
     setError(null)
 
@@ -48,7 +81,7 @@ export default function ContactSalesPage() {
 
         <div className="space-y-6">
           <div className="flex gap-4">
-            <div className="p-3 bg-primary/5 rounded-xl text-primary border border-primary/10 shrink-0">
+            <div className="p-3 bg-primary/5 rounded-xl text-primary border border-primary/10 shrink-0 select-none">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
@@ -60,7 +93,7 @@ export default function ContactSalesPage() {
           </div>
 
           <div className="flex gap-4">
-            <div className="p-3 bg-primary/5 rounded-xl text-primary border border-primary/10 shrink-0">
+            <div className="p-3 bg-primary/5 rounded-xl text-primary border border-primary/10 shrink-0 select-none">
               <Building2 className="w-5 h-5" />
             </div>
             <div>
@@ -72,38 +105,41 @@ export default function ContactSalesPage() {
           </div>
 
           <div className="flex gap-4">
-            <div className="p-3 bg-primary/5 rounded-xl text-primary border border-primary/10 shrink-0">
+            <div className="p-3 bg-primary/5 rounded-xl text-primary border border-primary/10 shrink-0 select-none">
               <Mail className="w-5 h-5" />
             </div>
             <div>
               <h4 className="text-sm font-bold text-slate-800">Direct Developer Inquiries</h4>
               <p className="text-xs text-slate-405 mt-1 leading-relaxed">
-                Have system architecture questions? E-mail our operations desk directly at <a href="mailto:solutions@krishisat.dev" className="text-primary hover:underline font-semibold">solutions@krishisat.dev</a>.
+                Have system architecture questions? E-mail our operations desk directly at <a href="mailto:hello@krishisat.dev" className="text-primary hover:underline font-semibold">hello@krishisat.dev</a>.
               </p>
             </div>
           </div>
         </div>
 
-        <div className="pt-6 border-t border-slate-100 text-xs text-slate-400">
-          Trusted by agritechs, enterprise farm operators, and regional agriculture boards globally.
+        <div className="pt-6 border-t border-slate-100 text-xs text-slate-400 font-medium select-none">
+          Used by agritech teams, precision farming operators, and farm management platforms
         </div>
       </div>
 
       {/* Right Column: Contact Form */}
       <div className="lg:col-span-7 bg-[#F8FAFC] border border-slate-200/80 rounded-2xl p-8 shadow-sm">
         {submitted ? (
-          <div className="text-center py-12 px-4 space-y-4">
-            <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-2">
+          <div className="text-center py-12 px-4 space-y-4 font-sans">
+            <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-2 select-none">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <h3 className="text-xl font-bold text-slate-900">Request received</h3>
             <p className="text-sm text-slate-500 max-w-sm mx-auto leading-relaxed">
               Our solutions team will contact you within 24 hours.
             </p>
-            <div className="pt-6">
+            <div className="pt-6 select-none">
               <button
-                onClick={() => setSubmitted(false)}
-                className="bg-primary hover:bg-[#114524] text-white px-5 py-2.5 text-xs font-bold rounded-lg transition-colors shadow-sm"
+                onClick={() => {
+                  setSubmitted(false)
+                  setFormData({ name: "", email: "", company: "", interest: "ndvi", message: "" })
+                }}
+                className="bg-primary hover:bg-[#114524] text-white px-5 py-2.5 text-xs font-bold rounded-lg transition-colors shadow-sm cursor-pointer"
               >
                 Submit Another Inquiry
               </button>
@@ -113,12 +149,12 @@ export default function ContactSalesPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <h3 className="text-lg font-bold text-slate-900">Corporate System Architecture Inquiry</h3>
-              <p className="text-xs text-slate-400 mt-1">Fill out the coordinates below and an engineer will review your request.</p>
+              <p className="text-xs text-slate-400 mt-1 select-none">Fill out the form below and an engineer will review your request.</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="fullname" className="text-xs font-semibold text-slate-700">Contact Name</label>
+                <label htmlFor="fullname" className="text-xs font-semibold text-slate-700 select-none">Contact Name</label>
                 <input
                   id="fullname"
                   type="text"
@@ -126,12 +162,18 @@ export default function ContactSalesPage() {
                   placeholder="Jane Doe"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all"
+                  onBlur={() => validateName(formData.name)}
+                  className={`w-full h-10 px-3 text-sm bg-white border ${
+                    nameError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-primary/10 focus:border-primary"
+                  } rounded-lg focus:outline-none focus:ring-2 transition-all`}
                 />
+                {nameError && (
+                  <p className="text-xs font-medium text-red-500 mt-0.5">{nameError}</p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="email" className="text-xs font-semibold text-slate-700">Work Email</label>
+                <label htmlFor="email" className="text-xs font-semibold text-slate-700 select-none">Work Email</label>
                 <input
                   id="email"
                   type="email"
@@ -139,12 +181,18 @@ export default function ContactSalesPage() {
                   placeholder="jane@company.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all"
+                  onBlur={() => validateEmail(formData.email)}
+                  className={`w-full h-10 px-3 text-sm bg-white border ${
+                    emailError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-primary/10 focus:border-primary"
+                  } rounded-lg focus:outline-none focus:ring-2 transition-all`}
                 />
+                {emailError && (
+                  <p className="text-xs font-medium text-red-500 mt-0.5">{emailError}</p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="company" className="text-xs font-semibold text-slate-700">Company Name</label>
+                <label htmlFor="company" className="text-xs font-semibold text-slate-700 select-none">Company Name</label>
                 <input
                   id="company"
                   type="text"
@@ -157,7 +205,7 @@ export default function ContactSalesPage() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="interest" className="text-xs font-semibold text-slate-700">Primary API Interest</label>
+                <label htmlFor="interest" className="text-xs font-semibold text-slate-700 select-none">Primary API Interest</label>
                 <select
                   id="interest"
                   value={formData.interest}
@@ -173,7 +221,7 @@ export default function ContactSalesPage() {
               </div>
 
               <div className="flex flex-col gap-1.5 sm:col-span-2">
-                <label htmlFor="message" className="text-xs font-semibold text-slate-700">System Coverage Requirements</label>
+                <label htmlFor="message" className="text-xs font-semibold text-slate-700 select-none">Describe your coverage area or use case</label>
                 <textarea
                   id="message"
                   required
@@ -187,16 +235,16 @@ export default function ContactSalesPage() {
             </div>
 
             {error && (
-              <div className="text-xs font-semibold text-rose-600 mt-2">
+              <div className="text-xs font-semibold text-rose-600 mt-2 select-text">
                 {error}
               </div>
             )}
 
-            <div className="pt-4 border-t border-slate-200 flex justify-end">
+            <div className="pt-4 border-t border-slate-200 flex flex-col items-end gap-3">
               <button
                 type="submit"
                 disabled={loading}
-                className="h-10 bg-primary hover:bg-[#114524] disabled:bg-primary/70 text-white px-5 rounded-lg text-xs font-bold transition-all shadow-sm focus:outline-none flex items-center gap-1.5"
+                className="h-10 bg-primary hover:bg-[#114524] disabled:bg-primary/70 text-white px-5 rounded-lg text-xs font-bold transition-all shadow-sm focus:outline-none flex items-center gap-1.5 cursor-pointer select-none"
               >
                 {loading ? (
                   <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin inline-block" />
@@ -207,6 +255,12 @@ export default function ContactSalesPage() {
                   </>
                 )}
               </button>
+              <p className="text-[11px] text-slate-400 text-right leading-normal select-none">
+                We typically respond within 1 business day. For urgent inquiries, email{" "}
+                <a href="mailto:hello@krishisat.dev" className="text-primary hover:underline font-semibold">
+                  hello@krishisat.dev
+                </a>
+              </p>
             </div>
           </form>
         )}

@@ -43,10 +43,10 @@ export default function Logo({
       <Image
         src="/logo.png"
         alt="KrishiSat Logo"
-        fill
+        width={width}
+        height={height}
         priority
         className="object-contain"
-        sizes={`${width}px`}
       />
     </div>
   )
