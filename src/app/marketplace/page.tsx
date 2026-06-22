@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Sprout, Droplets, Cloud, MapPin, Search, Copy, Check, ExternalLink, ShieldAlert, ArrowRight } from "lucide-react"
+import { Sprout, Droplets, Cloud, MapPin, Search, Copy, Check, ExternalLink, ShieldAlert, ArrowRight, BarChart2 } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 
 interface ApiProduct {
@@ -203,6 +203,25 @@ export default function MarketplacePage() {
         </div>
       </section>
 
+      {/* Stats Bar */}
+      <section className="bg-white border-b border-slate-200 py-5 px-6">
+        <div className="max-w-6xl mx-auto flex flex-wrap gap-6 justify-center sm:justify-start text-sm text-slate-500 font-sans">
+          {[
+            { label: "Live APIs", value: "8" },
+            { label: "Beta APIs", value: "3" },
+            { label: "Coming Soon", value: "4" },
+            { label: "Avg Latency", value: "238ms" },
+            { label: "Uptime", value: "99.98%" }
+          ].map((stat) => (
+            <div key={stat.label} className="flex items-center gap-2">
+              <BarChart2 className="w-3.5 h-3.5 text-slate-405" />
+              <span className="font-bold text-slate-800">{stat.value}</span>
+              <span>{stat.label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Catalog Filters and Grid */}
       <section className="max-w-6xl mx-auto px-6 py-12">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
@@ -312,6 +331,19 @@ export default function MarketplacePage() {
               <p className="text-xs text-slate-450 mt-1">Try resetting the search or category query.</p>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* CTA Banner */}
+      <section className="bg-[#14532D] text-white py-16 px-6 text-center mt-12 rounded-t-3xl select-none">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-2xl font-extrabold tracking-tight mb-3 font-sans">Start building agricultural intelligence</h2>
+          <p className="text-emerald-100/70 mb-8 max-w-md mx-auto text-sm leading-relaxed font-sans">
+            Join 847+ agritech developers using KrishiSat&apos;s satellite APIs to power smart farming applications.
+          </p>
+          <Link href="/register" className="inline-flex items-center gap-2 bg-[#22C55E] hover:bg-[#1cbd53] text-white h-11 px-8 rounded-xl font-bold text-sm transition-colors shadow-md">
+            Get your free API key <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </section>
 

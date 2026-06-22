@@ -41,18 +41,16 @@ export default function Home() {
 
               {/* H1 Headline */}
               <h1 className="font-sans font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-white leading-[1.1] mb-6">
-                Agricultural Intelligence APIs{" "}
-                <br className="hidden sm:inline" />
-                <span className="text-[#22C55E]">powered by Satellite & AI</span>
+                Satellite APIs & AI Models
               </h1>
 
               {/* Subheadline */}
               <p className="font-sans text-slate-400 text-lg sm:text-xl max-w-xl leading-relaxed mb-8">
-                Integrate crop health, water stress, weather intelligence, and farm analytics into your applications through a single satellite API platform.
+                Integrate crop health indices, water stress, weather intelligence, and AI-powered farm predictions into your applications through a single developer platform.
               </p>
 
               {/* CTA Buttons */}
-              <div className="flex flex-wrap items-center gap-4 mb-14">
+              <div className="flex flex-wrap items-center gap-4 mb-8">
                 <Link
                   href="/developers/quickstart"
                   className="bg-[#22C55E] hover:bg-[#1cbd53] text-white px-6 py-3 rounded-lg text-sm font-bold transition-colors shadow-sm flex items-center gap-2"
@@ -67,14 +65,22 @@ export default function Home() {
                 </Link>
                 <Link
                   href="/contact-sales"
-                  className="text-slate-450 hover:text-white text-sm font-medium transition-colors ml-2"
+                  className="text-slate-455 hover:text-white text-sm font-medium transition-colors ml-2"
                 >
                   Contact Sales →
                 </Link>
               </div>
 
+              {/* Footnote */}
+              <div className="text-[11px] text-slate-500 font-sans mb-12 select-none">
+                Coming soon: KrishiSat AI Models — a new category of agricultural intelligence.{" "}
+                <Link href="/models" className="text-[#22C55E] hover:underline font-semibold">
+                  Learn more →
+                </Link>
+              </div>
+
               {/* Trust Numbers */}
-              <div className="grid grid-cols-3 gap-8 w-full max-w-md pt-8 border-t border-slate-800">
+              <div className="grid grid-cols-4 gap-4 sm:gap-6 w-full max-w-lg pt-8 border-t border-slate-800">
                 <div>
                   <div className="text-2xl sm:text-3xl font-bold text-white font-sans tracking-tight">99.99%</div>
                   <div className="text-xs text-slate-500 mt-1 font-mono uppercase tracking-wider">API uptime</div>
@@ -86,6 +92,10 @@ export default function Home() {
                 <div>
                   <div className="text-2xl sm:text-3xl font-bold text-white font-sans tracking-tight">7</div>
                   <div className="text-xs text-slate-500 mt-1 font-mono uppercase tracking-wider">APIs live</div>
+                </div>
+                <div>
+                  <div className="text-2xl sm:text-3xl font-bold text-white font-sans tracking-tight">2</div>
+                  <div className="text-xs text-slate-500 mt-1 font-mono uppercase tracking-wider">AI Models coming soon</div>
                 </div>
               </div>
             </div>
@@ -385,6 +395,102 @@ export default function Home() {
                 Explore APIs <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 3.5: AI MODELS TEASER */}
+      <section className="bg-white py-24 border-b border-[#E2E8F0]">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Section Header */}
+          <div className="text-left max-w-2xl mb-16">
+            <span className="text-xs font-semibold tracking-widest text-[#2563EB] font-mono uppercase">
+              AI MODELS
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#0F172A] tracking-tight mt-2 mb-4">
+              Agricultural AI Models — Coming Soon
+            </h2>
+            <p className="text-[#64748B] text-lg">
+              Beyond indices — a new category of agricultural AI purpose-built for precision intelligence tasks that satellite telemetry alone cannot solve.
+            </p>
+          </div>
+
+          {/* 2 Column Grid of Locked Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 max-w-4xl">
+            {/* Card 1 */}
+            <div className="border border-[#E2E8F0] rounded-xl p-8 bg-slate-50/50 relative overflow-hidden custom-shadow opacity-60 grayscale-[30%] select-none flex flex-col justify-between min-h-[260px]">
+              <div>
+                {/* Coming Soon badge */}
+                <div className="absolute top-4 right-4 bg-amber-50 border border-amber-100 text-amber-700 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                  Coming Soon
+                </div>
+                
+                {/* Tag pill */}
+                <span className="text-[9px] font-mono bg-slate-100 text-slate-605 border border-slate-200 px-2 py-0.5 rounded w-fit font-bold mb-5 block">
+                  AI Model
+                </span>
+                
+                {/* Redacted Title */}
+                <div className="h-5 bg-slate-200/80 backdrop-blur-[3px] border border-slate-300/30 rounded-sm mb-3 w-[150px]" />
+                
+                <p className="text-slate-500 text-xs font-sans mt-4">
+                  Confidential — details will be revealed at launch.
+                </p>
+              </div>
+
+              {/* Disabled Button */}
+              <div className="mt-6 pt-4 border-t border-slate-105/80">
+                <button
+                  disabled
+                  className="w-full h-10 bg-[#14532D]/50 text-white rounded-xl text-xs font-semibold shadow-sm flex items-center justify-center gap-1.5 cursor-not-allowed"
+                >
+                  <span>Request Access</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="border border-[#E2E8F0] rounded-xl p-8 bg-slate-50/50 relative overflow-hidden custom-shadow opacity-60 grayscale-[30%] select-none flex flex-col justify-between min-h-[260px]">
+              <div>
+                {/* Coming Soon badge */}
+                <div className="absolute top-4 right-4 bg-amber-50 border border-amber-100 text-amber-700 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                  Coming Soon
+                </div>
+                
+                {/* Tag pill */}
+                <span className="text-[9px] font-mono bg-slate-100 text-slate-605 border border-slate-200 px-2 py-0.5 rounded w-fit font-bold mb-5 block">
+                  AI Model
+                </span>
+                
+                {/* Redacted Title */}
+                <div className="h-5 bg-slate-200/80 backdrop-blur-[3px] border border-slate-300/30 rounded-sm mb-3 w-[175px]" />
+                
+                <p className="text-slate-500 text-xs font-sans mt-4">
+                  Confidential — details will be revealed at launch.
+                </p>
+              </div>
+
+              {/* Disabled Button */}
+              <div className="mt-6 pt-4 border-t border-slate-105/80">
+                <button
+                  disabled
+                  className="w-full h-10 bg-[#14532D]/50 text-white rounded-xl text-xs font-semibold shadow-sm flex items-center justify-center gap-1.5 cursor-not-allowed"
+                >
+                  <span>Request Access</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center md:text-right animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <Link
+              href="/models"
+              className="text-[#2563EB] hover:text-[#1d4ed8] text-sm font-semibold inline-flex items-center gap-1.5 transition-colors group"
+            >
+              Explore all models <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
           </div>
         </div>
       </section>

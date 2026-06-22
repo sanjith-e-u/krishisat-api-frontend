@@ -8,7 +8,7 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-export const defaultOG = {
+const defaultOG = {
   title: "KrishiSat | Satellite APIs for Crop Monitoring",
   description: "Integrate NDVI, NDMI, weather intelligence, and farm analytics into your applications with a single satellite API. Built for agritech developers.",
   images: ["/og-image.png"],

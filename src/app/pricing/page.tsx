@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Check, Zap, Building2, Code } from "lucide-react"
+import { Check, Zap, Building2, Code, ArrowRight } from "lucide-react"
 import { creditsToUsd, formatUsd } from "@/lib/pricing"
 
 export const metadata: Metadata = {
@@ -167,6 +167,26 @@ export default function PricingPage() {
           })}
         </div>
       </section>
+
+    {/* AI Models Pricing Callout */}
+    <section className="max-w-6xl mx-auto px-6 pb-16 select-none">
+      <div className="bg-slate-50 border border-slate-205 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+        <div className="space-y-1 text-center md:text-left">
+          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono">
+            AI MODELS PRICING
+          </h3>
+          <h4 className="text-base font-extrabold text-slate-900 mt-1 font-sans">
+            AI model inference will be priced separately from API credits.
+          </h4>
+          <p className="text-xs text-slate-505 leading-relaxed mt-1 font-sans font-medium max-w-2xl">
+            Pricing is being finalized with our early access partners. Sign up for early access to receive pricing and availability updates.
+          </p>
+        </div>
+        <Link href="/models" className="text-xs font-bold text-[#14532D] hover:text-[#114524] bg-[#14532D]/8 px-4 py-2.5 rounded-xl hover:bg-[#14532D]/12 transition-all shrink-0 flex items-center gap-1.5 font-sans">
+          Join the early access list <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+    </section>
 
       {/* FAQ */}
       <section className="max-w-3xl mx-auto px-6 pb-24">
