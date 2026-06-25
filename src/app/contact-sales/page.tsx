@@ -56,7 +56,7 @@ export default function ContactSalesPage() {
 
     setTimeout(() => {
       setLoading(false)
-      if (formData.email.toLowerCase() === "error@krishisat.dev") {
+      if (formData.email.toLowerCase() === "error@X-AGI.dev") {
         setError("An error occurred while submitting your request. Please try again.")
       } else {
         setSubmitted(true)
@@ -111,7 +111,7 @@ export default function ContactSalesPage() {
             <div>
               <h4 className="text-sm font-bold text-slate-800">Direct Developer Inquiries</h4>
               <p className="text-xs text-slate-405 mt-1 leading-relaxed">
-                Have system architecture questions? E-mail our operations desk directly at <a href="mailto:hello@krishisat.dev" className="text-primary hover:underline font-semibold">hello@krishisat.dev</a>.
+                Have system architecture questions? E-mail our operations desk directly at <a href="mailto:hello@X-AGI.dev" className="text-primary hover:underline font-semibold">hello@X-AGI.dev</a>.
               </p>
             </div>
           </div>
@@ -257,8 +257,8 @@ export default function ContactSalesPage() {
               </button>
               <p className="text-[11px] text-slate-400 text-right leading-normal select-none">
                 We typically respond within 1 business day. For urgent inquiries, email{" "}
-                <a href="mailto:hello@krishisat.dev" className="text-primary hover:underline font-semibold">
-                  hello@krishisat.dev
+                <a href="mailto:hello@X-AGI.dev" className="text-primary hover:underline font-semibold">
+                  hello@X-AGI.dev
                 </a>
               </p>
             </div>

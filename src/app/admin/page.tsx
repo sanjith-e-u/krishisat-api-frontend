@@ -74,7 +74,7 @@ export default function AdminOverview() {
         const organization = profile?.organization || ""
 
         const isUserAdmin = 
-          email === "admin@krishisat.dev" || 
+          email === "admin@X-AGI.dev" || 
           email.startsWith("admin") || 
           fullName.toLowerCase() === "admin" || 
           organization.toLowerCase() === "admin"

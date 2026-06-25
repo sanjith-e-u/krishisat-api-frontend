@@ -18,28 +18,28 @@ export default function TermsPage() {
         <section className="space-y-3">
           <h2 className="text-base font-bold text-slate-800">2. Service Usage & Credit Quotas</h2>
           <p>
-            KrishiSat services are billed based on monthly index credits. Each calculated endpoint consumes credits as specified in the API Catalog (e.g. NDVI costs 2 credits, GDD weather costs 1 credit). Credits reset at the start of each billing cycle. Unused developer credits do not roll over, and accounts exceeding quotas will have query returns throttled until upgrades are configured.
+            X-AGI services are billed based on monthly index credits. Each calculated endpoint consumes credits as specified in the API Catalog (e.g. NDVI costs 2 credits, GDD weather costs 1 credit). Credits reset at the start of each billing cycle. Unused developer credits do not roll over, and accounts exceeding quotas will have query returns throttled until upgrades are configured.
           </p>
         </section>
 
         <section className="space-y-3">
           <h2 className="text-base font-bold text-slate-800">3. Spatial Coordinates & Boundaries</h2>
           <p>
-            You retain ownership of all farm polygons and GeoJSON boundary structures uploaded to our registration service. You grant KrishiSat a limited, non-exclusive license to process these coordinates through our satellite analysis loops to generate telemetry reports. You represent that you have acquired all rights to query data for the uploaded coordinates.
+            You retain ownership of all farm polygons and GeoJSON boundary structures uploaded to our registration service. You grant X-AGI a limited, non-exclusive license to process these coordinates through our satellite analysis loops to generate telemetry reports. You represent that you have acquired all rights to query data for the uploaded coordinates.
           </p>
         </section>
 
         <section className="space-y-3">
           <h2 className="text-base font-bold text-slate-800">4. Restrictions on Use</h2>
           <p>
-            Developers may not use KrishiSat APIs to build competing satellite analytics indices, scrape data blocks in bulk, bypass rate limits, or deploy secret credential keys on public repositories. Any automated script found abusing telemetry lookups will result in immediate API key suspension.
+            Developers may not use X-AGI APIs to build competing satellite analytics indices, scrape data blocks in bulk, bypass rate limits, or deploy secret credential keys on public repositories. Any automated script found abusing telemetry lookups will result in immediate API key suspension.
           </p>
         </section>
 
         <section className="space-y-3">
           <h2 className="text-base font-bold text-slate-800">5. Limitation of Liability</h2>
           <p>
-            Satellite crop intelligence values, canopy weather parameters, and water stress indicators are generated via computational AI modeling. We do not guarantee crop yields or represent that our indices are free from orbital sensor interference. KrishiSat is not liable for business losses resulting from calculations.
+            Satellite crop intelligence values, canopy weather parameters, and water stress indicators are generated via computational AI modeling. We do not guarantee crop yields or represent that our indices are free from orbital sensor interference. X-AGI is not liable for business losses resulting from calculations.
           </p>
         </section>
 

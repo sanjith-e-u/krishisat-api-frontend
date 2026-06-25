@@ -25,15 +25,15 @@ export default function DevelopersHubPage() {
   }
 
   const sdkInstallCmds = {
-    python: "pip install krishisat-sdk",
-    node: "npm install @krishisat/sdk",
-    go: "go get github.com/krishisat/krishisat-go"
+    python: "pip install X-AGI-sdk",
+    node: "npm install @X-AGI/sdk",
+    go: "go get github.com/X-AGI/X-AGI-go"
   }
 
   const sdkCodeSnippets = {
-    python: `import krishisat
+    python: `import X-AGI
 
-client = krishisat.Client(api_key="ks_sandbox_your_secret_key")
+client = X-AGI.Client(api_key="ks_sandbox_your_secret_key")
 
 # Fetch latest crop health metrics
 ndvi = client.vegetation.ndvi(
@@ -42,9 +42,9 @@ ndvi = client.vegetation.ndvi(
 )
 
 print(f"Crop Health (NDVI): {ndvi.value} - {ndvi.interpretation}")`,
-    node: `import KrishiSat from '@krishisat/sdk';
+    node: `import X-AGI from '@X-AGI/sdk';
 
-const client = new KrishiSat({
+const client = new X-AGI({
   apiKey: 'ks_sandbox_your_secret_key'
 });
 
@@ -60,11 +60,11 @@ console.log(\`Crop Health (NDVI): \${ndvi.value} - \${ndvi.interpretation}\`);`,
 import (
 	"context"
 	"fmt"
-	"github.com/krishisat/krishisat-go"
+	"github.com/X-AGI/X-AGI-go"
 )
 
 func main() {
-	client := krishisat.NewClient("ks_sandbox_your_secret_key")
+	client := X-AGI.NewClient("ks_sandbox_your_secret_key")
 	ctx := context.Background()
 
 	ndvi, _ := client.Vegetation.NDVI(ctx, "farm_abc123", "2026-06-12")
@@ -237,7 +237,7 @@ func main() {
               </div>
               <div className="flex justify-between text-xs text-slate-500">
                 <span>Base API Endpoint</span>
-                <span className="font-mono text-slate-800 bg-slate-100 px-1.5 py-0.5 rounded">https://api.krishisat.dev</span>
+                <span className="font-mono text-slate-800 bg-slate-100 px-1.5 py-0.5 rounded">https://api.X-AGI.dev</span>
               </div>
             </div>
           </div>
@@ -325,10 +325,10 @@ func main() {
               Contact Solutions Engineers
             </Link>
             <a 
-              href="mailto:support@krishisat.dev" 
+              href="mailto:support@X-AGI.dev" 
               className="border border-slate-700 hover:border-slate-600 text-slate-300 text-xs font-bold px-6 py-2.5 rounded-lg transition-all"
             >
-              support@krishisat.dev
+              support@X-AGI.dev
             </a>
           </div>
         </div>

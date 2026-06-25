@@ -4,12 +4,12 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { Terminal, Key, Satellite, ArrowRight, Code, CheckCircle } from "lucide-react"
 
-const API_URL = "https://api.krishisat.dev"
+const API_URL = "https://api.X-AGI.dev"
 
 const PYTHON_CODE = `import requests
 
 API_KEY = "ks_live_your_key_here"
-BASE_URL = "https://api.krishisat.dev/v1"
+BASE_URL = "https://api.X-AGI.dev/v1"
 
 payload = {
     "farm_id": "farm_abc123",
@@ -27,7 +27,7 @@ response = requests.post(
 )
 print(response.json())`
 
-const NODE_CODE = `const response = await fetch("https://api.krishisat.dev/v1/ndvi", {
+const NODE_CODE = `const response = await fetch("https://api.X-AGI.dev/v1/ndvi", {
   method: "POST",
   headers: {
     "Authorization": "Bearer ks_live_your_key_here",
@@ -49,7 +49,7 @@ const steps = [
   {
     step: "01",
     title: "Create your account",
-    description: "Register on KrishiSat and verify your email address.",
+    description: "Register on X-AGI and verify your email address.",
     code: null,
     link: "/register",
     linkLabel: "Create account →"

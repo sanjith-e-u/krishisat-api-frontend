@@ -36,7 +36,7 @@ export default function ModelsPage() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight font-sans">
-            KrishiSat AI Models
+            X-AGI AI Models
           </h1>
           <p className="text-base sm:text-lg text-slate-500 mt-4 max-w-xl mx-auto leading-relaxed font-sans">
             A new category of agricultural AI — purpose-built for precision intelligence tasks that satellite indices alone cannot solve. Details coming soon.

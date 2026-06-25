@@ -41,7 +41,7 @@ export default function Home() {
 
               {/* H1 Headline */}
               <h1 className="font-sans font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-white leading-[1.1] mb-6">
-                Satellite APIs & AI Models
+                Agricultural APIs & AI Models
               </h1>
 
               {/* Subheadline */}
@@ -73,7 +73,7 @@ export default function Home() {
 
               {/* Footnote */}
               <div className="text-[11px] text-slate-500 font-sans mb-12 select-none">
-                Coming soon: KrishiSat AI Models — a new category of agricultural intelligence.{" "}
+                Coming soon: X-AGI AI Models — a new category of agricultural intelligence.{" "}
                 <Link href="/models" className="text-[#22C55E] hover:underline font-semibold">
                   Learn more →
                 </Link>
@@ -152,7 +152,7 @@ export default function Home() {
               Core Agricultural Telemetry APIs
             </h2>
             <p className="text-slate-400 text-sm mt-3">
-              KrishiSat delivers production-ready agricultural data interfaces through three core endpoints.
+              X-AGI delivers production-ready agricultural data interfaces through three core endpoints.
             </p>
           </div>
 
@@ -609,7 +609,7 @@ export default function Home() {
               One unified intelligence engine
             </h2>
             <p className="text-slate-400 text-lg leading-relaxed">
-              KrishiSat is built on X Boson AI&apos;s agricultural intelligence engine —
+              X-AGI is built on X Boson AI&apos;s agricultural intelligence engine —
               fusing satellite imagery, meteorological arrays, farm boundaries, and custom agronomic AI models into a single, developer-grade API surface.
             </p>
           </div>

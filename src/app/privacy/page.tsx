@@ -18,7 +18,7 @@ export default function PrivacyPage() {
         <section className="space-y-3">
           <h2 className="text-base font-bold text-slate-800">2. Satellite & Crop Telemetry Data</h2>
           <p>
-            In providing our crop classification, GDD tracking, NDWI water delineation, and vegetation index services (including NDVI/NDRE calculation), KrishiSat processes geo-coordinate inputs and farm boundary polygons you upload. We cache computed telemetry raster blocks and metadata solely to enhance query performance and track your monthly index credit usage.
+            In providing our crop classification, GDD tracking, NDWI water delineation, and vegetation index services (including NDVI/NDRE calculation), X-AGI processes geo-coordinate inputs and farm boundary polygons you upload. We cache computed telemetry raster blocks and metadata solely to enhance query performance and track your monthly index credit usage.
           </p>
         </section>
 
@@ -46,7 +46,7 @@ export default function PrivacyPage() {
         <section className="space-y-3">
           <h2 className="text-base font-bold text-slate-800">6. Developer Rights & Access</h2>
           <p>
-            You can review, modify, or terminate your account coordinates directly through the setting tabs. To delete cache blocks associated with your crop boundaries, contact our operations desk at <a href="mailto:privacy@krishisat.dev" className="text-primary hover:underline font-semibold">privacy@krishisat.dev</a>.
+            You can review, modify, or terminate your account coordinates directly through the setting tabs. To delete cache blocks associated with your crop boundaries, contact our operations desk at <a href="mailto:privacy@X-AGI.dev" className="text-primary hover:underline font-semibold">privacy@X-AGI.dev</a>.
           </p>
         </section>
       </div>

@@ -28,21 +28,21 @@ export default function Logo({
   }
 
   const height = heights[size] || 60
-  // Aspect ratio is exactly 3.340
-  const width = Math.round(height * 3.340)
+  // Aspect ratio is exactly 3.084
+  const width = Math.round(height * 3.084)
 
   return (
     <div
       className={cn(
-        "relative select-none flex items-center justify-start",
-        dark && "brightness-0 invert opacity-90",
+        "relative select-none flex items-center justify-start transition-all duration-200",
+        !dark && "invert hue-rotate-180",
         className
       )}
       style={{ height: `${height}px`, width: `${width}px` }}
     >
       <Image
         src="/logo.png"
-        alt="KrishiSat Logo"
+        alt="X-AGI Logo"
         width={width}
         height={height}
         priority

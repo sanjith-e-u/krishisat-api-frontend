@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.krishisat.dev";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.X-AGI.dev";
 
 export interface DocSection {
   id: string;
@@ -26,7 +26,7 @@ export const docsSections: DocSection[] = [
     subtitle: "GETTING STARTED",
     group: "getting-started",
     description: [
-      "KrishiSat is a developer-first REST API platform that fuses multi-spectral satellite imagery, weather arrays, and agronomic AI models to provide real-time agricultural telemetry.",
+      "X-AGI is a developer-first REST API platform that fuses multi-spectral satellite imagery, weather arrays, and agronomic AI models to provide real-time agricultural telemetry.",
       "By registering field boundaries as GeoJSON polygons once, developers can immediately request high-resolution vegetation health indices, moisture analytics, and hyperlocal weather telemetry without dealing with raw raster band mathematics.",
       "All requests require a secure API Key transmitted over SSL. The production base URL is centralized as defined below:"
     ],
@@ -43,7 +43,7 @@ export const docsSections: DocSection[] = [
     subtitle: "SECURITY",
     group: "getting-started",
     description: [
-      "The KrishiSat API uses standard HTTP Bearer token authentication to authorize requests. All API requests must be made over HTTPS. Requests made over plain HTTP will fail.",
+      "The X-AGI API uses standard HTTP Bearer token authentication to authorize requests. All API requests must be made over HTTPS. Requests made over plain HTTP will fail.",
       "To authenticate, provide your API key in the `Authorization` header of all outbound requests.",
       "Authentication headers should adhere to the following schema:"
     ],
@@ -60,7 +60,7 @@ export const docsSections: DocSection[] = [
     subtitle: "SANDBOX VS LIVE",
     group: "getting-started",
     description: [
-      "KrishiSat supports dual environments using key prefixes. Sandbox keys are intended for testing and development, pointing to mock satellite tiles. Production keys invoke real sensor computation pipelines.",
+      "X-AGI supports dual environments using key prefixes. Sandbox keys are intended for testing and development, pointing to mock satellite tiles. Production keys invoke real sensor computation pipelines.",
       "• Sandbox Keys: Prefixed with \`ks_sandbox_\`. Free, capped at 1,000 requests per month.",
       "• Production Keys: Prefixed with \`ks_live_\`. Billed based on index credit consumption.",
       "Keep API keys private. Never hardcode them in browser applications or commit them to version control."
@@ -266,7 +266,7 @@ export const docsSections: DocSection[] = [
     subtitle: "TROUBLESHOOTING",
     group: "reference",
     description: [
-      "KrishiSat uses standard HTTP response status codes to indicate API success or failure. Status codes in the \`2xx\` range represent success. Codes in the \`4xx\` range represent user error, and \`5xx\` codes indicate server issues.",
+      "X-AGI uses standard HTTP response status codes to indicate API success or failure. Status codes in the \`2xx\` range represent success. Codes in the \`4xx\` range represent user error, and \`5xx\` codes indicate server issues.",
       "• 400 Bad Request: Missing request parameters or invalid polygon format.",
       "• 401 Unauthorized: Invalid API key or missing Bearer token headers.",
       "• 404 Not Found: Requested resources or farm_id do not exist.",
@@ -302,15 +302,15 @@ export const docsSections: DocSection[] = [
     subtitle: "DEVELOPER ASSISTANCE",
     group: "reference",
     description: [
-      "Need help integrating KrishiSat telemetry? Connect with our developer success team through the following channels:",
+      "Need help integrating X-AGI telemetry? Connect with our developer success team through the following channels:",
       "• Dashboard Help desk: Open a ticket directly inside the developer workspace.",
-      "• Email Support: <a href=\"mailto:support@krishisat.dev\" class=\"text-primary hover:underline font-semibold\">support@krishisat.dev</a> (SLA targets: 2 hours for production accounts, 1 business day for sandbox testers).",
+      "• Email Support: <a href=\"mailto:support@X-AGI.dev\" class=\"text-primary hover:underline font-semibold\">support@X-AGI.dev</a> (SLA targets: 2 hours for production accounts, 1 business day for sandbox testers).",
       "• SLA Status Dashboard: Keep track of incidents or service warnings on the active Status route."
     ],
     code: {
-      curl: `# Test API network latency to check connectivity\nping api.krishisat.dev`,
+      curl: `# Test API network latency to check connectivity\nping api.X-AGI.dev`,
       python: `# Simple diagnostics logging ping test\nimport urllib.request\ntry:\n    urllib.request.urlopen("${API_URL}/health", timeout=5)\n    print("Connection: Successful")\nexcept Exception as e:\n    print(f"Connection Failed: {e}")`,
-      node: `// Check connectivity using ping hooks\nconst dns = require('dns');\n\ndns.lookup('api.krishisat.dev', (err, address, family) => {\n  if (err) console.error('Offline:', err);\n  else console.log('Resolved address:', address);\n});`
+      node: `// Check connectivity using ping hooks\nconst dns = require('dns');\n\ndns.lookup('api.X-AGI.dev', (err, address, family) => {\n  if (err) console.error('Offline:', err);\n  else console.log('Resolved address:', address);\n});`
     },
     response: `{\n  "support_status": "online",\n  "active_escalations": 0,\n  "average_ticket_response": "14m"\n}`
   }

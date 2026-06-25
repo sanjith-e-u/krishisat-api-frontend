@@ -4,7 +4,7 @@ import { ArrowRight, Globe, Satellite, Sprout } from "lucide-react";
 
 export const metadata = {
   title: "About",
-  description: "Learn about KrishiSat — our mission to give every farmer access to satellite intelligence through developer-friendly APIs.",
+  description: "Learn about X-AGI — our mission to give every farmer access to satellite intelligence through developer-friendly APIs.",
 };
 
 export default function AboutPage() {
@@ -19,7 +19,7 @@ export default function AboutPage() {
           Democratizing Planetary Agri-Intelligence
         </h1>
         <p className="text-lg text-slate-500 mt-4 leading-relaxed">
-          At KrishiSat, we build developer-first APIs that translate multi-spectral satellite imagery and complex climate models into action-oriented insights for precision agriculture.
+          At X-AGI, we build developer-first APIs that translate multi-spectral satellite imagery and complex climate models into action-oriented insights for precision agriculture.
         </p>
       </section>
 
@@ -64,12 +64,12 @@ export default function AboutPage() {
 
       {/* Founding Story */}
       <section className="max-w-4xl mx-auto px-6 py-12 prose prose-slate">
-        <h2 className="text-2xl font-extrabold text-slate-900 mb-4 tracking-tight">Why we built KrishiSat</h2>
+        <h2 className="text-2xl font-extrabold text-slate-900 mb-4 tracking-tight">Why we built X-AGI</h2>
         <p className="text-slate-600 text-sm leading-relaxed mb-4">
-          Satellite data has been used by governments and large agricultural corporations for decades — but accessing it required expensive licenses, GIS specialists, and months of integration work. We built KrishiSat to change that: a single API that gives any developer access to the same satellite intelligence that precision agriculture giants use, with a REST interface they can integrate in an afternoon.
+          Satellite data has been used by governments and large agricultural corporations for decades — but accessing it required expensive licenses, GIS specialists, and months of integration work. We built X-AGI to change that: a single API that gives any developer access to the same satellite intelligence that precision agriculture giants use, with a REST interface they can integrate in an afternoon.
         </p>
         <p className="text-slate-600 text-sm leading-relaxed">
-          KrishiSat is built for the agritech teams, farm management platforms, and agricultural fintech products that are transforming how food is grown — starting with India, and expanding globally.
+          X-AGI is built for the agritech teams, farm management platforms, and agricultural fintech products that are transforming how food is grown — starting with India, and expanding globally.
         </p>
       </section>
 
@@ -100,9 +100,9 @@ export default function AboutPage() {
 
       {/* Footer social links */}
       <div className="max-w-4xl mx-auto px-6 pt-8 pb-12 border-t border-slate-100 flex justify-center gap-6 text-xs font-semibold text-slate-500">
-        <a href="https://github.com/krishisat" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">GitHub</a>
-        <a href="https://linkedin.com/company/krishisat" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">LinkedIn</a>
-        <a href="mailto:hello@krishisat.dev" className="hover:text-primary transition-colors">hello@krishisat.dev</a>
+        <a href="https://github.com/X-AGI" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">GitHub</a>
+        <a href="https://linkedin.com/company/X-AGI" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">LinkedIn</a>
+        <a href="mailto:hello@X-AGI.dev" className="hover:text-primary transition-colors">hello@X-AGI.dev</a>
       </div>
     </main>
   );

@@ -13,23 +13,23 @@ export default function DashboardSettings() {
   // Profile Form States
   const [profile, setProfile] = useState({
     name: "Dev Agronomist",
-    email: "dev@krishisat.dev",
+    email: "dev@X-AGI.dev",
     role: "Senior Systems Engineer"
   })
 
   // Company Form States
   const [company, setCompany] = useState({
-    name: "KrishiSat Agritech",
+    name: "X-AGI Agritech",
     region: "North India (New Delhi)",
     crops: "Wheat, Paddy, Mustard",
-    slug: "krishisat-agritech"
+    slug: "X-AGI-agritech"
   })
 
   // API Config States
   const [apiConfig, setApiConfig] = useState({
     cacheEnabled: true,
     cacheTtl: "60",
-    webhookUrl: "https://api.krishisat.dev/v1/telemetry-hook",
+    webhookUrl: "https://api.X-AGI.dev/v1/telemetry-hook",
     verboseLogging: false
   })
 
@@ -369,7 +369,7 @@ export default function DashboardSettings() {
             <form onSubmit={handleSaveNotifications} className="space-y-6">
               <div className="border-b border-slate-100 pb-4 mb-4">
                 <h3 className="text-sm font-bold text-slate-900">Email Notification Rules</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Control when KrishiSat emits account events to your inbox.</p>
+                <p className="text-xs text-slate-400 mt-0.5">Control when X-AGI emits account events to your inbox.</p>
               </div>
 
               <div className="space-y-4">

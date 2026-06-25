@@ -5,7 +5,7 @@ import DynamicDate from "@/components/shared/dynamic-date"
 
 export const metadata: Metadata = {
   title: "Trust & Security",
-  description: "KrishiSat security practices, uptime SLAs, data sovereignty, and compliance roadmap.",
+  description: "X-AGI security practices, uptime SLAs, data sovereignty, and compliance roadmap.",
 }
 
 const stats = [
@@ -29,7 +29,7 @@ const pillars = [
   {
     icon: Globe,
     title: "GDPR & DPDP Compliant",
-    description: "KrishiSat is fully compliant with EU GDPR and India's Digital Personal Data Protection Act 2023. Customer farm data is never sold or shared."
+    description: "X-AGI is fully compliant with EU GDPR and India's Digital Personal Data Protection Act 2023. Customer farm data is never sold or shared."
   },
   {
     icon: Server,
@@ -103,7 +103,7 @@ export default function TrustPage() {
         <span className="text-xs font-bold text-primary bg-primary/8 px-3 py-1 rounded-full uppercase tracking-widest">Trust & Security</span>
         <h1 className="text-4xl font-extrabold text-slate-900 mt-5 tracking-tight">Built for enterprise-grade reliability</h1>
         <p className="text-lg text-slate-500 mt-4 max-w-xl mx-auto leading-relaxed">
-          KrishiSat is designed from the ground up to be secure, private, and resilient — so your agricultural operations never go dark.
+          X-AGI is designed from the ground up to be secure, private, and resilient — so your agricultural operations never go dark.
         </p>
       </section>
 

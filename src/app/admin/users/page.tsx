@@ -75,8 +75,8 @@ export default function AdminUsers() {
         
         const fallbackName = p.full_name || "New Developer"
         const email = p.full_name 
-          ? `${p.full_name.toLowerCase().replace(/\s+/g, ".")}@krishisat.dev` 
-          : `dev-${p.id.substring(0, 8)}@krishisat.dev`
+          ? `${p.full_name.toLowerCase().replace(/\s+/g, ".")}@X-AGI.dev` 
+          : `dev-${p.id.substring(0, 8)}@X-AGI.dev`
 
         return {
           id: p.id,
@@ -125,7 +125,7 @@ export default function AdminUsers() {
         const organization = profile?.organization || ""
 
         const isUserAdmin = 
-          email === "admin@krishisat.dev" || 
+          email === "admin@X-AGI.dev" || 
           email.startsWith("admin") || 
           fullName.toLowerCase() === "admin" || 
           organization.toLowerCase() === "admin" ||
@@ -253,7 +253,7 @@ export default function AdminUsers() {
     const encodedUri = encodeURI(csvContent)
     const link = document.createElement("a")
     link.setAttribute("href", encodedUri)
-    link.setAttribute("download", `krishisat_users_${new Date().toISOString().split("T")[0]}.csv`)
+    link.setAttribute("download", `X-AGI_users_${new Date().toISOString().split("T")[0]}.csv`)
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -289,7 +289,7 @@ export default function AdminUsers() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">User Management</h1>
-          <p className="text-sm text-slate-500 mt-1">All registered developer accounts across KrishiSat.</p>
+          <p className="text-sm text-slate-500 mt-1">All registered developer accounts across X-AGI.</p>
         </div>
 
         <div className="flex items-center gap-3 self-start sm:self-auto">

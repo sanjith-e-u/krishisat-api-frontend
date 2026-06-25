@@ -91,7 +91,7 @@ function LoginForm() {
         </Link>
         <div>
           <h1 className="text-2xl font-bold text-[#0F172A] tracking-tight">Welcome Back</h1>
-          <p className="text-sm text-[#64748B] mt-1.5">Access your KrishiSat developer workspace.</p>
+          <p className="text-sm text-[#64748B] mt-1.5">Access your X-AGI developer workspace.</p>
         </div>
       </div>
 

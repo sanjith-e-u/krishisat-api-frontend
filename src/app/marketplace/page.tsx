@@ -192,7 +192,7 @@ export default function MarketplacePage() {
       <section className="bg-white border-b border-slate-200 py-16 px-6 text-center select-none">
         <div className="max-w-3xl mx-auto">
           <span className="text-xs font-bold text-[#14532D] bg-[#14532D]/8 px-3 py-1 rounded-full uppercase tracking-widest">
-            KrishiSat Marketplace
+            X-AGI Marketplace
           </span>
           <h1 className="text-4xl font-extrabold text-slate-950 mt-4 tracking-tight">
             Agricultural Intelligence APIs
@@ -339,7 +339,7 @@ export default function MarketplacePage() {
         <div className="max-w-2xl mx-auto">
           <h2 className="text-2xl font-extrabold tracking-tight mb-3 font-sans">Start building agricultural intelligence</h2>
           <p className="text-emerald-100/70 mb-8 max-w-md mx-auto text-sm leading-relaxed font-sans">
-            Join 847+ agritech developers using KrishiSat&apos;s satellite APIs to power smart farming applications.
+            Join 847+ agritech developers using X-AGI&apos;s satellite APIs to power smart farming applications.
           </p>
           <Link href="/register" className="inline-flex items-center gap-2 bg-[#22C55E] hover:bg-[#1cbd53] text-white h-11 px-8 rounded-xl font-bold text-sm transition-colors shadow-md">
             Get your free API key <ArrowRight className="w-4 h-4" />

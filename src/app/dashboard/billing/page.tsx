@@ -274,7 +274,7 @@ export default function DashboardBilling() {
             <div className="flex gap-3 p-3.5 bg-amber-50 border border-amber-200/50 rounded-2xl select-none">
               <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
               <p className="text-[11px] text-amber-700 leading-normal font-medium">
-                Need more credits immediately for testing? Please contact support@krishisat.ai to request a free developer quota grant.
+                Need more credits immediately for testing? Please contact support@X-AGI.ai to request a free developer quota grant.
               </p>
             </div>
 

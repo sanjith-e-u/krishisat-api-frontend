@@ -8,13 +8,13 @@ const codeTabs = [
     id: "curl",
     label: "cURL",
     language: "bash",
-    code: `curl https://api.krishisat.dev/v1/intelligence \\
+    code: `curl https://api.X-AGI.dev/v1/intelligence \\
   -H "Authorization: Bearer $KSAT_KEY" \\
   -d '{ "farm_id": "KR-1024",
         "indices": ["ndvi","ndmi","weather"] }'`,
     highlighted: (
       <span>
-        <span className="text-slate-500">curl</span> <span className="text-cyan-400">https://api.krishisat.dev/v1/intelligence</span> \<br />
+        <span className="text-slate-500">curl</span> <span className="text-cyan-400">https://api.X-AGI.dev/v1/intelligence</span> \<br />
         {"  "}<span className="text-slate-405">-H</span> <span className="text-emerald-400">&quot;Authorization: Bearer $KSAT_KEY&quot;</span> \<br />
         {"  "}<span className="text-slate-405">-d</span> <span className="text-emerald-400">{"'{ \"farm_id\": \"KR-1024\", \"indices\": [\"ndvi\",\"ndmi\",\"weather\"] }'"}</span>
       </span>
@@ -24,9 +24,9 @@ const codeTabs = [
     id: "python",
     label: "Python",
     language: "python",
-    code: `import krishisat
+    code: `import X-AGI
 
-client = krishisat.Client(api_key="$KSAT_KEY")
+client = X-AGI.Client(api_key="$KSAT_KEY")
 result = client.intelligence.get(
     farm_id="KR-1024",
     indices=["ndvi", "ndmi", "weather"]
@@ -34,8 +34,8 @@ result = client.intelligence.get(
 print(result.ndvi)  # 0.82`,
     highlighted: (
       <span>
-        <span className="text-rose-400">import</span> <span className="text-white">krishisat</span><br /><br />
-        <span className="text-white">client = krishisat.</span><span className="text-cyan-400">Client</span><span className="text-slate-400">(</span><span className="text-slate-300">api_key</span><span className="text-slate-400">=</span><span className="text-emerald-400">&quot;$KSAT_KEY&quot;</span><span className="text-slate-400">)</span><br />
+        <span className="text-rose-400">import</span> <span className="text-white">X-AGI</span><br /><br />
+        <span className="text-white">client = X-AGI.</span><span className="text-cyan-400">Client</span><span className="text-slate-400">(</span><span className="text-slate-300">api_key</span><span className="text-slate-400">=</span><span className="text-emerald-400">&quot;$KSAT_KEY&quot;</span><span className="text-slate-400">)</span><br />
         <span className="text-white">result = client.intelligence.</span><span className="text-cyan-400">get</span><span className="text-slate-400">(</span><br />
         {"    "}<span className="text-slate-300">farm_id</span><span className="text-slate-400">=</span><span className="text-emerald-400">&quot;KR-1024&quot;</span><span className="text-slate-400">,</span><br />
         {"    "}<span className="text-slate-300">indices</span><span className="text-slate-400">=</span><span className="text-slate-400">[</span><span className="text-emerald-400">&quot;ndvi&quot;</span><span className="text-slate-400">,</span> <span className="text-emerald-400">&quot;ndmi&quot;</span><span className="text-slate-400">,</span> <span className="text-emerald-400">&quot;weather&quot;</span><span className="text-slate-400">]</span><br />
@@ -48,9 +48,9 @@ print(result.ndvi)  # 0.82`,
     id: "nodejs",
     label: "Node.js",
     language: "javascript",
-    code: `import KrishiSat from 'krishisat';
+    code: `import X-AGI from 'X-AGI';
 
-const client = new KrishiSat({ apiKey: process.env.KSAT_KEY });
+const client = new X-AGI({ apiKey: process.env.KSAT_KEY });
 const result = await client.intelligence.get({
   farmId: 'KR-1024',
   indices: ['ndvi', 'ndmi', 'weather']
@@ -58,8 +58,8 @@ const result = await client.intelligence.get({
 console.log(result.ndvi); // 0.82`,
     highlighted: (
       <span>
-        <span className="text-rose-400">import</span> <span className="text-white">KrishiSat</span> <span className="text-rose-400">from</span> <span className="text-emerald-400">&apos;krishisat&apos;</span><span className="text-slate-400">;</span><br /><br />
-        <span className="text-rose-400">const</span> <span className="text-white">client =</span> <span className="text-rose-400">new</span> <span className="text-cyan-400">KrishiSat</span><span className="text-slate-400">(</span><span className="text-slate-300">{"{ apiKey: process.env.KSAT_KEY }"}</span><span className="text-slate-400">)</span><br />
+        <span className="text-rose-400">import</span> <span className="text-white">X-AGI</span> <span className="text-rose-400">from</span> <span className="text-emerald-400">&apos;X-AGI&apos;</span><span className="text-slate-400">;</span><br /><br />
+        <span className="text-rose-400">const</span> <span className="text-white">client =</span> <span className="text-rose-400">new</span> <span className="text-cyan-400">X-AGI</span><span className="text-slate-400">(</span><span className="text-slate-300">{"{ apiKey: process.env.KSAT_KEY }"}</span><span className="text-slate-400">)</span><br />
         <span className="text-rose-400">const</span> <span className="text-white">result =</span> <span className="text-rose-400">await</span> <span className="text-white">client.intelligence.</span><span className="text-cyan-400">get</span><span className="text-slate-400">(</span><span className="text-slate-300">{"{"}</span><br />
         {"  "}<span className="text-slate-300">farmId</span><span className="text-slate-400">:</span> <span className="text-emerald-400">&apos;KR-1024&apos;</span><span className="text-slate-400">,</span><br />
         {"  "}<span className="text-slate-300">indices</span><span className="text-slate-400">:</span> <span className="text-slate-400">[</span><span className="text-emerald-400">&apos;ndvi&apos;</span><span className="text-slate-400">,</span> <span className="text-emerald-400">&apos;ndmi&apos;</span><span className="text-slate-455">&apos;weather&apos;</span><span className="text-slate-400">]</span><br />

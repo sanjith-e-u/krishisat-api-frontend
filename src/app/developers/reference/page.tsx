@@ -3,11 +3,11 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "API Reference — KrishiSat Developers",
-  description: "Complete API reference for all KrishiSat satellite intelligence endpoints including NDVI, NDRE, Weather, and farm registration.",
+  title: "API Reference — X-AGI Developers",
+  description: "Complete API reference for all X-AGI satellite intelligence endpoints including NDVI, NDRE, Weather, and farm registration.",
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.krishisat.dev"
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.X-AGI.dev"
 
 const endpoints = [
   {
@@ -157,7 +157,7 @@ export default function ApiReferencePage() {
         </div>
         <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">API Reference</h1>
         <p className="text-lg text-slate-500 mt-3 max-w-2xl leading-relaxed">
-          Complete endpoint documentation for all KrishiSat satellite intelligence APIs.
+          Complete endpoint documentation for all X-AGI satellite intelligence APIs.
         </p>
         <div className="mt-6 inline-flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
           <span className="text-xs font-semibold text-slate-400">Base URL</span>

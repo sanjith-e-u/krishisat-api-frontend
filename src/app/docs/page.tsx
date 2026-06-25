@@ -62,14 +62,14 @@ function getPlainCode(section: string, lang: string): string {
     case "response-schema":
     case "support":
       if (lang === "curl") {
-        return `curl -X POST https://api.krishisat.dev/v1/intelligence \\
+        return `curl -X POST https://api.X-AGI.dev/v1/intelligence \\
   -H "Authorization: Bearer $KSAT_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{"farm_id":"farm_001","indices":["ndvi","ndmi","weather"]}'`;
       } else if (lang === "python") {
-        return `import krishisat
+        return `import X-AGI
 
-client = krishisat.Client(
+client = X-AGI.Client(
   api_key="$KSAT_KEY"
 )
 
@@ -80,9 +80,9 @@ result = client.intelligence.get(
 
 print(result.ndvi)  # 0.82`;
       } else {
-        return `import KrishiSat from 'krishisat'
+        return `import X-AGI from 'X-AGI'
 
-const client = new KrishiSat({
+const client = new X-AGI({
   apiKey: process.env.KSAT_KEY
 })
 
@@ -95,7 +95,7 @@ console.log(result.ndvi) // 0.82`;
       }
     case "farm-registration":
       if (lang === "curl") {
-        return `curl -X POST https://api.krishisat.dev/v1/farms \\
+        return `curl -X POST https://api.X-AGI.dev/v1/farms \\
   -H "Authorization: Bearer $KSAT_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{"farm_name":"Rice Farm","polygon":{...GeoJSON...}}'`;
@@ -114,7 +114,7 @@ console.log(farm.farmId) // farm_001`;
       }
     case "ndvi":
       if (lang === "curl") {
-        return `curl -X POST https://api.krishisat.dev/v1/vegetation/ndvi \\
+        return `curl -X POST https://api.X-AGI.dev/v1/vegetation/ndvi \\
   -H "Authorization: Bearer $KSAT_KEY" \\
   -d '{"farm_id":"farm_001"}'`;
       } else if (lang === "python") {
@@ -126,7 +126,7 @@ console.log(result.ndvi) // 0.82`;
       }
     case "ndmi":
       if (lang === "curl") {
-        return `curl -X POST https://api.krishisat.dev/v1/water/ndmi \\
+        return `curl -X POST https://api.X-AGI.dev/v1/water/ndmi \\
   -H "Authorization: Bearer $KSAT_KEY" \\
   -d '{"farm_id":"farm_001"}'`;
       } else if (lang === "python") {
@@ -138,7 +138,7 @@ console.log(result.ndmi) // 0.67`;
       }
     case "ndre":
       if (lang === "curl") {
-        return `curl -X POST https://api.krishisat.dev/v1/vegetation/ndre \\
+        return `curl -X POST https://api.X-AGI.dev/v1/vegetation/ndre \\
   -H "Authorization: Bearer $KSAT_KEY" \\
   -d '{"farm_id":"farm_001"}'`;
       } else if (lang === "python") {
@@ -150,7 +150,7 @@ console.log(result.ndre) // 0.61`;
       }
     case "savi":
       if (lang === "curl") {
-        return `curl -X POST https://api.krishisat.dev/v1/vegetation/savi \\
+        return `curl -X POST https://api.X-AGI.dev/v1/vegetation/savi \\
   -H "Authorization: Bearer $KSAT_KEY" \\
   -d '{"farm_id":"farm_001"}'`;
       } else if (lang === "python") {
@@ -162,7 +162,7 @@ console.log(result.savi) // 0.54`;
       }
     case "ndwi":
       if (lang === "curl") {
-        return `curl -X POST https://api.krishisat.dev/v1/water/ndwi \\
+        return `curl -X POST https://api.X-AGI.dev/v1/water/ndwi \\
   -H "Authorization: Bearer $KSAT_KEY" \\
   -d '{"farm_id":"farm_001"}'`;
       } else if (lang === "python") {
@@ -174,7 +174,7 @@ console.log(result.ndwi) // 0.23`;
       }
     case "ci":
       if (lang === "curl") {
-        return `curl -X POST https://api.krishisat.dev/v1/vegetation/ci \\
+        return `curl -X POST https://api.X-AGI.dev/v1/vegetation/ci \\
   -H "Authorization: Bearer $KSAT_KEY" \\
   -d '{"farm_id":"farm_001"}'`;
       } else if (lang === "python") {
@@ -186,7 +186,7 @@ console.log(result.ci) // 2.14`;
       }
     case "weather":
       if (lang === "curl") {
-        return `curl -X POST https://api.krishisat.dev/v1/weather \\
+        return `curl -X POST https://api.X-AGI.dev/v1/weather \\
   -H "Authorization: Bearer $KSAT_KEY" \\
   -d '{"farm_id":"farm_001"}'`;
       } else if (lang === "python") {
@@ -198,7 +198,7 @@ console.log(result.temperature) // 29`;
       }
     case "error-codes":
       if (lang === "curl") {
-        return `curl -X POST https://api.krishisat.dev/v1/vegetation/ndvi \\
+        return `curl -X POST https://api.X-AGI.dev/v1/vegetation/ndvi \\
   -H "Authorization: Bearer $KSAT_KEY" \\
   -d '{"farm_id":""}'
 
@@ -211,7 +211,7 @@ console.log(result.temperature) // 29`;
       } else if (lang === "python") {
         return `try:
   result = client.vegetation.ndvi(farm_id="")
-except krishisat.InvalidFarmIdError as e:
+except X-AGI.InvalidFarmIdError as e:
   print(e.code)    # INVALID_FARM_ID
   print(e.status)  # 400`;
       } else {
@@ -224,14 +224,14 @@ except krishisat.InvalidFarmIdError as e:
       }
     default:
       if (lang === "curl") {
-        return `curl -X POST https://api.krishisat.dev/v1/intelligence \\
+        return `curl -X POST https://api.X-AGI.dev/v1/intelligence \\
   -H "Authorization: Bearer $KSAT_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{"farm_id":"farm_001","indices":["ndvi","ndmi","weather"]}'`;
       } else if (lang === "python") {
-        return `import krishisat
+        return `import X-AGI
 
-client = krishisat.Client(
+client = X-AGI.Client(
   api_key="$KSAT_KEY"
 )
 
@@ -242,9 +242,9 @@ result = client.intelligence.get(
 
 print(result.ndvi)  # 0.82`;
       } else {
-        return `import KrishiSat from 'krishisat'
+        return `import X-AGI from 'X-AGI'
 
-const client = new KrishiSat({
+const client = new X-AGI({
   apiKey: process.env.KSAT_KEY
 })
 
@@ -270,7 +270,7 @@ function renderCode(section: string, lang: string): React.ReactNode {
       if (lang === "curl") {
         return (
           <span>
-            <span className="text-rose-400">curl</span> <span className="text-slate-400">-X</span> <span className="text-white">POST</span> <span className="text-cyan-400">https://api.krishisat.dev/v1/intelligence</span> \<br />
+            <span className="text-rose-400">curl</span> <span className="text-slate-400">-X</span> <span className="text-white">POST</span> <span className="text-cyan-400">https://api.X-AGI.dev/v1/intelligence</span> \<br />
             {"  "}<span className="text-slate-400">-H</span> <span className="text-emerald-400">&quot;Authorization: Bearer $KSAT_KEY&quot;</span> \<br />
             {"  "}<span className="text-slate-400">-H</span> <span className="text-emerald-400">&quot;Content-Type: application/json&quot;</span> \<br />
             {"  "}<span className="text-slate-400">-d</span> <span className="text-emerald-400">{"'{\"farm_id\":\"farm_001\",\"indices\":[\"ndvi\",\"ndmi\",\"weather\"]}'"}</span>
@@ -279,8 +279,8 @@ function renderCode(section: string, lang: string): React.ReactNode {
       } else if (lang === "python") {
         return (
           <span>
-            <span className="text-rose-400">import</span> <span className="text-white">krishisat</span><br /><br />
-            <span className="text-white">client = krishisat.</span><span className="text-cyan-400">Client</span><span className="text-slate-600">(</span><br />
+            <span className="text-rose-400">import</span> <span className="text-white">X-AGI</span><br /><br />
+            <span className="text-white">client = X-AGI.</span><span className="text-cyan-400">Client</span><span className="text-slate-600">(</span><br />
             {"  "}<span className="text-slate-400">api_key</span><span className="text-slate-600">=</span><span className="text-emerald-400">&quot;$KSAT_KEY&quot;</span><br />
             <span className="text-slate-600">)</span><br /><br />
             <span className="text-white">result = client.intelligence.</span><span className="text-cyan-400">get</span><span className="text-slate-600">(</span><br />
@@ -293,8 +293,8 @@ function renderCode(section: string, lang: string): React.ReactNode {
       } else {
         return (
           <span>
-            <span className="text-rose-400">import</span> <span className="text-white">KrishiSat</span> <span className="text-rose-400">from</span> <span className="text-emerald-400">&apos;krishisat&apos;</span><br /><br />
-            <span className="text-rose-400">const</span> <span className="text-white">client =</span> <span className="text-rose-400">new</span> <span className="text-cyan-400">KrishiSat</span><span className="text-slate-600">({"{"}</span><br />
+            <span className="text-rose-400">import</span> <span className="text-white">X-AGI</span> <span className="text-rose-400">from</span> <span className="text-emerald-400">&apos;X-AGI&apos;</span><br /><br />
+            <span className="text-rose-400">const</span> <span className="text-white">client =</span> <span className="text-rose-400">new</span> <span className="text-cyan-400">X-AGI</span><span className="text-slate-600">({"{"}</span><br />
             {"  "}<span className="text-slate-400">apiKey</span><span className="text-slate-600">:</span> <span className="text-white">process.env.KSAT_KEY</span><br />
             <span className="text-slate-600">{"})"}</span><br /><br />
             <span className="text-rose-400">const</span> <span className="text-white">result =</span> <span className="text-rose-400">await</span> <span className="text-white">client.intelligence.</span><span className="text-cyan-400">get</span><span className="text-slate-600">({"{"}</span><br />
@@ -309,7 +309,7 @@ function renderCode(section: string, lang: string): React.ReactNode {
       if (lang === "curl") {
         return (
           <span>
-            <span className="text-rose-400">curl</span> <span className="text-slate-400">-X</span> <span className="text-white">POST</span> <span className="text-cyan-400">https://api.krishisat.dev/v1/farms</span> \<br />
+            <span className="text-rose-400">curl</span> <span className="text-slate-400">-X</span> <span className="text-white">POST</span> <span className="text-cyan-400">https://api.X-AGI.dev/v1/farms</span> \<br />
             {"  "}<span className="text-slate-400">-H</span> <span className="text-emerald-400">&quot;Authorization: Bearer $KSAT_KEY&quot;</span> \<br />
             {"  "}<span className="text-slate-400">-H</span> <span className="text-emerald-400">&quot;Content-Type: application/json&quot;</span> \<br />
             {"  "}<span className="text-slate-400">-d</span> <span className="text-emerald-400">{"'{\"farm_name\":\"Rice Farm\",\"polygon\":{...GeoJSON...}}'"}</span>
@@ -360,7 +360,7 @@ function renderCode(section: string, lang: string): React.ReactNode {
         if (lang === "curl") {
           return (
             <span>
-              <span className="text-rose-400">curl</span> <span className="text-slate-400">-X</span> <span className="text-white">POST</span> <span className="text-cyan-400">https://api.krishisat.dev/v1{path}</span> \<br />
+              <span className="text-rose-400">curl</span> <span className="text-slate-400">-X</span> <span className="text-white">POST</span> <span className="text-cyan-400">https://api.X-AGI.dev/v1{path}</span> \<br />
               {"  "}<span className="text-slate-400">-H</span> <span className="text-emerald-400">&quot;Authorization: Bearer $KSAT_KEY&quot;</span> \<br />
               {"  "}<span className="text-slate-400">-d</span> <span className="text-emerald-400">{"'{\"farm_id\":\"farm_001\"}'"}</span>
             </span>
@@ -385,7 +385,7 @@ function renderCode(section: string, lang: string): React.ReactNode {
       if (lang === "curl") {
         return (
           <span>
-            <span className="text-rose-400">curl</span> <span className="text-slate-400">-X</span> <span className="text-white">POST</span> <span className="text-cyan-400">https://api.krishisat.dev/v1/vegetation/ndvi</span> \<br />
+            <span className="text-rose-400">curl</span> <span className="text-slate-400">-X</span> <span className="text-white">POST</span> <span className="text-cyan-400">https://api.X-AGI.dev/v1/vegetation/ndvi</span> \<br />
             {"  "}<span className="text-slate-400">-H</span> <span className="text-emerald-400">&quot;Authorization: Bearer $KSAT_KEY&quot;</span> \<br />
             {"  "}<span className="text-slate-400">-d</span> <span className="text-emerald-400">{"'{\"farm_id\":\"\"}'"}</span><br /><br />
             <span className="text-slate-500">{"# Response"}</span><br />
@@ -401,7 +401,7 @@ function renderCode(section: string, lang: string): React.ReactNode {
           <span>
             <span className="text-rose-400">try</span><span className="text-slate-600">:</span><br />
             {"  "}<span className="text-white">result = client.vegetation.</span><span className="text-cyan-400">ndvi</span><span className="text-slate-600">(</span><span className="text-slate-400">farm_id</span><span className="text-slate-600">=</span><span className="text-emerald-400">&quot;&quot;</span><span className="text-slate-600">)</span><br />
-            <span className="text-rose-400">except</span> <span className="text-white">krishisat.InvalidFarmIdError</span> <span className="text-rose-400">as</span> <span className="text-white">e</span><span className="text-slate-600">:</span><br />
+            <span className="text-rose-400">except</span> <span className="text-white">X-AGI.InvalidFarmIdError</span> <span className="text-rose-400">as</span> <span className="text-white">e</span><span className="text-slate-600">:</span><br />
             {"  "}<span className="text-cyan-400">print</span><span className="text-slate-600">(</span><span className="text-white">e.code</span><span className="text-slate-600">)</span>    <span className="text-slate-500">{"# INVALID_FARM_ID"}</span><br />
             {"  "}<span className="text-cyan-400">print</span><span className="text-slate-600">(</span><span className="text-white">e.status</span><span className="text-slate-600">)</span>  <span className="text-slate-500">{"# 400"}</span>
           </span>
@@ -422,7 +422,7 @@ function renderCode(section: string, lang: string): React.ReactNode {
       if (lang === "curl") {
         return (
           <span>
-            <span className="text-rose-400">curl</span> <span className="text-slate-400">-X</span> <span className="text-white">POST</span> <span className="text-cyan-400">https://api.krishisat.dev/v1/intelligence</span> \<br />
+            <span className="text-rose-400">curl</span> <span className="text-slate-400">-X</span> <span className="text-white">POST</span> <span className="text-cyan-400">https://api.X-AGI.dev/v1/intelligence</span> \<br />
             {"  "}<span className="text-slate-400">-H</span> <span className="text-emerald-400">&quot;Authorization: Bearer $KSAT_KEY&quot;</span> \<br />
             {"  "}<span className="text-slate-400">-H</span> <span className="text-emerald-400">&quot;Content-Type: application/json&quot;</span> \<br />
             {"  "}<span className="text-slate-400">-d</span> <span className="text-emerald-400">{"'{\"farm_id\":\"farm_001\",\"indices\":[\"ndvi\",\"ndmi\",\"weather\"]}'"}</span>
@@ -431,8 +431,8 @@ function renderCode(section: string, lang: string): React.ReactNode {
       } else if (lang === "python") {
         return (
           <span>
-            <span className="text-rose-400">import</span> <span className="text-white">krishisat</span><br /><br />
-            <span className="text-white">client = krishisat.</span><span className="text-cyan-400">Client</span><span className="text-slate-600">(</span><br />
+            <span className="text-rose-400">import</span> <span className="text-white">X-AGI</span><br /><br />
+            <span className="text-white">client = X-AGI.</span><span className="text-cyan-400">Client</span><span className="text-slate-600">(</span><br />
             {"  "}<span className="text-slate-400">api_key</span><span className="text-slate-600">=</span><span className="text-emerald-400">&quot;$KSAT_KEY&quot;</span><br />
             <span className="text-slate-600">)</span><br /><br />
             <span className="text-white">result = client.intelligence.</span><span className="text-cyan-400">get</span><span className="text-slate-600">(</span><br />
@@ -445,8 +445,8 @@ function renderCode(section: string, lang: string): React.ReactNode {
       } else {
         return (
           <span>
-            <span className="text-rose-400">import</span> <span className="text-white">KrishiSat</span> <span className="text-rose-400">from</span> <span className="text-emerald-400">&apos;krishisat&apos;</span><br /><br />
-            <span className="text-rose-400">const</span> <span className="text-white">client =</span> <span className="text-rose-400">new</span> <span className="text-cyan-400">KrishiSat</span><span className="text-slate-600">({"{"}</span><br />
+            <span className="text-rose-400">import</span> <span className="text-white">X-AGI</span> <span className="text-rose-400">from</span> <span className="text-emerald-400">&apos;X-AGI&apos;</span><br /><br />
+            <span className="text-rose-400">const</span> <span className="text-white">client =</span> <span className="text-rose-400">new</span> <span className="text-cyan-400">X-AGI</span><span className="text-slate-600">({"{"}</span><br />
             {"  "}<span className="text-slate-400">apiKey</span><span className="text-slate-600">:</span> <span className="text-white">process.env.KSAT_KEY</span><br />
             <span className="text-slate-600">{"})"}</span><br /><br />
             <span className="text-rose-400">const</span> <span className="text-white">result =</span> <span className="text-rose-400">await</span> <span className="text-white">client.intelligence.</span><span className="text-cyan-400">get</span><span className="text-slate-600">({"{"}</span><br />
@@ -475,7 +475,7 @@ const ndviRequestFields: RequestField[] = [
 const sectionSearchData: Record<string, { title: string; content: string }> = {
   introduction: {
     title: "Introduction",
-    content: "krishisat developer-first rest api crop health water weather farm management telemetry satellite"
+    content: "X-AGI developer-first rest api crop health water weather farm management telemetry satellite"
   },
   authentication: {
     title: "Authentication",
@@ -773,7 +773,7 @@ export default function DocsPage() {
                   Documentation
                 </span>
                 <h1 className="text-4xl font-bold tracking-tight text-[#0F172A] mb-4">
-                  Build with KrishiSat
+                  Build with X-AGI
                 </h1>
                 <p className="text-lg text-[#64748B] leading-relaxed mb-8 max-w-xl">
                   Programmatic access to crop health indices, water stress measurements,
@@ -805,7 +805,7 @@ export default function DocsPage() {
                 </h2>
                 <div className="space-y-4 mb-4">
                   <p className="text-slate-700 text-base leading-[1.8] max-w-4xl">
-                    KrishiSat is a REST API platform that provides satellite-derived agricultural intelligence. Register your farm polygons once and receive structured JSON telemetry from 8 dedicated endpoints covering crop health, water stress, and hyperlocal weather.
+                    X-AGI is a REST API platform that provides satellite-derived agricultural intelligence. Register your farm polygons once and receive structured JSON telemetry from 8 dedicated endpoints covering crop health, water stress, and hyperlocal weather.
                   </p>
                   <p className="text-slate-700 text-base leading-[1.8] max-w-4xl">
                     All APIs run on the base URL:
@@ -813,7 +813,7 @@ export default function DocsPage() {
                 </div>
                 <div className="mb-6">
                   <code className="font-mono text-sm bg-[#14532D]/5 border border-[#14532D]/10 px-3 py-1.5 rounded-lg text-[#14532D] font-semibold inline-block select-all">
-                    https://api.krishisat.dev
+                    https://api.X-AGI.dev
                   </code>
                 </div>
 
@@ -881,7 +881,7 @@ export default function DocsPage() {
                 </div>
 
                 <p className="text-slate-700 text-base leading-[1.8] mb-4 max-w-4xl">
-                  KrishiSat credentials contain specific prefixes to prevent key swap errors:
+                  X-AGI credentials contain specific prefixes to prevent key swap errors:
                 </p>
                 <ul className="list-disc pl-6 space-y-2 mb-6 text-[#64748B] text-sm">
                   <li>
@@ -1707,7 +1707,7 @@ export default function DocsPage() {
                   Error Codes
                 </h2>
                 <p className="text-slate-700 text-base leading-[1.8] mb-6 max-w-4xl">
-                  KrishiSat uses standard HTTP status codes. All errors return the same JSON envelope shape.
+                  X-AGI uses standard HTTP status codes. All errors return the same JSON envelope shape.
                 </p>
 
                 <div className="overflow-x-auto mb-6 border border-slate-200 rounded-xl shadow-sm bg-white">
@@ -1797,7 +1797,7 @@ export default function DocsPage() {
                       </p>
                     </div>
                     <a
-                      href="https://github.com/sanjith-e-u/krishisat-api-frontend/issues"
+                      href="https://github.com/sanjith-e-u/X-AGI-api-frontend/issues"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs font-semibold text-[#14532D] hover:text-[#114524] inline-flex items-center gap-1 transition-colors select-none"

@@ -99,7 +99,7 @@ export default function PricingPage() {
           <div className="space-y-1 text-center md:text-left">
             <h3 className="text-sm font-extrabold text-slate-900">💡 Pay-As-You-Go System</h3>
             <p className="text-xs text-slate-505 leading-relaxed max-w-2xl">
-              KrishiSat uses a simple usage-based model. Your first 1,000 credits each month are completely free. Subsequent requests are billed at a flat rate of <strong className="text-slate-800 font-bold">{formatUsd(creditsToUsd(1))} per credit</strong>. Endpoints cost between 1–3 credits per call depending on the data type. No monthly fees, no overage shocks, and no service interruptions.
+              X-AGI uses a simple usage-based model. Your first 1,000 credits each month are completely free. Subsequent requests are billed at a flat rate of <strong className="text-slate-800 font-bold">{formatUsd(creditsToUsd(1))} per credit</strong>. Endpoints cost between 1–3 credits per call depending on the data type. No monthly fees, no overage shocks, and no service interruptions.
             </p>
           </div>
           <Link href="/developers/reference" className="text-xs font-bold text-primary bg-primary/8 px-4 py-2.5 rounded-xl hover:bg-primary/10 transition-colors shrink-0">

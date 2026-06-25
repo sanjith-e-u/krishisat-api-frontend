@@ -95,7 +95,7 @@ export default function AdminApiMonitoring() {
         const organization = profile?.organization || ""
 
         const isUserAdmin = 
-          email === "admin@krishisat.dev" || 
+          email === "admin@X-AGI.dev" || 
           email.startsWith("admin") || 
           fullName.toLowerCase() === "admin" || 
           organization.toLowerCase() === "admin" ||
@@ -306,8 +306,8 @@ export default function AdminApiMonitoring() {
           {filteredLogs.map((log) => {
             const timeStr = new Date(log.created_at).toTimeString().slice(0, 8)
             const fallbackEmail = log.profiles?.full_name
-              ? `${log.profiles.full_name.toLowerCase().replace(/\s+/g, ".")}@krishisat.dev`
-              : `dev-${log.profiles?.id?.substring(0, 8) || "unknown"}@krishisat.dev`
+              ? `${log.profiles.full_name.toLowerCase().replace(/\s+/g, ".")}@X-AGI.dev`
+              : `dev-${log.profiles?.id?.substring(0, 8) || "unknown"}@X-AGI.dev`
             const cost = log.apis?.credit_cost ?? 1
 
             return (

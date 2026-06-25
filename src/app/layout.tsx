@@ -9,26 +9,26 @@ const inter = Inter({
 });
 
 const defaultOG = {
-  title: "KrishiSat | Satellite APIs for Crop Monitoring",
-  description: "Integrate NDVI, NDMI, weather intelligence, and farm analytics into your applications with a single satellite API. Built for agritech developers.",
+  title: "X-AGI | Agricultural APIs for Crop Monitoring",
+  description: "Integrate NDVI, NDMI, weather intelligence, and farm analytics into your applications with a single agricultural API. Built for agritech developers.",
   images: ["/og-image.png"],
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://krishisat-api-frontend.vercel.app"),
+  metadataBase: new URL("https://X-AGI-api-frontend.vercel.app"),
   title: {
-    default: "KrishiSat | Satellite APIs for Crop Monitoring",
-    template: "%s — KrishiSat"
+    default: "X-AGI | Agricultural APIs for Crop Monitoring",
+    template: "%s — X-AGI"
   },
-  description: "Integrate NDVI, NDMI, weather intelligence, and farm analytics into your applications with a single satellite API. Built for agritech developers.",
+  description: "Integrate NDVI, NDMI, weather intelligence, and farm analytics into your applications with a single agricultural API. Built for agritech developers.",
   openGraph: {
     ...defaultOG,
     type: "website",
-    siteName: "KrishiSat",
+    siteName: "X-AGI",
   },
   twitter: {
     card: "summary_large_image",
-    site: "@krishisat",
+    site: "{{TWITTER_HANDLE}}",
     images: ["/og-image.png"],
   },
 };

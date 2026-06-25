@@ -70,7 +70,7 @@ export default function CareersPage() {
               </div>
             </div>
             <button
-              onClick={() => window.location.href = 'mailto:careers@krishisat.dev'}
+              onClick={() => window.location.href = 'mailto:careers@X-AGI.dev'}
               className="bg-slate-50 group-hover:bg-primary text-slate-700 group-hover:text-white border border-slate-200 group-hover:border-transparent px-4 py-2 text-xs font-bold rounded-lg transition-colors inline-flex items-center gap-1 self-start md:self-center cursor-pointer"
             >
               Apply Now <ArrowRight className="w-3.5 h-3.5" />

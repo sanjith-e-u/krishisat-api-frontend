@@ -136,7 +136,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-slate-800/80 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-sans">
-          <div>© 2026 KrishiSat AI. All rights reserved.</div>
+          <div>© 2026 X-AGI. All rights reserved.</div>
           <div className="flex gap-6">
             <Link href="/privacy" className="hover:text-slate-400 transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-slate-400 transition-colors">Terms of Service</Link>

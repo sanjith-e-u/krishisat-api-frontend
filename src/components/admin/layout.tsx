@@ -183,7 +183,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 <div className="absolute right-0 mt-10 w-52 bg-white border border-slate-200 rounded-xl shadow-lg p-1 space-y-0.5 z-40 animate-in fade-in slide-in-from-top-1.5 duration-100">
                   <div className="px-3 py-2 select-none">
                     <p className="text-xs font-bold text-slate-800">Administrator</p>
-                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">admin@krishisat.dev</p>
+                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">admin@X-AGI.dev</p>
                   </div>
                   <div className="border-t border-slate-100" />
                   <Link

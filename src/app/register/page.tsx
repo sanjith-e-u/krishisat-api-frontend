@@ -260,7 +260,7 @@ export default function RegisterPage() {
               className="w-4 h-4 mt-0.5 text-[#14532D] bg-white border-slate-200 rounded focus:ring-[#14532D]"
             />
             <label htmlFor="terms" className="text-xs text-[#64748B] cursor-pointer leading-normal">
-              I agree to the KrishiSat{" "}
+              I agree to the X-AGI{" "}
               <Link href="/terms" className="text-primary hover:underline font-semibold">Terms of Service</Link>{" "}
               and{" "}
               <Link href="/privacy" className="text-primary hover:underline font-semibold">Privacy Policy</Link>,{" "}
@@ -315,7 +315,7 @@ export default function RegisterPage() {
         <div className="relative z-10 space-y-6">
           <h2 className="text-xl font-bold tracking-tight">Agricultural intelligence at your fingertips.</h2>
           <p className="text-emerald-100 text-xs sm:text-sm leading-relaxed">
-            KrishiSat delivers planetary crop health telemetry and meteorological forecasts directly to your tech stack through unified REST endpoints.
+            X-AGI delivers planetary crop health telemetry and meteorological forecasts directly to your tech stack through unified REST endpoints.
           </p>
 
           <ul className="space-y-4 pt-4">

@@ -112,7 +112,7 @@ export function ApiPlayground() {
               POST
             </span>
             <code className="font-mono text-xs text-slate-300 overflow-x-auto whitespace-nowrap scrollbar-none select-text">
-              https://api.krishisat.dev/v1/{selected === "weather" ? "weather" : `vegetation/${selected}`}
+              https://api.X-AGI.dev/v1/{selected === "weather" ? "weather" : `vegetation/${selected}`}
             </code>
           </div>
           <span className="text-[10px] font-bold text-slate-350 bg-slate-900 border border-slate-800 px-2.5 py-0.5 rounded font-mono shrink-0 select-none">
