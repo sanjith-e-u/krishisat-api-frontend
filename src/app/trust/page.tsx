@@ -97,12 +97,12 @@ const uptime = [
 
 export default function TrustPage() {
   return (
-    <main className="bg-white min-h-screen text-slate-800">
+    <main className="bg-background min-h-screen text-foreground">
       {/* Hero */}
-      <section className="text-center pt-24 pb-16 px-6 border-b border-slate-200 bg-slate-50/60">
+      <section className="text-center pt-24 pb-16 px-6 border-b border-border bg-subtle/60">
         <span className="text-xs font-bold text-primary bg-primary/8 px-3 py-1 rounded-full uppercase tracking-widest">Trust & Security</span>
-        <h1 className="text-4xl font-extrabold text-slate-900 mt-5 tracking-tight">Built for enterprise-grade reliability</h1>
-        <p className="text-lg text-slate-500 mt-4 max-w-xl mx-auto leading-relaxed">
+        <h1 className="text-4xl font-extrabold text-foreground mt-5 tracking-tight">Built for enterprise-grade reliability</h1>
+        <p className="text-lg text-muted-foreground mt-4 max-w-xl mx-auto leading-relaxed">
           X-AGI is designed from the ground up to be secure, private, and resilient — so your agricultural operations never go dark.
         </p>
       </section>
@@ -111,33 +111,33 @@ export default function TrustPage() {
       <section className="max-w-6xl mx-auto px-6 py-12 border-b border-slate-100">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, idx) => (
-            <div key={idx} className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-slate-300 transition-colors">
+            <div key={idx} className="bg-background border border-border rounded-xl p-5 custom-shadow hover:border-border-strong transition-colors">
               <span className="text-3xl font-black text-primary block tracking-tight">{stat.value}</span>
-              <span className="text-xs font-extrabold text-slate-900 block mt-1 uppercase tracking-wider">{stat.label}</span>
-              <span className="text-[11px] text-slate-400 block mt-1 leading-normal">{stat.desc}</span>
+              <span className="text-xs font-extrabold text-foreground block mt-1 uppercase tracking-wider">{stat.label}</span>
+              <span className="text-[11px] text-muted-foreground block mt-1 leading-normal">{stat.desc}</span>
             </div>
           ))}
         </div>
-        <p className="text-center text-xs text-slate-400 mt-6 font-medium">
+        <p className="text-center text-xs text-muted-foreground mt-6 font-medium">
           Metrics updated monthly
         </p>
       </section>
 
       {/* Security Pillars */}
       <section className="max-w-6xl mx-auto px-6 py-20">
-        <h2 className="text-2xl font-extrabold text-slate-900 mb-3">Security practices</h2>
-        <p className="text-slate-500 mb-12">How we protect your API keys, farm data, and satellite telemetry.</p>
+        <h2 className="text-2xl font-extrabold text-foreground mb-3">Security practices</h2>
+        <p className="text-muted-foreground mb-12">How we protect your API keys, farm data, and satellite telemetry.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {pillars.map((pillar) => {
             const Icon = pillar.icon
             return (
-              <div key={pillar.title} className="p-6 border border-slate-200 rounded-xl hover:border-slate-350 transition-all bg-white shadow-sm flex flex-col justify-between">
+              <div key={pillar.title} className="p-6 border border-border rounded-xl hover:border-slate-350 transition-all bg-background custom-shadow flex flex-col justify-between">
                 <div>
                   <div className="w-10 h-10 bg-primary/8 rounded-xl flex items-center justify-center mb-5">
                     <Icon className="w-5 h-5 text-primary" />
                   </div>
-                  <h3 className="text-sm font-bold text-slate-900">{pillar.title}</h3>
-                  <p className="text-xs text-slate-500 mt-2 leading-relaxed">{pillar.description}</p>
+                  <h3 className="text-sm font-bold text-foreground">{pillar.title}</h3>
+                  <p className="text-xs text-muted-foreground mt-2 leading-relaxed">{pillar.description}</p>
                 </div>
               </div>
             )
@@ -146,27 +146,27 @@ export default function TrustPage() {
       </section>
 
       {/* Data Ingress Sources */}
-      <section className="bg-slate-900 text-white py-20 px-6">
+      <section className="bg-card border-y border-border py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="max-w-2xl mb-12">
-            <span className="text-xs font-bold text-agri uppercase tracking-widest font-mono">Telemetry Inputs</span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold mt-2 text-white">Data ingestion & satellite providers</h2>
-            <p className="text-slate-400 text-sm mt-3 leading-relaxed">
+            <span className="text-xs font-bold text-primary uppercase tracking-widest font-mono">Telemetry Inputs</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold mt-2 text-foreground">Data ingestion & satellite providers</h2>
+            <p className="text-muted-foreground text-sm mt-3 leading-relaxed">
               We compile multi-spectral telemetry from public space agencies and climate databases to feed our calculation algorithms.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {dataSources.map((source, idx) => (
-              <div key={idx} className="bg-slate-950 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between hover:border-slate-700 transition-colors">
+              <div key={idx} className="bg-background border border-border p-6 rounded-2xl flex flex-col justify-between hover:border-accent/40 transition-colors custom-shadow">
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm font-extrabold text-white">{source.name}</span>
+                    <span className="text-sm font-extrabold text-foreground">{source.name}</span>
                     <span className="text-[9px] font-bold bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded uppercase tracking-wider font-mono">
                       {source.type}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">{source.desc}</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{source.desc}</p>
                 </div>
               </div>
             ))}
@@ -178,8 +178,8 @@ export default function TrustPage() {
       <section className="max-w-6xl mx-auto px-6 py-20 border-b border-slate-100">
         <div className="max-w-2xl mb-12">
           <span className="text-xs font-bold text-primary uppercase tracking-widest font-mono">Spatial Applications</span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold mt-2 text-slate-900">Real-world agricultural use cases</h2>
-          <p className="text-slate-500 text-sm mt-3 leading-relaxed">
+          <h2 className="text-2xl sm:text-3xl font-extrabold mt-2 text-foreground">Real-world agricultural use cases</h2>
+          <p className="text-muted-foreground text-sm mt-3 leading-relaxed">
             See how developers utilize our unified endpoints structure to support precise field workflows.
           </p>
         </div>
@@ -188,13 +188,13 @@ export default function TrustPage() {
           {useCases.map((uc, idx) => {
             const Icon = uc.icon
             return (
-              <div key={idx} className="bg-white border border-slate-200 rounded-2xl p-6 hover:border-slate-350 transition-all flex flex-col justify-between shadow-sm">
+              <div key={idx} className="bg-background border border-border rounded-2xl p-6 hover:border-slate-350 transition-all flex flex-col justify-between custom-shadow">
                 <div className="space-y-4">
                   <div className="w-10 h-10 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center text-primary">
                     <Icon className="w-5 h-5" />
                   </div>
-                  <h3 className="text-base font-extrabold text-slate-900">{uc.title}</h3>
-                  <p className="text-xs text-slate-500 leading-relaxed">{uc.desc}</p>
+                  <h3 className="text-base font-extrabold text-foreground">{uc.title}</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{uc.desc}</p>
                 </div>
               </div>
             )
@@ -203,24 +203,24 @@ export default function TrustPage() {
       </section>
 
       {/* Uptime History */}
-      <section className="bg-slate-50 border-b border-slate-200 py-16 px-6">
+      <section className="bg-subtle border-b border-border py-16 px-6">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-extrabold text-slate-900 mb-2">Historical Uptime</h2>
-          <p className="text-slate-500 mb-10">Production API endpoint availability over the past 6 months.</p>
+          <h2 className="text-2xl font-extrabold text-foreground mb-2">Historical Uptime</h2>
+          <p className="text-muted-foreground mb-10">Production API endpoint availability over the past 6 months.</p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {uptime.map((row) => (
-              <div key={row.month} className="bg-white border border-slate-200 rounded-xl p-4 text-center shadow-sm">
+              <div key={row.month} className="bg-background border border-border rounded-xl p-4 text-center custom-shadow">
                 <div className="text-xl font-extrabold text-primary">{row.uptime}</div>
-                <div className="text-xs text-slate-400 mt-1 font-semibold">{row.month}</div>
+                <div className="text-xs text-muted-foreground mt-1 font-semibold">{row.month}</div>
               </div>
             ))}
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-6">
-            <p className="text-xs text-slate-400 font-semibold flex items-center gap-1.5">
+            <p className="text-xs text-muted-foreground font-semibold flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-[#22C55E]" />
               All systems operational — 99.98% uptime this month
             </p>
-            <p className="text-xs text-slate-400 font-medium">
+            <p className="text-xs text-muted-foreground font-medium">
               Last updated: <DynamicDate />
             </p>
           </div>
@@ -229,8 +229,8 @@ export default function TrustPage() {
 
       {/* Data Practices */}
       <section className="max-w-5xl mx-auto px-6 py-20">
-        <h2 className="text-2xl font-extrabold text-slate-900 mb-3">Data handling</h2>
-        <p className="text-slate-500 mb-8">How we collect, store, and use your agricultural telemetry data.</p>
+        <h2 className="text-2xl font-extrabold text-foreground mb-3">Data handling</h2>
+        <p className="text-muted-foreground mb-8">How we collect, store, and use your agricultural telemetry data.</p>
         <div className="space-y-5">
           {[
             { label: "Farm GeoJSON boundaries", retention: "Until account deletion", sharing: "Never shared", encryption: "AES-256 at rest" },
@@ -238,18 +238,18 @@ export default function TrustPage() {
             { label: "API request logs", retention: "30 days", sharing: "Never shared", encryption: "TLS 1.3 in transit" },
             { label: "Billing information", retention: "7 years (legal)", sharing: "Stripe PCI DSS vaulted", encryption: "Tokenized — no card data stored" }
           ].map((row) => (
-            <div key={row.label} className="grid grid-cols-1 md:grid-cols-4 gap-4 p-5 border border-slate-200 rounded-xl bg-white text-sm items-center">
-              <span className="font-bold text-slate-800">{row.label}</span>
+            <div key={row.label} className="grid grid-cols-1 md:grid-cols-4 gap-4 p-5 border border-border rounded-xl bg-background text-sm items-center">
+              <span className="font-bold text-foreground">{row.label}</span>
               <div>
-                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Retention</div>
+                <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Retention</div>
                 <div className="text-slate-605 font-semibold">{row.retention}</div>
               </div>
               <div>
-                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Third-party sharing</div>
+                <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Third-party sharing</div>
                 <div className="text-slate-605 font-semibold">{row.sharing}</div>
               </div>
               <div>
-                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Encryption</div>
+                <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Encryption</div>
                 <div className="text-slate-605 font-semibold">{row.encryption}</div>
               </div>
             </div>
@@ -260,7 +260,7 @@ export default function TrustPage() {
       {/* CTA */}
       <section className="text-center pb-24 px-6">
         <p className="text-slate-505 mb-4 text-sm">Have security questions or want to request a custom compliance review?</p>
-        <Link href="/contact-sales" className="inline-flex items-center gap-2 bg-primary hover:bg-[#114524] text-white h-11 px-8 rounded-xl font-bold text-sm transition-colors shadow-md">
+        <Link href="/contact-sales" className="inline-flex items-center gap-2 bg-primary hover:bg-[#114524] text-white h-11 px-8 rounded-xl font-bold text-sm transition-colors custom-shadow">
           Talk to solutions engineers →
         </Link>
       </section>

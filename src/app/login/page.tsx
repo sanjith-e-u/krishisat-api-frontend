@@ -83,22 +83,22 @@ function LoginForm() {
   }
 
   return (
-    <div className="w-full max-w-[420px] bg-white border border-slate-200 rounded-2xl shadow-xl p-8 flex flex-col gap-6">
+    <div className="w-full max-w-[420px] bg-background border border-border rounded-2xl shadow-xl p-8 flex flex-col gap-6">
       {/* Header with Logo */}
       <div className="flex flex-col items-center text-center gap-4">
         <Link href="/" className="select-none flex justify-center">
           <Logo size="md" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-[#0F172A] tracking-tight">Welcome Back</h1>
-          <p className="text-sm text-[#64748B] mt-1.5">Access your X-AGI developer workspace.</p>
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">Welcome Back</h1>
+          <p className="text-sm text-muted-foreground mt-1.5">Access your X-AGI developer workspace.</p>
         </div>
       </div>
 
       {/* Main Authentication Form */}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="email" className="text-xs font-semibold text-slate-700">
+          <label htmlFor="email" className="text-xs font-semibold text-muted-foreground">
             Email Address
           </label>
           <input
@@ -109,8 +109,8 @@ function LoginForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             onBlur={() => validateEmail(email)}
-            className={`w-full h-10 px-3 text-sm bg-white border ${
-              emailError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-[#14532D]/10 focus:border-[#14532D]"
+            className={`w-full h-10 px-3 text-sm bg-background border ${
+              emailError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-border focus:ring-accent/10 focus:border-accent"
             } rounded-lg focus:outline-none focus:ring-2 transition-all`}
           />
           {emailError && (
@@ -120,12 +120,12 @@ function LoginForm() {
 
         <div className="flex flex-col gap-1.5">
           <div className="flex justify-between items-center">
-            <label htmlFor="password" className="text-xs font-semibold text-slate-700">
+            <label htmlFor="password" className="text-xs font-semibold text-muted-foreground">
               Password
             </label>
             <Link
               href="/forgot-password"
-              className="text-xs font-medium text-[#14532D] hover:underline"
+              className="text-xs font-medium text-accent hover:underline"
             >
               Forgot Password?
             </Link>
@@ -138,8 +138,8 @@ function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onBlur={() => validatePassword(password)}
-            className={`w-full h-10 px-3 text-sm bg-white border ${
-              passwordError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-[#14532D]/10 focus:border-[#14532D]"
+            className={`w-full h-10 px-3 text-sm bg-background border ${
+              passwordError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-border focus:ring-accent/10 focus:border-accent"
             } rounded-lg focus:outline-none focus:ring-2 transition-all`}
           />
           {passwordError && (
@@ -152,9 +152,9 @@ function LoginForm() {
           <input
             id="remember"
             type="checkbox"
-            className="w-4 h-4 text-[#14532D] bg-white border-slate-200 rounded focus:ring-[#14532D]"
+            className="w-4 h-4 text-accent bg-background border-border rounded focus:ring-accent"
           />
-          <label htmlFor="remember" className="text-xs text-[#64748B] cursor-pointer">
+          <label htmlFor="remember" className="text-xs text-muted-foreground cursor-pointer">
             Remember this device for 30 days
           </label>
         </div>
@@ -163,7 +163,7 @@ function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full h-10 bg-[#14532D] hover:bg-[#114524] disabled:bg-[#14532D]/70 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center shadow-sm cursor-pointer"
+          className="w-full h-10 bg-accent hover:bg-[#114524] disabled:bg-accent/70 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center custom-shadow cursor-pointer"
         >
           {loading ? (
             <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
@@ -185,9 +185,9 @@ function LoginForm() {
 
       {/* Divider */}
       <div className="relative flex py-1 items-center">
-        <div className="flex-grow border-t border-slate-200"></div>
-        <span className="flex-shrink mx-4 text-[10px] uppercase font-mono tracking-widest text-[#64748B]">or</span>
-        <div className="flex-grow border-t border-slate-200"></div>
+        <div className="flex-grow border-t border-border"></div>
+        <span className="flex-shrink mx-4 text-[10px] uppercase font-mono tracking-widest text-muted-foreground">or</span>
+        <div className="flex-grow border-t border-border"></div>
       </div>
 
       {/* Mock Social Logins with Tooltip */}
@@ -195,7 +195,7 @@ function LoginForm() {
         <button
           disabled
           type="button"
-          className="w-full h-10 border border-slate-200 bg-slate-50 text-[#94A3B8] text-xs font-semibold rounded-lg flex items-center justify-center gap-2 select-none cursor-not-allowed opacity-60"
+          className="w-full h-10 border border-border bg-subtle text-[#94A3B8] text-xs font-semibold rounded-lg flex items-center justify-center gap-2 select-none cursor-not-allowed opacity-60"
         >
           {/* Mock Google Icon */}
           <svg className="w-4 h-4 opacity-50" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
@@ -207,7 +207,7 @@ function LoginForm() {
             </g>
           </svg>
           Continue with Google
-          <span className="absolute right-3 px-1.5 py-0.5 rounded text-[8px] font-mono bg-slate-200 text-slate-500 uppercase tracking-wide">
+          <span className="absolute right-3 px-1.5 py-0.5 rounded text-[8px] font-mono bg-slate-200 text-muted-foreground uppercase tracking-wide">
             Disabled
           </span>
         </button>
@@ -218,9 +218,9 @@ function LoginForm() {
       </div>
 
       {/* Footer redirects */}
-      <div className="text-center text-xs text-[#64748B]">
+      <div className="text-center text-xs text-muted-foreground">
         Don&apos;t have an account?{" "}
-        <Link href="/register" className="font-semibold text-[#14532D] hover:underline">
+        <Link href="/register" className="font-semibold text-accent hover:underline">
           Create Account
         </Link>
       </div>
@@ -231,7 +231,7 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="w-full max-w-[420px] bg-white border border-slate-200 rounded-2xl shadow-xl p-8 flex items-center justify-center min-h-[300px]">
+      <div className="w-full max-w-[420px] bg-background border border-border rounded-2xl shadow-xl p-8 flex items-center justify-center min-h-[300px]">
         <div className="animate-pulse flex flex-col items-center gap-4">
           <div className="h-10 w-10 bg-slate-200 rounded-full"></div>
           <div className="h-4 w-32 bg-slate-200 rounded"></div>

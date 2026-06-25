@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC]">
+    <div className="flex min-h-screen bg-card">
       {/* Desktop Sidebar (hidden on mobile) */}
       <DashboardSidebar className="hidden lg:flex shrink-0 sticky top-0" />
 
@@ -27,7 +27,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           />
 
           {/* Drawer Sidebar container */}
-          <div className="relative flex flex-col w-[260px] h-full bg-[#14532D] shadow-2xl animate-in slide-in-from-left duration-300">
+          <div className="relative flex flex-col w-[260px] h-full bg-accent shadow-2xl animate-in slide-in-from-left duration-300">
             {/* Close button inside mobile header */}
             <button
               onClick={() => setMobileSidebarOpen(false)}

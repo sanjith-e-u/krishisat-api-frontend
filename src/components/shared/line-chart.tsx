@@ -33,7 +33,7 @@ export default function LineChart({
 
   if (!data || data.length === 0) {
     return (
-      <div className="flex h-48 items-center justify-center text-xs text-slate-400">
+      <div className="flex h-48 items-center justify-center text-xs text-muted-foreground">
         No chart data available.
       </div>
     )
@@ -170,14 +170,14 @@ export default function LineChart({
       {/* Tooltip Overlay */}
       {hoveredPoint && (
         <div
-          className="absolute bg-slate-900 text-white rounded-lg p-2 shadow-sm text-[10px] z-20 flex flex-col gap-0.5 border border-slate-800 pointer-events-none"
+          className="absolute bg-slate-900 text-white rounded-lg p-2 custom-shadow text-[10px] z-20 flex flex-col gap-0.5 border border-slate-800 pointer-events-none"
           style={{
             left: `${(hoveredPoint.x / width) * 100}%`,
             top: `${(hoveredPoint.y / height) * 100 - 30}%`,
             transform: "translate(-50%, -100%)"
           }}
         >
-          <span className="text-slate-400 font-mono text-[8px] font-bold uppercase">{hoveredPoint.label}</span>
+          <span className="text-muted-foreground font-mono text-[8px] font-bold uppercase">{hoveredPoint.label}</span>
           <span className="font-bold text-[#22C55E]">{tooltipFormatter(hoveredPoint.value)}</span>
         </div>
       )}

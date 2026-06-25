@@ -29,16 +29,16 @@ const posts = [
 
 export default function BlogPage() {
   return (
-    <main className="bg-white min-h-screen text-slate-800 pt-24 pb-16">
+    <main className="bg-background min-h-screen text-foreground pt-24 pb-16">
       {/* Header */}
       <section className="max-w-4xl mx-auto px-6 text-center py-12">
         <span className="text-xs font-bold text-primary bg-primary/8 px-3 py-1 rounded-full uppercase tracking-widest">
           Developer Blog
         </span>
-        <h1 className="text-4xl font-extrabold text-slate-900 mt-5 tracking-tight">
+        <h1 className="text-4xl font-extrabold text-foreground mt-5 tracking-tight">
           Agriculture & Satellite Engineering Insights
         </h1>
-        <p className="text-lg text-slate-500 mt-4 leading-relaxed">
+        <p className="text-lg text-muted-foreground mt-4 leading-relaxed">
           Tutorials, engineering post-mortems, and spectral intelligence analyses.
         </p>
       </section>
@@ -48,20 +48,20 @@ export default function BlogPage() {
         {posts.map((post) => (
           <article
             key={post.slug}
-            className="group bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+            className="group bg-background border border-border rounded-2xl p-6 custom-shadow hover:custom-shadow transition-all flex flex-col justify-between"
           >
             <div>
-              <div className="flex items-center gap-3 text-xs text-slate-400 font-medium mb-4 select-none">
+              <div className="flex items-center gap-3 text-xs text-muted-foreground font-medium mb-4 select-none">
                 <span className="flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5" /> {post.date}
                 </span>
                 <span>•</span>
                 <span>{post.readTime}</span>
               </div>
-              <h3 className="text-base font-extrabold text-slate-900 group-hover:text-primary transition-colors leading-snug">
+              <h3 className="text-base font-extrabold text-foreground group-hover:text-primary transition-colors leading-snug">
                 {post.title}
               </h3>
-              <p className="text-xs text-slate-500 mt-2.5 leading-relaxed">
+              <p className="text-xs text-muted-foreground mt-2.5 leading-relaxed">
                 {post.desc}
               </p>
             </div>
@@ -76,10 +76,10 @@ export default function BlogPage() {
 
       {/* Bottom Newsletter Stub */}
       <section className="max-w-xl mx-auto px-6 text-center py-16">
-        <div className="flex flex-col items-center gap-4 bg-slate-50 border border-slate-200 p-8 rounded-2xl shadow-sm">
+        <div className="flex flex-col items-center gap-4 bg-subtle border border-border p-8 rounded-2xl custom-shadow">
           <BookOpen className="w-6 h-6 text-primary" />
-          <h3 className="text-base font-extrabold text-slate-900">Subscribe to updates</h3>
-          <p className="text-xs text-slate-500 max-w-xs mx-auto leading-relaxed">
+          <h3 className="text-base font-extrabold text-foreground">Subscribe to updates</h3>
+          <p className="text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
             Get technical notifications on API release notes, new indices, and satellite coverage expansions.
           </p>
           <form onSubmit={(e) => e.preventDefault()} className="flex gap-2 w-full mt-2">
@@ -87,7 +87,7 @@ export default function BlogPage() {
               type="email"
               placeholder="you@company.com"
               required
-              className="flex-1 h-9 px-3 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+              className="flex-1 h-9 px-3 text-xs bg-background border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
             />
             <button
               type="submit"

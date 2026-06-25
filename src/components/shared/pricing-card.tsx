@@ -27,10 +27,10 @@ export default function PricingCard({
     <div
       onClick={onSelect}
       className={cn(
-        "border rounded-xl p-5 flex flex-col justify-between cursor-pointer transition-all relative bg-white",
+        "border rounded-xl p-5 flex flex-col justify-between cursor-pointer transition-all relative bg-background",
         currentPlan
           ? "border-primary bg-primary/5 ring-2 ring-primary/10"
-          : "border-slate-200 hover:bg-slate-50"
+          : "border-border hover:bg-subtle"
       )}
     >
       {popular && (
@@ -45,18 +45,18 @@ export default function PricingCard({
       )}
       
       <div>
-        <h4 className="text-sm font-extrabold text-slate-900">{tier}</h4>
-        <p className="text-[10px] text-slate-400 leading-relaxed mt-1">{description}</p>
+        <h4 className="text-sm font-extrabold text-foreground">{tier}</h4>
+        <p className="text-[10px] text-muted-foreground leading-relaxed mt-1">{description}</p>
         
         <div className="my-4">
-          <span className="text-2xl font-black text-slate-900">{price}</span>
-          {price !== "Custom" && <span className="text-xs text-slate-400 font-medium"> / month</span>}
+          <span className="text-2xl font-black text-foreground">{price}</span>
+          {price !== "Custom" && <span className="text-xs text-muted-foreground font-medium"> / month</span>}
         </div>
 
-        <ul className="space-y-2 text-xs text-slate-600 border-t border-slate-200/50 pt-4">
+        <ul className="space-y-2 text-xs text-muted-foreground border-t border-border/50 pt-4">
           <li className="flex items-center gap-2">
             <Check className="w-3.5 h-3.5 text-agri shrink-0" />
-            <span className="font-semibold text-slate-700">{credits}</span>
+            <span className="font-semibold text-muted-foreground">{credits}</span>
           </li>
           {features.map((feature, idx) => (
             <li key={idx} className="flex items-center gap-2">
@@ -76,7 +76,7 @@ export default function PricingCard({
         className={cn(
           "w-full h-9 rounded-lg text-xs font-bold transition-colors mt-6 border focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
           currentPlan
-            ? "bg-white border-slate-200 text-slate-500 cursor-default"
+            ? "bg-background border-border text-muted-foreground cursor-default"
             : "bg-primary hover:bg-[#114524] text-white border-transparent"
         )}
         disabled={currentPlan}

@@ -41,7 +41,7 @@ export default function DocsMobileTOC({
   return (
     <nav
       aria-label="Documentation navigation"
-      className="lg:hidden sticky top-[72px] left-0 right-0 bg-white/95 backdrop-blur border-b border-slate-200/80 z-30 select-none"
+      className="lg:hidden sticky top-[72px] left-0 right-0 bg-background/95 backdrop-blur border-b border-border/80 z-30 select-none"
       ref={dropdownRef}
     >
       <div className="px-6 py-3 flex items-center justify-between">
@@ -50,28 +50,28 @@ export default function DocsMobileTOC({
           aria-expanded={isOpen}
           aria-haspopup="listbox"
           aria-label="Toggle documentation table of contents"
-          className="flex items-center gap-2 text-xs font-semibold text-slate-705 hover:text-slate-900 transition-colors bg-slate-50 border border-slate-200 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#14532D]"
+          className="flex items-center gap-2 text-xs font-semibold text-slate-705 hover:text-foreground transition-colors bg-subtle border border-border px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-accent"
         >
           <List className="w-3.5 h-3.5" aria-hidden="true" />
           <span>Active: {activeLabel}</span>
           <ChevronDown
-            className={cn("w-3.5 h-3.5 transition-transform duration-200 text-slate-400", isOpen && "rotate-180")}
+            className={cn("w-3.5 h-3.5 transition-transform duration-200 text-muted-foreground", isOpen && "rotate-180")}
             aria-hidden="true"
           />
         </button>
 
-        <span className="text-[10px] font-bold font-mono text-slate-400 uppercase tracking-wider">
+        <span className="text-[10px] font-bold font-mono text-muted-foreground uppercase tracking-wider">
           Documentation
         </span>
       </div>
 
       {/* Dropdown Options List */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 bg-white border-b border-slate-200/80 shadow-lg max-h-[320px] overflow-y-auto z-40 animate-in fade-in slide-in-from-top-2 duration-150">
+        <div className="absolute top-full left-0 right-0 bg-background border-b border-border/80 shadow-lg max-h-[320px] overflow-y-auto z-40 animate-in fade-in slide-in-from-top-2 duration-150">
           <ul
             role="listbox"
             aria-label="Documentation topics"
-            className="p-3 space-y-1 text-xs text-slate-500"
+            className="p-3 space-y-1 text-xs text-muted-foreground"
           >
             {sections.map((section) => {
               const isActive = activeSection === section.id
@@ -82,8 +82,8 @@ export default function DocsMobileTOC({
                     className={cn(
                       "w-full flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors font-medium text-left focus:outline-none",
                       isActive
-                        ? "text-[#14532D] bg-[#14532D]/5 font-semibold"
-                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                        ? "text-accent bg-accent/5 font-semibold"
+                        : "text-muted-foreground hover:text-foreground hover:bg-subtle"
                     )}
                   >
                     <span>{section.title}</span>
@@ -91,7 +91,7 @@ export default function DocsMobileTOC({
                       <span className={cn(
                         "font-mono text-[9px] px-1.5 py-0.5 rounded ml-2 font-bold uppercase tracking-wider",
                         section.endpoint.method === "GET" && "bg-sky-50 text-sky-700 border border-sky-100",
-                        section.endpoint.method === "POST" && "bg-[#14532D]/10 text-[#14532D]"
+                        section.endpoint.method === "POST" && "bg-accent/10 text-accent"
                       )}>
                         {section.endpoint.method}
                       </span>

@@ -13,17 +13,17 @@ export default function PageWrapper({ children }: { children: React.ReactNode })
   const isAuth = pathname === "/login" || pathname === "/register" || pathname === "/forgot-password"
 
   if (isDashboard) {
-    return <div className="min-h-screen bg-[#F8FAFC]">{children}</div>
+    return <div className="min-h-screen bg-card">{children}</div>
   }
 
   if (isAuth) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-        <header className="h-14 border-b border-slate-200 bg-white flex items-center justify-between px-6 select-none shrink-0">
+      <div className="min-h-screen bg-subtle flex flex-col font-sans">
+        <header className="h-14 border-b border-border bg-background flex items-center justify-between px-6 select-none shrink-0">
           <Link href="/">
             <Logo size="sm" />
           </Link>
-          <Link href="/" className="text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors">
+          <Link href="/" className="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors">
             ← Back to site
           </Link>
         </header>

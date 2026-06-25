@@ -4,12 +4,12 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { Terminal, Key, Satellite, ArrowRight, Code, CheckCircle } from "lucide-react"
 
-const API_URL = "https://api.X-AGI.dev"
+const API_URL = "https://api.x-agi.dev"
 
 const PYTHON_CODE = `import requests
 
 API_KEY = "ks_live_your_key_here"
-BASE_URL = "https://api.X-AGI.dev/v1"
+BASE_URL = "https://api.x-agi.dev/v1"
 
 payload = {
     "farm_id": "farm_abc123",
@@ -27,7 +27,7 @@ response = requests.post(
 )
 print(response.json())`
 
-const NODE_CODE = `const response = await fetch("https://api.X-AGI.dev/v1/ndvi", {
+const NODE_CODE = `const response = await fetch("https://api.x-agi.dev/v1/ndvi", {
   method: "POST",
   headers: {
     "Authorization": "Bearer ks_live_your_key_here",
@@ -124,26 +124,26 @@ export default function QuickstartPage() {
   }
 
   return (
-    <main className="bg-white min-h-screen font-sans">
+    <main className="bg-background min-h-screen font-sans">
       {/* Hero */}
       <section className="max-w-5xl mx-auto px-6 pt-20 pb-12">
         <div className="flex items-center gap-2 mb-4">
-          <Link href="/docs" className="text-xs text-slate-400 hover:text-primary font-semibold">Docs</Link>
+          <Link href="/docs" className="text-xs text-muted-foreground hover:text-primary font-semibold">Docs</Link>
           <span className="text-slate-300">/</span>
-          <span className="text-xs font-semibold text-slate-700">Quickstart</span>
+          <span className="text-xs font-semibold text-muted-foreground">Quickstart</span>
         </div>
-        <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Quickstart Guide</h1>
-        <p className="text-lg text-slate-500 mt-3 max-w-2xl leading-relaxed">
+        <h1 className="text-4xl font-extrabold text-foreground tracking-tight">Quickstart Guide</h1>
+        <p className="text-lg text-muted-foreground mt-3 max-w-2xl leading-relaxed">
           Make your first satellite vegetation call in under 5 minutes.
         </p>
         <div className="flex flex-wrap gap-3 mt-6">
-          <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full inline-flex items-center gap-1.5 select-none">
+          <span className="text-xs font-semibold text-muted-foreground bg-muted px-3 py-1 rounded-full inline-flex items-center gap-1.5 select-none">
             <Terminal className="w-3 h-3" /> cURL / Python / Node.js
           </span>
-          <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full inline-flex items-center gap-1.5 select-none">
+          <span className="text-xs font-semibold text-muted-foreground bg-muted px-3 py-1 rounded-full inline-flex items-center gap-1.5 select-none">
             <Key className="w-3 h-3" /> API Key auth
           </span>
-          <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full inline-flex items-center gap-1.5 select-none">
+          <span className="text-xs font-semibold text-muted-foreground bg-muted px-3 py-1 rounded-full inline-flex items-center gap-1.5 select-none">
             <Satellite className="w-3 h-3" /> NDVI Index
           </span>
         </div>
@@ -162,10 +162,10 @@ export default function QuickstartPage() {
 
             <div className="flex-1 pb-8">
               <div className="flex items-center gap-3 mb-1 select-none">
-                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{step.step}</span>
+                <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">{step.step}</span>
               </div>
-              <h2 className="text-xl font-extrabold text-slate-900">{step.title}</h2>
-              <p className="text-sm text-slate-500 mt-2 leading-relaxed">{step.description}</p>
+              <h2 className="text-xl font-extrabold text-foreground">{step.title}</h2>
+              <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{step.description}</p>
 
               {step.link && (
                 <Link href={step.link} className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline mt-3 select-none">
@@ -183,8 +183,8 @@ export default function QuickstartPage() {
                           onClick={() => handleTabChange(lang)}
                           className={`px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider transition-colors ${
                             activeTab === lang
-                              ? "bg-[#14532D] text-white font-extrabold"
-                              : "text-slate-400 hover:text-slate-200"
+                              ? "bg-accent text-white font-extrabold"
+                              : "text-muted-foreground hover:text-slate-200"
                           }`}
                         >
                           {lang === "curl" ? "cURL" : lang === "python" ? "Python" : "Node.js"}
@@ -214,7 +214,7 @@ export default function QuickstartPage() {
                       <div className="w-2.5 h-2.5 rounded-full bg-rose-500" />
                       <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
                       <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                      <span className="text-[9px] text-slate-500 font-mono ml-2 uppercase tracking-widest">terminal</span>
+                      <span className="text-[9px] text-muted-foreground font-mono ml-2 uppercase tracking-widest">terminal</span>
                     </div>
                     <pre className="p-5 text-xs font-mono text-slate-300 leading-relaxed overflow-x-auto whitespace-pre-wrap select-text">
                       <code>{step.code}</code>
@@ -243,9 +243,9 @@ export default function QuickstartPage() {
       </section>
 
       {/* Next Steps */}
-      <section className="bg-slate-50 border-t border-slate-200 py-16 px-6 select-none">
+      <section className="bg-subtle border-t border-border py-16 px-6 select-none">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-xl font-extrabold text-slate-900 mb-8">What&apos;s next?</h2>
+          <h2 className="text-xl font-extrabold text-foreground mb-8">What&apos;s next?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               { title: "Full API Reference", desc: "Browse all endpoints, parameters, and response schemas.", href: "/developers/reference", icon: Code },
@@ -253,13 +253,13 @@ export default function QuickstartPage() {
             ].map((card) => {
               const Icon = card.icon
               return (
-                <Link key={card.title} href={card.href} className="group flex gap-4 p-6 bg-white border border-slate-200 rounded-xl hover:border-primary/40 transition-colors">
+                <Link key={card.title} href={card.href} className="group flex gap-4 p-6 bg-background border border-border rounded-xl hover:border-primary/40 transition-colors">
                   <div className="w-10 h-10 bg-primary/8 rounded-xl flex items-center justify-center shrink-0">
                     <Icon className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900 group-hover:text-primary transition-colors">{card.title}</h3>
-                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">{card.desc}</p>
+                    <h3 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">{card.title}</h3>
+                    <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{card.desc}</p>
                   </div>
                   <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-primary transition-colors ml-auto self-center shrink-0" />
                 </Link>

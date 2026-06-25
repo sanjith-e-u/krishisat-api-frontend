@@ -29,15 +29,15 @@ interface MetricCardProps {
 
 function MetricCard({ title, value, trend, trendType = "none", icon }: MetricCardProps) {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+    <div className="bg-background border border-border rounded-xl p-6 custom-shadow">
       <div className="flex justify-between items-start">
-        <span className="text-xs font-semibold text-slate-500 tracking-wide uppercase">{title}</span>
-        <div className="p-2.5 bg-slate-50 border border-slate-100 rounded-lg text-slate-600">
+        <span className="text-xs font-semibold text-muted-foreground tracking-wide uppercase">{title}</span>
+        <div className="p-2.5 bg-subtle border border-slate-100 rounded-lg text-muted-foreground">
           {icon}
         </div>
       </div>
       <div className="mt-3">
-        <div className="text-2xl font-bold text-slate-900 tracking-tight">{value}</div>
+        <div className="text-2xl font-bold text-foreground tracking-tight">{value}</div>
         {trend && (
           <div className="flex items-center gap-1 mt-1.5 text-xs">
             {trendType === "up" && (
@@ -50,7 +50,7 @@ function MetricCard({ title, value, trend, trendType = "none", icon }: MetricCar
                 ↓ {trend}
               </span>
             )}
-            <span className="text-slate-400 font-medium">vs last month</span>
+            <span className="text-muted-foreground font-medium">vs last month</span>
           </div>
         )}
       </div>
@@ -63,8 +63,8 @@ function SectionHeader({ title, subtitle, action }: { title: string; subtitle?: 
   return (
     <div className="flex justify-between items-center mb-6">
       <div>
-        <h2 className="text-lg font-bold text-[#0F172A] tracking-tight">{title}</h2>
-        {subtitle && <p className="text-xs text-[#64748B] mt-0.5">{subtitle}</p>}
+        <h2 className="text-lg font-bold text-foreground tracking-tight">{title}</h2>
+        {subtitle && <p className="text-xs text-muted-foreground mt-0.5">{subtitle}</p>}
       </div>
       {action && <div>{action}</div>}
     </div>
@@ -92,7 +92,7 @@ export default function DashboardOverview() {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) {
         setLoading(false)
-        router.push("/login")
+        // router.push("/login")
         return
       }
       setUser(session.user)
@@ -187,7 +187,7 @@ export default function DashboardOverview() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <svg className="animate-spin h-8 w-8 text-[#14532D]" fill="none" viewBox="0 0 24 24">
+        <svg className="animate-spin h-8 w-8 text-accent" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
         </svg>
@@ -200,8 +200,8 @@ export default function DashboardOverview() {
         
         {/* Title */}
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Workspace Overview</h1>
-          <p className="text-sm text-slate-500 mt-1">Real-time status of your agricultural telemetry operations.</p>
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">Workspace Overview</h1>
+          <p className="text-sm text-muted-foreground mt-1">Real-time status of your agricultural telemetry operations.</p>
         </div>
 
         {/* Dynamic KPI Metric Cards */}
@@ -232,14 +232,14 @@ export default function DashboardOverview() {
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
           
           {/* Usage Chart Card - Left Column */}
-          <div className="xl:col-span-8 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+          <div className="xl:col-span-8 bg-background border border-border rounded-xl p-6 custom-shadow">
             <SectionHeader
               title="API Requests"
               subtitle="Total programmatic requests recorded over the last 30 days"
               action={
                 <Link
                   href="/dashboard/usage"
-                  className="text-xs font-semibold text-[#14532D] hover:underline flex items-center gap-1"
+                  className="text-xs font-semibold text-accent hover:underline flex items-center gap-1"
                 >
                   Full Usage Analytics <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
@@ -329,7 +329,7 @@ export default function DashboardOverview() {
                     transform: "translate(-50%, -100%)"
                   }}
                 >
-                  <span className="text-slate-400 font-mono text-[9px] uppercase font-bold">{hoveredPoint.label}</span>
+                  <span className="text-muted-foreground font-mono text-[9px] uppercase font-bold">{hoveredPoint.label}</span>
                   <span className="font-bold text-[#22C55E]">{hoveredPoint.value.toLocaleString()} calls</span>
                 </div>
               )}
@@ -338,12 +338,12 @@ export default function DashboardOverview() {
 
           {/* Right Column - Recent Activity */}
           <div className="xl:col-span-4 flex flex-col gap-6">
-            <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex flex-col justify-between flex-grow">
+            <div className="bg-background border border-border rounded-xl p-6 custom-shadow flex flex-col justify-between flex-grow">
               <div>
                 <SectionHeader title="Recent Activity" subtitle="Outbound developer request logs" />
                 
                 {recentLogs.length === 0 ? (
-                  <div className="py-12 text-center text-slate-400 select-none">
+                  <div className="py-12 text-center text-muted-foreground select-none">
                     <Activity className="w-8 h-8 mx-auto mb-2 text-slate-350" />
                     <p className="text-xs font-semibold">No recent activity logs recorded.</p>
                   </div>
@@ -357,11 +357,11 @@ export default function DashboardOverview() {
                       return (
                         <li key={log.id} className="flex justify-between items-start py-1 border-b border-slate-50 last:border-b-0">
                           <div>
-                            <h4 className="text-xs font-bold text-slate-800">{apiName} API Called</h4>
-                            <p className="text-[10px] text-slate-400 font-mono mt-0.5">POST {endpoint}</p>
+                            <h4 className="text-xs font-bold text-foreground">{apiName} API Called</h4>
+                            <p className="text-[10px] text-muted-foreground font-mono mt-0.5">POST {endpoint}</p>
                           </div>
                           <div className="text-right">
-                            <span className="text-[10px] text-slate-500 font-medium font-sans block">
+                            <span className="text-[10px] text-muted-foreground font-medium font-sans block">
                               {new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </span>
                             <span className={cn(
@@ -382,7 +382,7 @@ export default function DashboardOverview() {
                 <span className="font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-1 rounded inline-block">
                   ● Gateway Connected
                 </span>
-                <span className="text-slate-400 font-mono">
+                <span className="text-muted-foreground font-mono">
                   region: ap-south-1
                 </span>
               </div>
@@ -399,7 +399,7 @@ export default function DashboardOverview() {
             action={
               <Link
                 href="/marketplace"
-                className="text-xs font-semibold text-[#14532D] hover:underline flex items-center gap-1"
+                className="text-xs font-semibold text-accent hover:underline flex items-center gap-1"
               >
                 Open API Catalog <ArrowRight className="w-3.5 h-3.5" />
               </Link>
@@ -408,50 +408,50 @@ export default function DashboardOverview() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* NDVI Card */}
-            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col justify-between">
+            <div className="bg-background border border-border rounded-xl p-5 custom-shadow flex flex-col justify-between">
               <div>
                 <div className="flex justify-between items-start mb-3 select-none">
-                  <span className="font-mono text-[9px] font-bold text-[#14532D] bg-[#14532D]/10 px-2 py-0.5 rounded uppercase tracking-wide">POST</span>
-                  <span className="bg-emerald-50 border border-emerald-150 text-[#14532D] text-[10px] font-semibold px-2 py-0.5 rounded-full select-none">Active</span>
+                  <span className="font-mono text-[9px] font-bold text-accent bg-accent/10 px-2 py-0.5 rounded uppercase tracking-wide">POST</span>
+                  <span className="bg-emerald-50 border border-emerald-150 text-accent text-[10px] font-semibold px-2 py-0.5 rounded-full select-none">Active</span>
                 </div>
-                <h4 className="text-sm font-bold text-slate-900">NDVI API</h4>
+                <h4 className="text-sm font-bold text-foreground">NDVI API</h4>
                 <p className="text-xs text-slate-505 mt-1 leading-relaxed">Vegetation density index representing overall canopy greenness, biomass and chlorophyll.</p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 select-none">
+              <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-muted-foreground select-none">
                 <span className="font-mono">/v1/vegetation/ndvi</span>
-                <span className="font-semibold text-slate-700">1 credit</span>
+                <span className="font-semibold text-muted-foreground">1 credit</span>
               </div>
             </div>
 
             {/* NDRE Card */}
-            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col justify-between">
+            <div className="bg-background border border-border rounded-xl p-5 custom-shadow flex flex-col justify-between">
               <div>
                 <div className="flex justify-between items-start mb-3 select-none">
-                  <span className="font-mono text-[9px] font-bold text-[#14532D] bg-[#14532D]/10 px-2 py-0.5 rounded uppercase tracking-wide">POST</span>
-                  <span className="bg-emerald-50 border border-emerald-150 text-[#14532D] text-[10px] font-semibold px-2 py-0.5 rounded-full select-none">Active</span>
+                  <span className="font-mono text-[9px] font-bold text-accent bg-accent/10 px-2 py-0.5 rounded uppercase tracking-wide">POST</span>
+                  <span className="bg-emerald-50 border border-emerald-150 text-accent text-[10px] font-semibold px-2 py-0.5 rounded-full select-none">Active</span>
                 </div>
-                <h4 className="text-sm font-bold text-slate-900">NDRE API</h4>
+                <h4 className="text-sm font-bold text-foreground">NDRE API</h4>
                 <p className="text-xs text-slate-505 mt-1 leading-relaxed">Red Edge Index optimized for crop nitrogen logging and dense canopy insights.</p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 select-none">
+              <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-muted-foreground select-none">
                 <span className="font-mono">/v1/vegetation/ndre</span>
-                <span className="font-semibold text-slate-700">2 credits</span>
+                <span className="font-semibold text-muted-foreground">2 credits</span>
               </div>
             </div>
 
             {/* Weather Card */}
-            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col justify-between">
+            <div className="bg-background border border-border rounded-xl p-5 custom-shadow flex flex-col justify-between">
               <div>
                 <div className="flex justify-between items-start mb-3 select-none">
-                  <span className="font-mono text-[9px] font-bold text-[#14532D] bg-[#14532D]/10 px-2 py-0.5 rounded uppercase tracking-wide">POST</span>
-                  <span className="bg-emerald-50 border border-emerald-150 text-[#14532D] text-[10px] font-semibold px-2 py-0.5 rounded-full select-none">Active</span>
+                  <span className="font-mono text-[9px] font-bold text-accent bg-accent/10 px-2 py-0.5 rounded uppercase tracking-wide">POST</span>
+                  <span className="bg-emerald-50 border border-emerald-150 text-accent text-[10px] font-semibold px-2 py-0.5 rounded-full select-none">Active</span>
                 </div>
-                <h4 className="text-sm font-bold text-slate-900">Weather API</h4>
+                <h4 className="text-sm font-bold text-foreground">Weather API</h4>
                 <p className="text-xs text-slate-505 mt-1 leading-relaxed">Hyperlocal meteorological telemetry including GDD calculations, rainfall, and wind speeds.</p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 select-none">
+              <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-muted-foreground select-none">
                 <span className="font-mono">/v1/weather</span>
-                <span className="font-semibold text-slate-700">1 credit</span>
+                <span className="font-semibold text-muted-foreground">1 credit</span>
               </div>
             </div>
           </div>

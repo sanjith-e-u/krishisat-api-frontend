@@ -90,10 +90,10 @@ const categoryIcons = {
 }
 
 const categoryColors = {
-  Vegetation: "bg-emerald-50 text-emerald-700 border-emerald-100",
-  Water: "bg-blue-50 text-blue-700 border-blue-100",
-  Core: "bg-amber-50 text-amber-700 border-amber-100",
-  Weather: "bg-purple-50 text-purple-700 border-purple-100"
+  Vegetation: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+  Water: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+  Core: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+  Weather: "bg-purple-500/10 text-purple-400 border-purple-500/20"
 }
 
 export default function MarketplacePage() {
@@ -187,25 +187,25 @@ export default function MarketplacePage() {
   })
 
   return (
-    <main className="bg-slate-50 min-h-screen pt-20">
+    <main className="bg-subtle min-h-screen pt-20">
       {/* Hero Header */}
-      <section className="bg-white border-b border-slate-200 py-16 px-6 text-center select-none">
+      <section className="bg-background border-b border-border py-16 px-6 text-center select-none">
         <div className="max-w-3xl mx-auto">
-          <span className="text-xs font-bold text-[#14532D] bg-[#14532D]/8 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-accent bg-accent/10 px-3 py-1 rounded-full uppercase tracking-widest">
             X-AGI Marketplace
           </span>
-          <h1 className="text-4xl font-extrabold text-slate-950 mt-4 tracking-tight">
+          <h1 className="text-4xl font-extrabold text-foreground mt-4 tracking-tight">
             Agricultural Intelligence APIs
           </h1>
-          <p className="text-base text-slate-500 mt-3 max-w-lg mx-auto leading-relaxed">
+          <p className="text-base text-muted-foreground mt-3 max-w-lg mx-auto leading-relaxed">
             Purchase access to individual high-resolution crop indices, boundaries, and climate APIs. Keys generated separately per endpoint.
           </p>
         </div>
       </section>
 
       {/* Stats Bar */}
-      <section className="bg-white border-b border-slate-200 py-5 px-6">
-        <div className="max-w-6xl mx-auto flex flex-wrap gap-6 justify-center sm:justify-start text-sm text-slate-500 font-sans">
+      <section className="bg-background border-b border-border py-5 px-6">
+        <div className="max-w-6xl mx-auto flex flex-wrap gap-6 justify-center sm:justify-start text-sm text-muted-foreground font-sans">
           {[
             { label: "Live APIs", value: "8" },
             { label: "Beta APIs", value: "3" },
@@ -215,7 +215,7 @@ export default function MarketplacePage() {
           ].map((stat) => (
             <div key={stat.label} className="flex items-center gap-2">
               <BarChart2 className="w-3.5 h-3.5 text-slate-405" />
-              <span className="font-bold text-slate-800">{stat.value}</span>
+              <span className="font-bold text-foreground">{stat.value}</span>
               <span>{stat.label}</span>
             </div>
           ))}
@@ -233,8 +233,8 @@ export default function MarketplacePage() {
                 onClick={() => setSelectedCategory(cat)}
                 className={`h-9 px-4 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   selectedCategory === cat
-                    ? "bg-[#14532D] text-white shadow-sm"
-                    : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
+                    ? "bg-accent text-white custom-shadow"
+                    : "bg-background border border-border text-muted-foreground hover:bg-subtle"
                 }`}
               >
                 {cat}
@@ -244,7 +244,7 @@ export default function MarketplacePage() {
 
           {/* Search bar */}
           <div className="relative w-full md:w-80">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">
               <Search className="w-4 h-4" />
             </div>
             <input
@@ -252,7 +252,7 @@ export default function MarketplacePage() {
               placeholder="Search index catalog..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-10 pl-9 pr-4 bg-white border border-slate-200 rounded-xl text-xs placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#14532D]"
+              className="w-full h-10 pl-9 pr-4 bg-background border border-border rounded-xl text-xs placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-accent"
             />
           </div>
         </div>
@@ -266,7 +266,7 @@ export default function MarketplacePage() {
             return (
               <div
                 key={api.name}
-                className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:border-[#14532D]/30 transition-all flex flex-col justify-between"
+                className="shine-host tilt-glow bg-card border border-border rounded-2xl p-6 custom-shadow hover:border-accent/40 group hover-glow relative flex flex-col justify-between transition-all"
               >
                 <div>
                   {/* Category and cost badges */}
@@ -279,17 +279,17 @@ export default function MarketplacePage() {
                       <Icon className="w-3 h-3" />
                       {api.category}
                     </span>
-                    <span className="text-[10px] font-bold text-slate-400 font-mono">
+                    <span className="text-[10px] font-bold text-muted-foreground font-mono">
                       {isFree ? "Free (0 cr)" : `${api.credits} credit / call`}
                     </span>
                   </div>
 
-                  <h3 className="text-base font-extrabold text-slate-900 tracking-tight">
+                  <h3 className="text-base font-extrabold text-foreground tracking-tight">
                     {api.name} API
                   </h3>
-                  <span className="text-xs text-slate-400 font-medium">{api.desc}</span>
+                  <span className="text-xs text-muted-foreground font-medium">{api.desc}</span>
 
-                  <p className="text-xs text-slate-500 mt-3.5 leading-relaxed font-sans font-medium bg-slate-50 border border-slate-100 rounded-xl p-3">
+                  <p className="text-xs text-muted-foreground mt-3.5 leading-relaxed font-sans font-medium bg-subtle border border-slate-100 rounded-xl p-3">
                     {api.longDesc}
                   </p>
                 </div>
@@ -297,8 +297,8 @@ export default function MarketplacePage() {
                 {/* Footer and trigger button */}
                 <div className="mt-6 pt-4 border-t border-slate-100 flex flex-col gap-3.5">
                   <div className="flex justify-between items-center select-all">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Endpoint</span>
-                    <code className="font-mono text-[10px] text-slate-600 bg-slate-150 p-1 rounded font-bold">
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Endpoint</span>
+                    <code className="font-mono text-[10px] text-muted-foreground bg-background border border-border/50 px-1.5 py-0.5 rounded font-bold">
                       {api.endpoint}
                     </code>
                   </div>
@@ -306,7 +306,7 @@ export default function MarketplacePage() {
                   <button
                     onClick={() => handleBuyAccess(api.name)}
                     disabled={loadingApi !== null}
-                    className="w-full h-10 bg-[#14532D] hover:bg-[#114524] disabled:bg-[#14532D]/50 text-white rounded-xl text-xs font-semibold shadow-sm transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="w-full h-10 bg-accent hover:bg-accent-strong disabled:bg-accent/50 text-accent-foreground rounded-xl text-xs font-semibold custom-shadow transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     {loadingApi === api.name ? (
                       <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
@@ -325,9 +325,9 @@ export default function MarketplacePage() {
             )
           })}
           {filteredApis.length === 0 && (
-            <div className="col-span-full py-16 text-center select-none bg-white border border-slate-200 rounded-2xl">
+            <div className="col-span-full py-16 text-center select-none bg-background border border-border rounded-2xl">
               <Sprout className="w-8 h-8 mx-auto mb-2 text-slate-350" />
-              <p className="text-sm font-semibold text-slate-700">No APIs match your filters.</p>
+              <p className="text-sm font-semibold text-muted-foreground">No APIs match your filters.</p>
               <p className="text-xs text-slate-450 mt-1">Try resetting the search or category query.</p>
             </div>
           )}
@@ -335,13 +335,16 @@ export default function MarketplacePage() {
       </section>
 
       {/* CTA Banner */}
-      <section className="bg-[#14532D] text-white py-16 px-6 text-center mt-12 rounded-t-3xl select-none">
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-2xl font-extrabold tracking-tight mb-3 font-sans">Start building agricultural intelligence</h2>
-          <p className="text-emerald-100/70 mb-8 max-w-md mx-auto text-sm leading-relaxed font-sans">
+      <section className="bg-card border border-border py-16 px-6 text-center mt-12 rounded-3xl select-none relative overflow-hidden custom-shadow shine-host tilt-glow group hover-glow mx-auto max-w-6xl mb-12">
+        <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(color-mix(in_oklab,var(--foreground)_10%,transparent)_1px,transparent_1px)] [background-size:24px_24px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-accent opacity-10 blur-[100px] pointer-events-none transition-opacity group-hover:opacity-20" />
+        
+        <div className="max-w-2xl mx-auto relative z-10">
+          <h2 className="text-2xl font-extrabold tracking-tight mb-3 font-sans text-foreground">Start building agricultural intelligence</h2>
+          <p className="text-muted-foreground mb-8 max-w-md mx-auto text-sm leading-relaxed font-sans">
             Join 847+ agritech developers using X-AGI&apos;s satellite APIs to power smart farming applications.
           </p>
-          <Link href="/register" className="inline-flex items-center gap-2 bg-[#22C55E] hover:bg-[#1cbd53] text-white h-11 px-8 rounded-xl font-bold text-sm transition-colors shadow-md">
+          <Link href="/register" className="inline-flex items-center gap-2 btn-primary-hero text-accent-foreground h-11 px-8 rounded-xl font-bold text-sm transition-colors">
             Get your free API key <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -357,15 +360,15 @@ export default function MarketplacePage() {
           />
 
           {/* Modal Container */}
-          <div className="relative bg-white border border-slate-200 rounded-3xl shadow-2xl p-7 w-full max-w-[460px] z-50 animate-in slide-in-from-top-4 duration-300 flex flex-col gap-6">
+          <div className="relative bg-background border border-border rounded-3xl shadow-2xl p-7 w-full max-w-[460px] z-50 animate-in slide-in-from-top-4 duration-300 flex flex-col gap-6">
             <div>
               <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full select-none">
                 Checkout Successful
               </span>
-              <h3 className="text-lg font-bold text-slate-950 mt-3 tracking-tight">
+              <h3 className="text-lg font-bold text-foreground mt-3 tracking-tight">
                 API Key Generated Successfully
               </h3>
-              <p className="text-xs text-slate-500 mt-1 leading-normal">
+              <p className="text-xs text-muted-foreground mt-1 leading-normal">
                 An active sandbox credential has been created for your requested API endpoint.
               </p>
             </div>
@@ -382,13 +385,13 @@ export default function MarketplacePage() {
             </div>
 
             {/* Code Field */}
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex items-center justify-between font-mono text-xs text-slate-800">
-              <span className="truncate max-w-[280px] select-all font-semibold font-mono tracking-tight text-slate-900">
+            <div className="bg-subtle border border-border rounded-xl p-3.5 flex items-center justify-between font-mono text-xs text-foreground">
+              <span className="truncate max-w-[280px] select-all font-semibold font-mono tracking-tight text-foreground">
                 {generatedKey}
               </span>
               <button
                 onClick={handleCopyKey}
-                className="shrink-0 p-1.5 text-slate-400 hover:text-slate-800 transition-colors flex items-center gap-1 focus:outline-none cursor-pointer"
+                className="shrink-0 p-1.5 text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 focus:outline-none cursor-pointer"
                 title="Copy plaintext API Key"
               >
                 {copied ? (
@@ -398,8 +401,8 @@ export default function MarketplacePage() {
                   </>
                 ) : (
                   <>
-                    <Copy className="w-4 h-4 text-slate-500" />
-                    <span className="text-[10px] font-semibold text-slate-500">Copy</span>
+                    <Copy className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-[10px] font-semibold text-muted-foreground">Copy</span>
                   </>
                 )}
               </button>
@@ -409,7 +412,7 @@ export default function MarketplacePage() {
             <div className="flex justify-end pt-1">
               <button
                 onClick={handleCloseModal}
-                className="h-10 bg-[#14532D] hover:bg-[#114524] text-white px-5 rounded-xl text-xs font-semibold shadow-sm transition-colors cursor-pointer"
+                className="h-10 bg-accent hover:bg-[#114524] text-white px-5 rounded-xl text-xs font-semibold custom-shadow transition-colors cursor-pointer"
               >
                 Close & Go to Dashboard
               </button>

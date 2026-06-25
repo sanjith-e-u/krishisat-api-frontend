@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Complete API reference for all X-AGI satellite intelligence endpoints including NDVI, NDRE, Weather, and farm registration.",
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.X-AGI.dev"
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.x-agi.dev"
 
 const endpoints = [
   {
@@ -147,21 +147,21 @@ const endpoints = [
 
 export default function ApiReferencePage() {
   return (
-    <main className="bg-white min-h-screen">
+    <main className="bg-background min-h-screen">
       {/* Header */}
       <section className="max-w-6xl mx-auto px-6 pt-20 pb-12 border-b border-slate-100">
         <div className="flex items-center gap-2 mb-4">
-          <Link href="/docs" className="text-xs text-slate-400 hover:text-primary font-semibold">Docs</Link>
+          <Link href="/docs" className="text-xs text-muted-foreground hover:text-primary font-semibold">Docs</Link>
           <span className="text-slate-300">/</span>
-          <span className="text-xs font-semibold text-slate-700">API Reference</span>
+          <span className="text-xs font-semibold text-muted-foreground">API Reference</span>
         </div>
-        <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">API Reference</h1>
-        <p className="text-lg text-slate-500 mt-3 max-w-2xl leading-relaxed">
+        <h1 className="text-4xl font-extrabold text-foreground tracking-tight">API Reference</h1>
+        <p className="text-lg text-muted-foreground mt-3 max-w-2xl leading-relaxed">
           Complete endpoint documentation for all X-AGI satellite intelligence APIs.
         </p>
-        <div className="mt-6 inline-flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
-          <span className="text-xs font-semibold text-slate-400">Base URL</span>
-          <code className="font-mono text-xs font-bold text-slate-800">{API_URL}</code>
+        <div className="mt-6 inline-flex items-center gap-2 bg-subtle border border-border rounded-xl px-4 py-3">
+          <span className="text-xs font-semibold text-muted-foreground">Base URL</span>
+          <code className="font-mono text-xs font-bold text-foreground">{API_URL}</code>
         </div>
       </section>
 
@@ -171,25 +171,25 @@ export default function ApiReferencePage() {
           <div key={ep.path} id={ep.path.replace(/\//g, "-").replace(/^-/, "")} className="scroll-mt-20">
             <div className="flex flex-wrap items-center gap-3 mb-4">
               <span className="text-xs font-black text-white bg-primary px-2 py-0.5 rounded font-mono uppercase tracking-wide">{ep.method}</span>
-              <code className="text-lg font-bold text-slate-800 font-mono">{ep.path}</code>
+              <code className="text-lg font-bold text-foreground font-mono">{ep.path}</code>
               <span className="text-xs font-semibold text-primary bg-primary/8 px-2 py-0.5 rounded-full">{ep.credits} credit{ep.credits > 1 ? "s" : ""} / call</span>
             </div>
 
-            <h2 className="text-xl font-extrabold text-slate-900 mb-2">{ep.summary}</h2>
-            <p className="text-sm text-slate-500 leading-relaxed mb-8">{ep.description}</p>
+            <h2 className="text-xl font-extrabold text-foreground mb-2">{ep.summary}</h2>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-8">{ep.description}</p>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
-                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Request Body</div>
+                <div className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-2">Request Body</div>
                 <div className="bg-slate-950 rounded-xl border border-slate-800 overflow-hidden">
-                  <div className="px-4 py-2 border-b border-slate-800 bg-slate-900 text-[9px] text-slate-500 font-mono uppercase tracking-widest">JSON</div>
+                  <div className="px-4 py-2 border-b border-slate-800 bg-slate-900 text-[9px] text-muted-foreground font-mono uppercase tracking-widest">JSON</div>
                   <pre className="p-5 text-xs font-mono text-slate-300 leading-relaxed overflow-x-auto"><code>{ep.body}</code></pre>
                 </div>
               </div>
               <div>
-                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">200 Response</div>
+                <div className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-2">200 Response</div>
                 <div className="bg-slate-950 rounded-xl border border-slate-800 overflow-hidden">
-                  <div className="px-4 py-2 border-b border-slate-800 bg-slate-900 text-[9px] text-slate-500 font-mono uppercase tracking-widest">JSON</div>
+                  <div className="px-4 py-2 border-b border-slate-800 bg-slate-900 text-[9px] text-muted-foreground font-mono uppercase tracking-widest">JSON</div>
                   <pre className="p-5 text-xs font-mono text-slate-300 leading-relaxed overflow-x-auto"><code>{ep.response}</code></pre>
                 </div>
               </div>
@@ -201,11 +201,11 @@ export default function ApiReferencePage() {
       </section>
 
       {/* Footer CTA */}
-      <section className="bg-slate-50 border-t border-slate-200 py-16 px-6">
+      <section className="bg-subtle border-t border-border py-16 px-6">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div>
-            <h2 className="text-lg font-extrabold text-slate-900">Ready to start building?</h2>
-            <p className="text-sm text-slate-500 mt-1">Follow our quickstart guide to make your first API call.</p>
+            <h2 className="text-lg font-extrabold text-foreground">Ready to start building?</h2>
+            <p className="text-sm text-muted-foreground mt-1">Follow our quickstart guide to make your first API call.</p>
           </div>
           <Link href="/developers/quickstart" className="inline-flex items-center gap-2 bg-primary text-white h-10 px-6 rounded-xl text-sm font-bold hover:bg-primary/90 transition-colors shrink-0">
             Open Quickstart <ArrowRight className="w-4 h-4" />

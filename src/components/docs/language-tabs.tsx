@@ -74,10 +74,10 @@ export default function LanguageTabs({
             onClick={() => onChange(key)}
             onKeyDown={(e) => handleKeyDown(e, key)}
             className={cn(
-              "px-3 py-1.5 rounded-md text-[10px] font-mono font-semibold uppercase transition-all duration-200 select-none focus:outline-none focus:ring-1 focus:ring-[#14532D] focus:ring-offset-1 focus:ring-offset-slate-950",
+              "px-3 py-1.5 rounded-md text-[10px] font-mono font-semibold uppercase transition-all duration-200 select-none focus:outline-none focus:ring-1 focus:ring-accent focus:ring-offset-1 focus:ring-offset-slate-950",
               isActive
-                ? "text-white bg-[#14532D] shadow-sm"
-                : "text-slate-400 hover:text-slate-200"
+                ? "text-white bg-accent custom-shadow"
+                : "text-muted-foreground hover:text-slate-200"
             )}
           >
             {label}

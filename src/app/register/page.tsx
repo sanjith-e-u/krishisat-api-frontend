@@ -132,21 +132,21 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="w-full max-w-[1000px] bg-white border border-slate-200 rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[600px]">
+    <div className="w-full max-w-[1000px] bg-background border border-border rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[600px]">
       {/* Left Column: Form */}
       <div className="col-span-1 md:col-span-7 p-8 md:p-12 flex flex-col gap-6 justify-center">
         <div>
           <Link href="/" className="select-none flex mb-4 justify-start">
             <Logo size="sm" />
           </Link>
-          <h1 className="text-2xl font-bold text-[#0F172A] tracking-tight">Create Developer Account</h1>
-          <p className="text-sm text-[#64748B] mt-1.5">Get API keys and start building in seconds.</p>
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">Create Developer Account</h1>
+          <p className="text-sm text-muted-foreground mt-1.5">Get API keys and start building in seconds.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="name" className="text-xs font-semibold text-slate-700">
+              <label htmlFor="name" className="text-xs font-semibold text-muted-foreground">
                 Full Name
               </label>
               <input
@@ -157,8 +157,8 @@ export default function RegisterPage() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 onBlur={() => validateName(fullName)}
-                className={`w-full h-10 px-3 text-sm bg-white border ${
-                  nameError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-[#14532D]/10 focus:border-[#14532D]"
+                className={`w-full h-10 px-3 text-sm bg-background border ${
+                  nameError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-border focus:ring-accent/10 focus:border-accent"
                 } rounded-lg focus:outline-none focus:ring-2 transition-all`}
               />
               {nameError && (
@@ -166,7 +166,7 @@ export default function RegisterPage() {
               )}
             </div>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="company" className="text-xs font-semibold text-slate-700">
+              <label htmlFor="company" className="text-xs font-semibold text-muted-foreground">
                 Company Name
               </label>
               <input
@@ -177,8 +177,8 @@ export default function RegisterPage() {
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 onBlur={() => validateCompany(companyName)}
-                className={`w-full h-10 px-3 text-sm bg-white border ${
-                  companyError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-[#14532D]/10 focus:border-[#14532D]"
+                className={`w-full h-10 px-3 text-sm bg-background border ${
+                  companyError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-border focus:ring-accent/10 focus:border-accent"
                 } rounded-lg focus:outline-none focus:ring-2 transition-all`}
               />
               {companyError && (
@@ -188,7 +188,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="email" className="text-xs font-semibold text-slate-700">
+            <label htmlFor="email" className="text-xs font-semibold text-muted-foreground">
               Email Address
             </label>
             <input
@@ -199,8 +199,8 @@ export default function RegisterPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onBlur={() => validateEmail(email)}
-              className={`w-full h-10 px-3 text-sm bg-white border ${
-                emailError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-[#14532D]/10 focus:border-[#14532D]"
+              className={`w-full h-10 px-3 text-sm bg-background border ${
+                emailError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-border focus:ring-accent/10 focus:border-accent"
               } rounded-lg focus:outline-none focus:ring-2 transition-all`}
             />
             {emailError && (
@@ -210,7 +210,7 @@ export default function RegisterPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="password" className="text-xs font-semibold text-slate-700">
+              <label htmlFor="password" className="text-xs font-semibold text-muted-foreground">
                 Password
               </label>
               <input
@@ -221,8 +221,8 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 onBlur={() => validatePassword(password)}
-                className={`w-full h-10 px-3 text-sm bg-white border ${
-                  passwordError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-[#14532D]/10 focus:border-[#14532D]"
+                className={`w-full h-10 px-3 text-sm bg-background border ${
+                  passwordError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-border focus:ring-accent/10 focus:border-accent"
                 } rounded-lg focus:outline-none focus:ring-2 transition-all`}
               />
               {passwordError && (
@@ -230,7 +230,7 @@ export default function RegisterPage() {
               )}
             </div>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="confirmPassword" className="text-xs font-semibold text-slate-700">
+              <label htmlFor="confirmPassword" className="text-xs font-semibold text-muted-foreground">
                 Confirm Password
               </label>
               <input
@@ -241,8 +241,8 @@ export default function RegisterPage() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 onBlur={() => validateConfirmPassword(confirmPassword)}
-                className={`w-full h-10 px-3 text-sm bg-white border ${
-                  confirmPasswordError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-slate-200 focus:ring-[#14532D]/10 focus:border-[#14532D]"
+                className={`w-full h-10 px-3 text-sm bg-background border ${
+                  confirmPasswordError ? "border-red-500 focus:ring-red-500/10 focus:border-red-500" : "border-border focus:ring-accent/10 focus:border-accent"
                 } rounded-lg focus:outline-none focus:ring-2 transition-all`}
               />
               {confirmPasswordError && (
@@ -257,9 +257,9 @@ export default function RegisterPage() {
               id="terms"
               type="checkbox"
               required
-              className="w-4 h-4 mt-0.5 text-[#14532D] bg-white border-slate-200 rounded focus:ring-[#14532D]"
+              className="w-4 h-4 mt-0.5 text-accent bg-background border-border rounded focus:ring-accent"
             />
-            <label htmlFor="terms" className="text-xs text-[#64748B] cursor-pointer leading-normal">
+            <label htmlFor="terms" className="text-xs text-muted-foreground cursor-pointer leading-normal">
               I agree to the X-AGI{" "}
               <Link href="/terms" className="text-primary hover:underline font-semibold">Terms of Service</Link>{" "}
               and{" "}
@@ -272,7 +272,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-10 mt-2 bg-[#14532D] hover:bg-[#114524] disabled:bg-[#14532D]/70 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center shadow-sm cursor-pointer"
+            className="w-full h-10 mt-2 bg-accent hover:bg-[#114524] disabled:bg-accent/70 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center custom-shadow cursor-pointer"
           >
             {loading ? (
               <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
@@ -299,16 +299,16 @@ export default function RegisterPage() {
           </p>
         )}
 
-        <div className="text-center md:text-left text-xs text-[#64748B] mt-2">
+        <div className="text-center md:text-left text-xs text-muted-foreground mt-2">
           Already have a developer account?{" "}
-          <Link href="/login" className="font-semibold text-[#14532D] hover:underline">
+          <Link href="/login" className="font-semibold text-accent hover:underline">
             Sign In
           </Link>
         </div>
       </div>
 
       {/* Right Column: Benefits Panel */}
-      <div className="col-span-1 md:col-span-5 bg-[#14532D] text-white p-8 md:p-12 flex flex-col justify-between relative overflow-hidden select-none">
+      <div className="col-span-1 md:col-span-5 bg-accent text-white p-8 md:p-12 flex flex-col justify-between relative overflow-hidden select-none">
         {/* Background topography-like grid design */}
         <div className="absolute inset-0 bg-emerald-950 opacity-20 pointer-events-none topo-pattern" />
 

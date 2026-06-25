@@ -36,15 +36,20 @@ export default function Nav() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 bg-white border-b border-slate-200/80 shadow-sm transition-all duration-200 flex items-center",
-        scrolled ? "h-[72px]" : "h-[72px] md:h-[88px]"
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-200 flex items-center",
+        scrolled
+          ? "h-[72px] bg-background/80 backdrop-blur-md border-b border-border custom-shadow"
+          : "h-[72px] md:h-[88px] bg-background border-b border-border/50"
       )}
     >
       <div className="max-w-[1400px] w-full mx-auto px-6 flex items-center justify-between">
         {/* Left: Logo */}
-        <Link href="/" className="flex items-center select-none">
-          <Logo size={scrolled ? "scrolled" : "md"} dark={false} className="hidden md:block" />
-          <Logo size="sm" dark={false} className="md:hidden" />
+        <Link href="/" className="flex items-center select-none mr-6">
+          <img 
+            src="/x-agi-full-logo.png" 
+            alt="X-AGI Logo" 
+            className="w-[130px] md:w-[160px] h-auto bg-transparent" 
+          />
         </Link>
 
         {/* Center: Navigation Links (Desktop) */}
@@ -58,13 +63,13 @@ export default function Nav() {
                 className={cn(
                   "text-sm font-medium transition-colors relative h-full flex items-center self-stretch",
                   isActive
-                    ? "text-[#14532D] font-semibold"
-                    : "text-slate-650 hover:text-[#14532D]"
+                    ? "text-accent font-semibold"
+                    : "text-muted-foreground hover:text-accent"
                 )}
               >
                 {link.name}
                 {isActive && (
-                  <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#14532D] rounded-t-full" />
+                  <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-accent rounded-t-full" />
                 )}
               </Link>
             );
@@ -75,13 +80,13 @@ export default function Nav() {
         <div className="hidden md:flex items-center gap-4">
           <Link
             href="/login"
-            className="text-sm font-medium text-slate-650 hover:text-slate-900 px-3 py-1.5 transition-colors"
+            className="text-sm font-medium text-muted-foreground hover:text-foreground px-3 py-1.5 transition-colors"
           >
             Sign In
           </Link>
           <Link
             href="/register"
-            className="bg-[#14532D] hover:bg-[#114524] text-white px-5 py-2.5 text-xs font-semibold rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-[#14532D] focus:ring-offset-2 focus:ring-offset-white"
+            className="bg-accent hover:bg-accent-strong text-accent-foreground px-5 py-2.5 text-xs font-semibold rounded-lg transition-colors custom-shadow focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background hover-glow btn-magnetic"
           >
             Get API Key
           </Link>
@@ -90,7 +95,7 @@ export default function Nav() {
         {/* Mobile menu toggle */}
         <button
           onClick={() => setMobileMenuOpen(true)}
-          className="md:hidden p-2 rounded-lg border border-slate-200 text-slate-655 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-[#14532D]"
+          className="md:hidden p-2 rounded-lg border border-border text-muted-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-accent"
           aria-label="Open Menu"
         >
           <Menu className="w-5 h-5" />
@@ -100,7 +105,7 @@ export default function Nav() {
       {/* Drawer Overlay for Mobile */}
       {mobileMenuOpen && (
         <div
-          className="md:hidden fixed inset-0 bg-slate-900/45 backdrop-blur-sm z-40 transition-opacity duration-200"
+          className="md:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40 transition-opacity duration-200"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
@@ -108,20 +113,23 @@ export default function Nav() {
       {/* Sliding Mobile Drawer Drawer */}
       <div
         className={cn(
-          "md:hidden fixed top-0 right-0 h-full w-[280px] bg-white border-l border-slate-200 shadow-2xl z-50 p-6 flex flex-col transition-transform duration-350 ease-in-out transform",
+          "md:hidden fixed top-0 right-0 h-full w-[280px] bg-background border-l border-border shadow-2xl z-50 p-6 flex flex-col transition-transform duration-350 ease-in-out transform",
           mobileMenuOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
-        {/* Drawer Header */}
-        <div className="flex justify-between items-center mb-8 border-b border-slate-100 pb-4 select-none">
-          <Logo size="sm" dark={false} />
-          <button
-            onClick={() => setMobileMenuOpen(false)}
-            className="p-2 rounded-lg hover:bg-slate-50 text-slate-500 hover:text-slate-800 transition-colors"
-            aria-label="Close menu"
-          >
-            <X className="w-5 h-5" />
-          </button>
+        <div className="flex justify-between items-center mb-8 border-b border-border/50 pb-4 select-none">
+          <Link href="/">
+            <img src="/x-agi-full-logo.png" alt="X-AGI Logo" className="w-[130px] h-auto bg-transparent" />
+          </Link>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Close menu"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Drawer Links */}
@@ -134,10 +142,10 @@ export default function Nav() {
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
                 className={cn(
-                  "text-base font-semibold py-1 transition-colors border-b border-slate-50/50 pb-1",
+                  "text-base font-semibold py-1 transition-colors border-b border-border/30 pb-1",
                   isActive
-                    ? "text-[#14532D]"
-                    : "text-slate-655 hover:text-[#14532D]"
+                    ? "text-accent"
+                    : "text-muted-foreground hover:text-accent"
                 )}
               >
                 {link.name}
@@ -146,19 +154,18 @@ export default function Nav() {
           })}
         </nav>
 
-        {/* Drawer Footer Actions */}
         <div className="mt-auto flex flex-col gap-3 pb-8">
           <Link
             href="/login"
             onClick={() => setMobileMenuOpen(false)}
-            className="w-full text-center border border-slate-200 py-3 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+            className="w-full text-center border border-border py-3 rounded-lg text-sm font-semibold text-foreground hover:bg-muted transition-colors"
           >
             Sign In
           </Link>
           <Link
             href="/register"
             onClick={() => setMobileMenuOpen(false)}
-            className="w-full text-center bg-[#14532D] hover:bg-[#114524] text-white py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm"
+            className="w-full text-center bg-accent hover:bg-accent-strong text-accent-foreground py-3 rounded-lg text-sm font-semibold transition-colors custom-shadow"
           >
             Get API Key
           </Link>

@@ -83,26 +83,29 @@ const faq = [
 
 export default function PricingPage() {
   return (
-    <main className="bg-white min-h-screen">
+    <main className="bg-background min-h-screen">
       {/* Hero */}
-      <section className="text-center pt-24 pb-12 px-6 border-b border-slate-100">
+      <section className="text-center pt-24 pb-12 px-6 border-b border-border">
         <span className="text-xs font-bold text-primary bg-primary/8 px-3 py-1 rounded-full uppercase tracking-widest">Pricing</span>
-        <h1 className="text-4xl font-extrabold text-slate-900 mt-5 tracking-tight">Simple, transparent pricing</h1>
-        <p className="text-lg text-slate-500 mt-4 max-w-lg mx-auto leading-relaxed">
+        <h1 className="text-4xl font-extrabold text-foreground mt-5 tracking-tight">Simple, transparent pricing</h1>
+        <p className="text-lg text-muted-foreground mt-4 max-w-lg mx-auto leading-relaxed">
           Start small, scale as your coverage expands. Pay only for the telemetry your systems consume.
         </p>
       </section>
 
       {/* Pay-as-you-go Explanation Banner */}
       <section className="max-w-6xl mx-auto px-6 pt-12">
-        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+        <div className="bg-subtle border border-border rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 custom-shadow">
           <div className="space-y-1 text-center md:text-left">
-            <h3 className="text-sm font-extrabold text-slate-900">💡 Pay-As-You-Go System</h3>
+            <h3 className="text-sm font-extrabold text-foreground">💡 Pay-As-You-Go System</h3>
             <p className="text-xs text-slate-505 leading-relaxed max-w-2xl">
-              X-AGI uses a simple usage-based model. Your first 1,000 credits each month are completely free. Subsequent requests are billed at a flat rate of <strong className="text-slate-800 font-bold">{formatUsd(creditsToUsd(1))} per credit</strong>. Endpoints cost between 1–3 credits per call depending on the data type. No monthly fees, no overage shocks, and no service interruptions.
+              X-AGI uses a simple usage-based model. Your first 1,000 credits each month are completely free. Subsequent requests are billed at a flat rate of <strong className="text-foreground font-bold">{formatUsd(creditsToUsd(1))} per credit</strong>. Endpoints cost between 1–3 credits per call depending on the data type. No monthly fees, no overage shocks, and no service interruptions.
             </p>
           </div>
-          <Link href="/developers/reference" className="text-xs font-bold text-primary bg-primary/8 px-4 py-2.5 rounded-xl hover:bg-primary/10 transition-colors shrink-0">
+          <Link
+            href="/developers/reference"
+            className="btn-secondary text-foreground px-5 py-2.5 rounded-lg text-xs font-semibold"
+          >
             View API Reference
           </Link>
         </div>
@@ -117,29 +120,29 @@ export default function PricingPage() {
               <div key={plan.name} className={`relative rounded-2xl p-8 flex flex-col border ${
                 plan.highlight
                   ? "border-primary bg-primary text-white shadow-2xl shadow-primary/20"
-                  : "border-slate-200 bg-white"
+                  : "border-border bg-background"
               }`}>
                 {plan.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="bg-agri text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">
+                    <span className="bg-agri text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest custom-shadow">
                       Most Popular
                     </span>
                   </div>
                 )}
 
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-6 ${
-                  plan.highlight ? "bg-white/15" : "bg-slate-50 border border-slate-100"
+                  plan.highlight ? "bg-background/15" : "bg-subtle border border-border"
                 }`}>
                   <Icon className={`w-5 h-5 ${plan.highlight ? "text-white" : "text-primary"}`} />
                 </div>
 
                 <div className="mb-2">
-                  <h2 className={`text-lg font-extrabold ${plan.highlight ? "text-white" : "text-slate-900"}`}>{plan.name}</h2>
-                  <p className={`text-xs leading-relaxed mt-1 ${plan.highlight ? "text-white/70" : "text-slate-400"}`}>{plan.description}</p>
+                  <h2 className={`text-lg font-extrabold ${plan.highlight ? "text-white" : "text-foreground"}`}>{plan.name}</h2>
+                  <p className={`text-xs leading-relaxed mt-1 ${plan.highlight ? "text-white/70" : "text-muted-foreground"}`}>{plan.description}</p>
                 </div>
 
                 <div className="mt-6 mb-8">
-                  <span className={`text-4xl font-black ${plan.highlight ? "text-white" : "text-slate-900"}`}>{plan.price}</span>
+                  <span className={`text-4xl font-black ${plan.highlight ? "text-white" : "text-foreground"}`}>{plan.price}</span>
                   <span className={`text-xs ml-1 ${plan.highlight ? "text-white/60" : "text-slate-405"}`}>{plan.period}</span>
                 </div>
 
@@ -147,7 +150,7 @@ export default function PricingPage() {
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-start gap-2.5 text-sm">
                       <Check className={`w-4 h-4 mt-0.5 shrink-0 ${plan.highlight ? "text-agri" : "text-agri"}`} />
-                      <span className={plan.highlight ? "text-white/90" : "text-slate-600"}>{f}</span>
+                      <span className={plan.highlight ? "text-white/90" : "text-muted-foreground"}>{f}</span>
                     </li>
                   ))}
                 </ul>
@@ -156,7 +159,7 @@ export default function PricingPage() {
                   href={plan.cta === "Contact Sales" ? "/contact-sales" : "/register"}
                   className={`w-full h-11 rounded-xl text-sm font-bold flex items-center justify-center transition-all ${
                     plan.highlight
-                      ? "bg-white text-primary hover:bg-slate-50"
+                      ? "bg-background text-primary hover:bg-subtle"
                       : "bg-primary text-white hover:bg-primary/90"
                   }`}
                 >
@@ -170,19 +173,19 @@ export default function PricingPage() {
 
     {/* AI Models Pricing Callout */}
     <section className="max-w-6xl mx-auto px-6 pb-16 select-none">
-      <div className="bg-slate-50 border border-slate-205 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+      <div className="bg-subtle border border-slate-205 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 custom-shadow">
         <div className="space-y-1 text-center md:text-left">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono">
+          <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest font-mono">
             AI MODELS PRICING
           </h3>
-          <h4 className="text-base font-extrabold text-slate-900 mt-1 font-sans">
+          <h4 className="text-base font-extrabold text-foreground mt-1 font-sans">
             AI model inference will be priced separately from API credits.
           </h4>
           <p className="text-xs text-slate-505 leading-relaxed mt-1 font-sans font-medium max-w-2xl">
             Pricing is being finalized with our early access partners. Sign up for early access to receive pricing and availability updates.
           </p>
         </div>
-        <Link href="/models" className="text-xs font-bold text-[#14532D] hover:text-[#114524] bg-[#14532D]/8 px-4 py-2.5 rounded-xl hover:bg-[#14532D]/12 transition-all shrink-0 flex items-center gap-1.5 font-sans">
+        <Link href="/models" className="text-xs font-bold text-accent hover:text-[#114524] bg-accent/10 px-4 py-2.5 rounded-xl hover:bg-accent/12 transition-all shrink-0 flex items-center gap-1.5 font-sans">
           Join the early access list <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
@@ -190,11 +193,11 @@ export default function PricingPage() {
 
       {/* FAQ */}
       <section className="max-w-3xl mx-auto px-6 pb-24">
-        <h2 className="text-2xl font-extrabold text-slate-900 mb-10 text-center">Frequently asked questions</h2>
+        <h2 className="text-2xl font-extrabold text-foreground mb-10 text-center">Frequently asked questions</h2>
         <div className="space-y-4">
           {faq.map((item) => (
-            <div key={item.q} className="border border-slate-200 rounded-xl p-6">
-              <h3 className="text-sm font-bold text-slate-900">{item.q}</h3>
+            <div key={item.q} className="border border-border rounded-xl p-6">
+              <h3 className="text-sm font-bold text-foreground">{item.q}</h3>
               <p className="text-sm text-slate-505 mt-2 leading-relaxed">{item.a}</p>
             </div>
           ))}

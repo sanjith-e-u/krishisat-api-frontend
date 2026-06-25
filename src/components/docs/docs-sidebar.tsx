@@ -31,7 +31,7 @@ export default function DocsSidebar({
   totalFilteredCount
 }: DocsSidebarProps) {
   return (
-    <aside className="hidden lg:flex w-[260px] shrink-0 bg-white border-r border-slate-100 text-slate-500 h-[calc(100vh-88px)] sticky top-[88px] overflow-y-auto px-6 py-8 flex-col justify-between z-20 select-none">
+    <aside className="hidden lg:flex w-[260px] shrink-0 bg-background border-r border-slate-100 text-muted-foreground h-[calc(100vh-88px)] sticky top-[88px] overflow-y-auto px-6 py-8 flex-col justify-between z-20 select-none">
       <div>
         {/* Sidebar Header Search */}
         <div className="mb-6">
@@ -59,7 +59,7 @@ export default function DocsSidebar({
           {/* Category: Getting Started */}
           {gettingStartedSections.length > 0 && (
             <div>
-              <h4 className="text-[11px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-2 block font-sans">
+              <h4 className="text-[11px] font-bold tracking-[0.2em] text-muted-foreground uppercase mb-2 block font-sans">
                 GETTING STARTED
               </h4>
               <ul className="space-y-1">
@@ -74,8 +74,8 @@ export default function DocsSidebar({
                         className={cn(
                           "flex items-center px-3 py-2 rounded-lg transition-colors text-sm font-medium focus:outline-none",
                           isActive
-                            ? "bg-[#14532D]/5 text-[#14532D] font-semibold"
-                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                            ? "bg-accent/5 text-accent font-semibold"
+                            : "text-muted-foreground hover:text-foreground hover:bg-subtle"
                         )}
                       >
                         {section.title}
@@ -90,7 +90,7 @@ export default function DocsSidebar({
           {/* Category: Core APIs */}
           {coreApiSections.length > 0 && (
             <div>
-              <h4 className="text-[11px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-2 block font-sans">
+              <h4 className="text-[11px] font-bold tracking-[0.2em] text-muted-foreground uppercase mb-2 block font-sans">
                 CORE APIS
               </h4>
               <ul className="space-y-1">
@@ -105,8 +105,8 @@ export default function DocsSidebar({
                         className={cn(
                           "flex items-center justify-between px-3 py-2 rounded-lg transition-colors text-sm font-medium focus:outline-none",
                           isActive
-                            ? "bg-[#14532D]/5 text-[#14532D] font-semibold"
-                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                            ? "bg-accent/5 text-accent font-semibold"
+                            : "text-muted-foreground hover:text-foreground hover:bg-subtle"
                         )}
                       >
                         <span>{section.title.split(" — ")[0]}</span>
@@ -114,7 +114,7 @@ export default function DocsSidebar({
                           <span className={cn(
                             "font-mono text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider",
                             section.endpoint.method === "GET" && "bg-sky-50 text-sky-700 border border-sky-100",
-                            section.endpoint.method === "POST" && "bg-[#14532D]/10 text-[#14532D]"
+                            section.endpoint.method === "POST" && "bg-accent/10 text-accent"
                           )}>
                             {section.endpoint.method}
                           </span>
@@ -130,7 +130,7 @@ export default function DocsSidebar({
           {/* Category: Reference */}
           {referenceSections.length > 0 && (
             <div>
-              <h4 className="text-[11px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-2 block font-sans">
+              <h4 className="text-[11px] font-bold tracking-[0.2em] text-muted-foreground uppercase mb-2 block font-sans">
                 REFERENCE
               </h4>
               <ul className="space-y-1">
@@ -145,8 +145,8 @@ export default function DocsSidebar({
                         className={cn(
                           "flex items-center px-3 py-2 rounded-lg transition-colors text-sm font-medium focus:outline-none",
                           isActive
-                            ? "bg-[#14532D]/5 text-[#14532D] font-semibold"
-                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                            ? "bg-accent/5 text-accent font-semibold"
+                            : "text-muted-foreground hover:text-foreground hover:bg-subtle"
                         )}
                       >
                         {section.title}
@@ -160,14 +160,14 @@ export default function DocsSidebar({
 
           {/* Category: Developer Resources */}
           <div>
-            <h4 className="text-[11px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-2 block font-sans">
+            <h4 className="text-[11px] font-bold tracking-[0.2em] text-muted-foreground uppercase mb-2 block font-sans">
               DEVELOPER RESOURCES
             </h4>
             <ul className="space-y-1">
               <li>
                 <Link
                   href="/developers/quickstart"
-                  className="flex items-center px-3 py-2 rounded-lg transition-colors text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                  className="flex items-center px-3 py-2 rounded-lg transition-colors text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-subtle"
                 >
                   Quickstart
                 </Link>
@@ -175,7 +175,7 @@ export default function DocsSidebar({
               <li>
                 <Link
                   href="/pricing"
-                  className="flex items-center px-3 py-2 rounded-lg transition-colors text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                  className="flex items-center px-3 py-2 rounded-lg transition-colors text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-subtle"
                 >
                   Pricing
                 </Link>
@@ -183,7 +183,7 @@ export default function DocsSidebar({
               <li>
                 <Link
                   href="/developers/reference"
-                  className="flex items-center px-3 py-2 rounded-lg transition-colors text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                  className="flex items-center px-3 py-2 rounded-lg transition-colors text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-subtle"
                 >
                   Reference
                 </Link>
@@ -191,7 +191,7 @@ export default function DocsSidebar({
               <li>
                 <button
                   onClick={(e) => onScrollTo(e, "support")}
-                  className="w-full flex items-center px-3 py-2 rounded-lg transition-colors text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-left focus:outline-none"
+                  className="w-full flex items-center px-3 py-2 rounded-lg transition-colors text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-subtle text-left focus:outline-none"
                 >
                   Support
                 </button>
@@ -201,7 +201,7 @@ export default function DocsSidebar({
 
           {/* Empty Search State inside Sidebar */}
           {totalFilteredCount === 0 && (
-            <div className="py-4 text-center text-slate-400 font-sans text-xs">
+            <div className="py-4 text-center text-muted-foreground font-sans text-xs">
               No matching sections.
             </div>
           )}

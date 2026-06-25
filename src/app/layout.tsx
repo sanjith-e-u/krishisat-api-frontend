@@ -1,11 +1,31 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono, Instrument_Serif, Cormorant_Garamond } from "next/font/google";
 import PageWrapper from "@/components/page-wrapper";
+import { ScrollProgress } from "@/components/scroll-progress";
 import "./globals.css";
+
+const instrumentSerif = Instrument_Serif({
+  weight: ["400"],
+  subsets: ["latin"],
+  style: ["italic"],
+  variable: "--font-serif-accent",
+});
+
+const cormorantGaramond = Cormorant_Garamond({
+  weight: ["400"],
+  subsets: ["latin"],
+  style: ["italic"],
+  variable: "--font-serif-accent",
+});
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
 });
 
 const defaultOG = {
@@ -39,8 +59,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full bg-bg text-text-primary">
+    <html lang="en" suppressHydrationWarning className={`dark ${inter.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable} h-full antialiased`}>
+      <body className="min-h-full bg-background text-foreground">
+        <ScrollProgress />
         <PageWrapper>{children}</PageWrapper>
       </body>
     </html>

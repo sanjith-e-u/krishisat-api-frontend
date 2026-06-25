@@ -8,13 +8,13 @@ const codeTabs = [
     id: "curl",
     label: "cURL",
     language: "bash",
-    code: `curl https://api.X-AGI.dev/v1/intelligence \\
+    code: `curl https://api.x-agi.dev/v1/intelligence \\
   -H "Authorization: Bearer $KSAT_KEY" \\
   -d '{ "farm_id": "KR-1024",
         "indices": ["ndvi","ndmi","weather"] }'`,
     highlighted: (
       <span>
-        <span className="text-slate-500">curl</span> <span className="text-cyan-400">https://api.X-AGI.dev/v1/intelligence</span> \<br />
+        <span className="text-muted-foreground">curl</span> <span className="text-cyan-400">https://api.x-agi.dev/v1/intelligence</span> \<br />
         {"  "}<span className="text-slate-405">-H</span> <span className="text-emerald-400">&quot;Authorization: Bearer $KSAT_KEY&quot;</span> \<br />
         {"  "}<span className="text-slate-405">-d</span> <span className="text-emerald-400">{"'{ \"farm_id\": \"KR-1024\", \"indices\": [\"ndvi\",\"ndmi\",\"weather\"] }'"}</span>
       </span>
@@ -24,9 +24,9 @@ const codeTabs = [
     id: "python",
     label: "Python",
     language: "python",
-    code: `import X-AGI
+    code: `import x_agi
 
-client = X-AGI.Client(api_key="$KSAT_KEY")
+client = x_agi.Client(api_key="$KSAT_KEY")
 result = client.intelligence.get(
     farm_id="KR-1024",
     indices=["ndvi", "ndmi", "weather"]
@@ -35,12 +35,12 @@ print(result.ndvi)  # 0.82`,
     highlighted: (
       <span>
         <span className="text-rose-400">import</span> <span className="text-white">X-AGI</span><br /><br />
-        <span className="text-white">client = X-AGI.</span><span className="text-cyan-400">Client</span><span className="text-slate-400">(</span><span className="text-slate-300">api_key</span><span className="text-slate-400">=</span><span className="text-emerald-400">&quot;$KSAT_KEY&quot;</span><span className="text-slate-400">)</span><br />
-        <span className="text-white">result = client.intelligence.</span><span className="text-cyan-400">get</span><span className="text-slate-400">(</span><br />
-        {"    "}<span className="text-slate-300">farm_id</span><span className="text-slate-400">=</span><span className="text-emerald-400">&quot;KR-1024&quot;</span><span className="text-slate-400">,</span><br />
-        {"    "}<span className="text-slate-300">indices</span><span className="text-slate-400">=</span><span className="text-slate-400">[</span><span className="text-emerald-400">&quot;ndvi&quot;</span><span className="text-slate-400">,</span> <span className="text-emerald-400">&quot;ndmi&quot;</span><span className="text-slate-400">,</span> <span className="text-emerald-400">&quot;weather&quot;</span><span className="text-slate-400">]</span><br />
-        <span className="text-slate-400">)</span><br />
-        <span className="text-cyan-400">print</span><span className="text-slate-400">(</span><span className="text-white">result.ndvi</span><span className="text-slate-400">)</span>  <span className="text-slate-500">{"# 0.82"}</span>
+        <span className="text-white">client = X-AGI.</span><span className="text-cyan-400">Client</span><span className="text-muted-foreground">(</span><span className="text-slate-300">api_key</span><span className="text-muted-foreground">=</span><span className="text-emerald-400">&quot;$KSAT_KEY&quot;</span><span className="text-muted-foreground">)</span><br />
+        <span className="text-white">result = client.intelligence.</span><span className="text-cyan-400">get</span><span className="text-muted-foreground">(</span><br />
+        {"    "}<span className="text-slate-300">farm_id</span><span className="text-muted-foreground">=</span><span className="text-emerald-400">&quot;KR-1024&quot;</span><span className="text-muted-foreground">,</span><br />
+        {"    "}<span className="text-slate-300">indices</span><span className="text-muted-foreground">=</span><span className="text-muted-foreground">[</span><span className="text-emerald-400">&quot;ndvi&quot;</span><span className="text-muted-foreground">,</span> <span className="text-emerald-400">&quot;ndmi&quot;</span><span className="text-muted-foreground">,</span> <span className="text-emerald-400">&quot;weather&quot;</span><span className="text-muted-foreground">]</span><br />
+        <span className="text-muted-foreground">)</span><br />
+        <span className="text-cyan-400">print</span><span className="text-muted-foreground">(</span><span className="text-white">result.ndvi</span><span className="text-muted-foreground">)</span>  <span className="text-muted-foreground">{"# 0.82"}</span>
       </span>
     )
   },
@@ -48,7 +48,7 @@ print(result.ndvi)  # 0.82`,
     id: "nodejs",
     label: "Node.js",
     language: "javascript",
-    code: `import X-AGI from 'X-AGI';
+    code: `import x_agi from 'X-AGI';
 
 const client = new X-AGI({ apiKey: process.env.KSAT_KEY });
 const result = await client.intelligence.get({
@@ -58,13 +58,13 @@ const result = await client.intelligence.get({
 console.log(result.ndvi); // 0.82`,
     highlighted: (
       <span>
-        <span className="text-rose-400">import</span> <span className="text-white">X-AGI</span> <span className="text-rose-400">from</span> <span className="text-emerald-400">&apos;X-AGI&apos;</span><span className="text-slate-400">;</span><br /><br />
-        <span className="text-rose-400">const</span> <span className="text-white">client =</span> <span className="text-rose-400">new</span> <span className="text-cyan-400">X-AGI</span><span className="text-slate-400">(</span><span className="text-slate-300">{"{ apiKey: process.env.KSAT_KEY }"}</span><span className="text-slate-400">)</span><br />
-        <span className="text-rose-400">const</span> <span className="text-white">result =</span> <span className="text-rose-400">await</span> <span className="text-white">client.intelligence.</span><span className="text-cyan-400">get</span><span className="text-slate-400">(</span><span className="text-slate-300">{"{"}</span><br />
-        {"  "}<span className="text-slate-300">farmId</span><span className="text-slate-400">:</span> <span className="text-emerald-400">&apos;KR-1024&apos;</span><span className="text-slate-400">,</span><br />
-        {"  "}<span className="text-slate-300">indices</span><span className="text-slate-400">:</span> <span className="text-slate-400">[</span><span className="text-emerald-400">&apos;ndvi&apos;</span><span className="text-slate-400">,</span> <span className="text-emerald-400">&apos;ndmi&apos;</span><span className="text-slate-455">&apos;weather&apos;</span><span className="text-slate-400">]</span><br />
-        <span className="text-slate-300">{"}"}</span><span className="text-slate-400">)</span><br />
-        <span className="text-white">console.</span><span className="text-cyan-400">log</span><span className="text-slate-400">(</span><span className="text-white">result.ndvi</span><span className="text-slate-400">)</span><span className="text-slate-400">;</span> <span className="text-slate-500">{"// 0.82"}</span>
+        <span className="text-rose-400">import</span> <span className="text-white">X-AGI</span> <span className="text-rose-400">from</span> <span className="text-emerald-400">&apos;X-AGI&apos;</span><span className="text-muted-foreground">;</span><br /><br />
+        <span className="text-rose-400">const</span> <span className="text-white">client =</span> <span className="text-rose-400">new</span> <span className="text-cyan-400">X-AGI</span><span className="text-muted-foreground">(</span><span className="text-slate-300">{"{ apiKey: process.env.KSAT_KEY }"}</span><span className="text-muted-foreground">)</span><br />
+        <span className="text-rose-400">const</span> <span className="text-white">result =</span> <span className="text-rose-400">await</span> <span className="text-white">client.intelligence.</span><span className="text-cyan-400">get</span><span className="text-muted-foreground">(</span><span className="text-slate-300">{"{"}</span><br />
+        {"  "}<span className="text-slate-300">farmId</span><span className="text-muted-foreground">:</span> <span className="text-emerald-400">&apos;KR-1024&apos;</span><span className="text-muted-foreground">,</span><br />
+        {"  "}<span className="text-slate-300">indices</span><span className="text-muted-foreground">:</span> <span className="text-muted-foreground">[</span><span className="text-emerald-400">&apos;ndvi&apos;</span><span className="text-muted-foreground">,</span> <span className="text-emerald-400">&apos;ndmi&apos;</span><span className="text-slate-455">&apos;weather&apos;</span><span className="text-muted-foreground">]</span><br />
+        <span className="text-slate-300">{"}"}</span><span className="text-muted-foreground">)</span><br />
+        <span className="text-white">console.</span><span className="text-cyan-400">log</span><span className="text-muted-foreground">(</span><span className="text-white">result.ndvi</span><span className="text-muted-foreground">)</span><span className="text-muted-foreground">;</span> <span className="text-muted-foreground">{"// 0.82"}</span>
       </span>
     )
   }
@@ -97,8 +97,8 @@ export default function CodeBlock() {
               onClick={() => setActiveTab(tab.id)}
               className={`px-3 py-1 rounded-[4px] text-xs font-mono font-medium transition-all ${
                 activeTab === tab.id
-                  ? "bg-slate-800 text-white border border-slate-700 shadow-sm"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 border border-transparent"
+                  ? "bg-slate-800 text-white border border-slate-700 custom-shadow"
+                  : "text-muted-foreground hover:text-slate-200 hover:bg-slate-800/40 border border-transparent"
               }`}
             >
               {tab.label}
@@ -107,7 +107,7 @@ export default function CodeBlock() {
         </div>
         <button
           onClick={handleCopy}
-          className="p-1.5 rounded-[4px] border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-all"
+          className="p-1.5 rounded-[4px] border border-slate-800 bg-slate-900 hover:bg-slate-800 text-muted-foreground hover:text-white transition-all"
           title="Copy to clipboard"
         >
           {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}

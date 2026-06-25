@@ -71,7 +71,7 @@ export default function AdminSubscriptions() {
       
       {/* Toast */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 border border-slate-800 text-white px-4 py-3 rounded-xl shadow-sm flex items-center gap-2.5 animate-in slide-in-from-bottom-5">
+        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 border border-slate-800 text-white px-4 py-3 rounded-xl custom-shadow flex items-center gap-2.5 animate-in slide-in-from-bottom-5">
           <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
           <span className="text-xs font-semibold">{toastMessage}</span>
         </div>
@@ -80,10 +80,10 @@ export default function AdminSubscriptions() {
       {/* Summary KPI Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Card 1: Active */}
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex items-center justify-between">
+        <div className="bg-background border border-border rounded-xl p-6 custom-shadow flex items-center justify-between">
           <div>
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Active Subscriptions</span>
-            <div className="text-2xl font-bold text-slate-900 mt-2">847</div>
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Active Subscriptions</span>
+            <div className="text-2xl font-bold text-foreground mt-2">847</div>
           </div>
           <div className="p-3 bg-emerald-50 border border-emerald-100 rounded-xl text-primary">
             <CreditCard className="w-6 h-6" />
@@ -91,11 +91,11 @@ export default function AdminSubscriptions() {
         </div>
 
         {/* Card 2: Pending */}
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex items-center justify-between">
+        <div className="bg-background border border-border rounded-xl p-6 custom-shadow flex items-center justify-between">
           <div>
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Pending Renewals</span>
-            <div className="text-2xl font-bold text-slate-900 mt-2">23</div>
-            <span className="text-[10px] text-slate-400 font-medium">Renewing in next 7 days</span>
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Pending Renewals</span>
+            <div className="text-2xl font-bold text-foreground mt-2">23</div>
+            <span className="text-[10px] text-muted-foreground font-medium">Renewing in next 7 days</span>
           </div>
           <div className="p-3 bg-amber-50 border border-amber-100 rounded-xl text-amber-600">
             <Clock className="w-6 h-6" />
@@ -103,10 +103,10 @@ export default function AdminSubscriptions() {
         </div>
 
         {/* Card 3: Cancelled */}
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex items-center justify-between">
+        <div className="bg-background border border-border rounded-xl p-6 custom-shadow flex items-center justify-between">
           <div>
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Cancelled This Month</span>
-            <div className="text-2xl font-bold text-slate-900 mt-2">8</div>
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Cancelled This Month</span>
+            <div className="text-2xl font-bold text-foreground mt-2">8</div>
           </div>
           <div className="p-3 bg-rose-50 border border-rose-100 rounded-xl text-rose-600">
             <AlertTriangle className="w-6 h-6" />
@@ -115,15 +115,15 @@ export default function AdminSubscriptions() {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-wrap gap-4 items-center justify-between">
+      <div className="bg-background border border-border rounded-xl p-4 custom-shadow flex flex-wrap gap-4 items-center justify-between">
         <div className="flex flex-wrap gap-3 items-center">
           {/* Plan filter */}
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Plan Tier</span>
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Plan Tier</span>
             <select
               value={planFilter}
               onChange={(e) => setPlanFilter(e.target.value)}
-              className="h-9 px-3 border border-slate-200 rounded-lg text-xs bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary font-semibold text-slate-700"
+              className="h-9 px-3 border border-border rounded-lg text-xs bg-subtle focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary font-semibold text-muted-foreground"
             >
               <option value="All">All Plans</option>
               <option value="Developer">Developer</option>
@@ -134,11 +134,11 @@ export default function AdminSubscriptions() {
 
           {/* Status filter */}
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Status</span>
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Status</span>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="h-9 px-3 border border-slate-200 rounded-lg text-xs bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary font-semibold text-slate-700"
+              className="h-9 px-3 border border-border rounded-lg text-xs bg-subtle focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary font-semibold text-muted-foreground"
             >
               <option value="All">All Statuses</option>
               <option value="Active">Active</option>
@@ -151,7 +151,7 @@ export default function AdminSubscriptions() {
         <button
           type="button"
           onClick={handleResetFilters}
-          className="h-9 border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 rounded-lg text-xs font-bold transition-all focus:outline-none flex items-center gap-1.5"
+          className="h-9 border border-border hover:bg-subtle text-muted-foreground px-4 rounded-lg text-xs font-bold transition-all focus:outline-none flex items-center gap-1.5"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>Reset Filters</span>
@@ -159,11 +159,11 @@ export default function AdminSubscriptions() {
       </div>
 
       {/* Subscriptions Table */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-background border border-border rounded-xl custom-shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm border-collapse text-left">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <tr className="bg-subtle border-b border-border text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 <th className="py-3 px-6 font-sans">Company</th>
                 <th className="py-3 px-6 font-sans">Plan</th>
                 <th className="py-3 px-6 font-sans">Customer</th>
@@ -175,8 +175,8 @@ export default function AdminSubscriptions() {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filteredSubs.map((row) => (
-                <tr key={row.id} className="hover:bg-slate-50/40 transition-colors">
-                  <td className="py-4 px-6 font-semibold text-slate-800">{row.company}</td>
+                <tr key={row.id} className="hover:bg-subtle/40 transition-colors">
+                  <td className="py-4 px-6 font-semibold text-foreground">{row.company}</td>
                   
                   {/* Plan Badge */}
                   <td className="py-4 px-6">
@@ -194,9 +194,9 @@ export default function AdminSubscriptions() {
                     </span>
                   </td>
 
-                  <td className="py-4 px-6 text-slate-500 font-medium">{row.customer}</td>
-                  <td className="py-4 px-6 font-bold text-slate-800">{row.mrr}</td>
-                  <td className="py-4 px-6 text-slate-400 font-medium">{row.renewal}</td>
+                  <td className="py-4 px-6 text-muted-foreground font-medium">{row.customer}</td>
+                  <td className="py-4 px-6 font-bold text-foreground">{row.mrr}</td>
+                  <td className="py-4 px-6 text-muted-foreground font-medium">{row.renewal}</td>
                   
                   {/* Status Badge */}
                   <td className="py-4 px-6">
@@ -230,7 +230,7 @@ export default function AdminSubscriptions() {
                       <button
                         type="button"
                         onClick={() => showToast(`Downloading invoice statement for ${row.company}`)}
-                        className="p-1.5 border border-slate-200 text-slate-500 hover:text-slate-900 bg-white hover:bg-slate-50 rounded-lg transition-colors focus:outline-none focus:ring-1 focus:ring-primary inline-flex items-center gap-1 text-xs font-semibold shadow-sm"
+                        className="p-1.5 border border-border text-muted-foreground hover:text-foreground bg-background hover:bg-subtle rounded-lg transition-colors focus:outline-none focus:ring-1 focus:ring-primary inline-flex items-center gap-1 text-xs font-semibold custom-shadow"
                         title="Download latest Invoice"
                       >
                         <Download className="w-3.5 h-3.5" />
@@ -241,7 +241,7 @@ export default function AdminSubscriptions() {
                         <button
                           type="button"
                           onClick={() => handleCancelSub(row.id, row.company)}
-                          className="p-1.5 border border-slate-200 text-slate-400 hover:text-rose-600 hover:border-rose-200 bg-white hover:bg-rose-50 rounded-lg transition-colors focus:outline-none focus:ring-1 focus:ring-rose-500 inline-flex items-center gap-1 text-xs font-semibold"
+                          className="p-1.5 border border-border text-muted-foreground hover:text-rose-600 hover:border-rose-200 bg-background hover:bg-rose-50 rounded-lg transition-colors focus:outline-none focus:ring-1 focus:ring-rose-500 inline-flex items-center gap-1 text-xs font-semibold"
                           title="Cancel subscription"
                         >
                           <CloseIcon className="w-3.5 h-3.5" />
@@ -254,7 +254,7 @@ export default function AdminSubscriptions() {
               ))}
               {filteredSubs.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-slate-400">
+                  <td colSpan={7} className="py-12 text-center text-muted-foreground">
                     <p className="text-sm font-semibold">No active subscriptions match your filter.</p>
                   </td>
                 </tr>

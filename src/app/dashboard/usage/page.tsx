@@ -43,7 +43,7 @@ export default function UsageAnalytics() {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) {
         setLoading(false)
-        router.push("/login")
+        // router.push("/login")
         return
       }
       setUser(session.user)
@@ -122,7 +122,7 @@ export default function UsageAnalytics() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", `X-AGI-usage-${timeRange}-${new Date().toISOString().split("T")[0]}.csv`);
+    link.setAttribute("download", `x-agi-usage-${timeRange}-${new Date().toISOString().split("T")[0]}.csv`);
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
@@ -176,7 +176,7 @@ export default function UsageAnalytics() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <svg className="animate-spin h-8 w-8 text-[#14532D]" fill="none" viewBox="0 0 24 24">
+        <svg className="animate-spin h-8 w-8 text-accent" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
         </svg>
@@ -188,10 +188,10 @@ export default function UsageAnalytics() {
     <div className="space-y-8">
         
         {/* Header Section */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6 select-none">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-6 select-none">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Usage Analytics</h1>
-            <p className="text-sm text-slate-500 mt-1">Detailed logging and consumption metrics for your API applications.</p>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">Usage Analytics</h1>
+            <p className="text-sm text-muted-foreground mt-1">Detailed logging and consumption metrics for your API applications.</p>
           </div>
 
           <div className="flex items-center gap-3 self-start sm:self-auto">
@@ -199,20 +199,20 @@ export default function UsageAnalytics() {
             <button
               onClick={handleExportCSV}
               disabled={activeLogs.length === 0}
-              className="h-9 border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed text-slate-700 px-3.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-colors cursor-pointer"
+              className="h-9 border border-border bg-background hover:bg-subtle disabled:opacity-50 disabled:cursor-not-allowed text-muted-foreground px-3.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 custom-shadow transition-colors cursor-pointer"
             >
               Export CSV
             </button>
 
             {/* Timeframe selector */}
-            <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200/60">
+            <div className="flex bg-muted p-0.5 rounded-lg border border-border/60">
               <button
                 onClick={() => setTimeRange("7d")}
                 className={cn(
                   "px-3 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer",
                   timeRange === "7d"
-                    ? "bg-white text-slate-900 shadow-sm"
-                    : "text-slate-500 hover:text-slate-800"
+                    ? "bg-background text-foreground custom-shadow"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 7 Days
@@ -222,8 +222,8 @@ export default function UsageAnalytics() {
                 className={cn(
                   "px-3 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer",
                   timeRange === "30d"
-                    ? "bg-white text-slate-900 shadow-sm"
-                    : "text-slate-500 hover:text-slate-800"
+                    ? "bg-background text-foreground custom-shadow"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 30 Days
@@ -233,8 +233,8 @@ export default function UsageAnalytics() {
                 className={cn(
                   "px-3 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer",
                   timeRange === "all"
-                    ? "bg-white text-slate-900 shadow-sm"
-                    : "text-slate-500 hover:text-slate-800"
+                    ? "bg-background text-foreground custom-shadow"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 All Time
@@ -246,48 +246,48 @@ export default function UsageAnalytics() {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Card 1: API Requests */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+          <div className="bg-background border border-border rounded-xl p-6 custom-shadow">
             <div className="flex justify-between items-start">
-              <span className="text-xs font-semibold text-slate-500 tracking-wide uppercase">API Requests</span>
-              <div className="p-2.5 bg-slate-50 border border-slate-100 rounded-lg text-slate-600">
+              <span className="text-xs font-semibold text-muted-foreground tracking-wide uppercase">API Requests</span>
+              <div className="p-2.5 bg-subtle border border-slate-100 rounded-lg text-muted-foreground">
                 <Activity className="w-4 h-4" />
               </div>
             </div>
             <div className="mt-3">
-              <div className="text-2xl font-bold text-slate-900 tracking-tight">{totalCalls.toLocaleString()}</div>
-              <div className="flex items-center gap-1 mt-1.5 text-xs text-slate-400 font-medium">
+              <div className="text-2xl font-bold text-foreground tracking-tight">{totalCalls.toLocaleString()}</div>
+              <div className="flex items-center gap-1 mt-1.5 text-xs text-muted-foreground font-medium">
                 Total requests made this period
               </div>
             </div>
           </div>
 
           {/* Card 2: Success Rate */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+          <div className="bg-background border border-border rounded-xl p-6 custom-shadow">
             <div className="flex justify-between items-start">
-              <span className="text-xs font-semibold text-slate-500 tracking-wide uppercase">Success Rate</span>
-              <div className="p-2.5 bg-slate-50 border border-slate-100 rounded-lg text-slate-600">
+              <span className="text-xs font-semibold text-muted-foreground tracking-wide uppercase">Success Rate</span>
+              <div className="p-2.5 bg-subtle border border-slate-100 rounded-lg text-muted-foreground">
                 <CheckCircle className="w-4 h-4" />
               </div>
             </div>
             <div className="mt-3">
-              <div className="text-2xl font-bold text-slate-900 tracking-tight">{successRate}%</div>
-              <div className="flex items-center gap-1 mt-1.5 text-xs text-slate-400 font-medium">
+              <div className="text-2xl font-bold text-foreground tracking-tight">{successRate}%</div>
+              <div className="flex items-center gap-1 mt-1.5 text-xs text-muted-foreground font-medium">
                 Success rate over this timeframe
               </div>
             </div>
           </div>
 
           {/* Card 3: Credits Used */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+          <div className="bg-background border border-border rounded-xl p-6 custom-shadow">
             <div className="flex justify-between items-start">
-              <span className="text-xs font-semibold text-slate-500 tracking-wide uppercase">Credits Consumed</span>
-              <div className="p-2.5 bg-slate-50 border border-slate-100 rounded-lg text-slate-600">
+              <span className="text-xs font-semibold text-muted-foreground tracking-wide uppercase">Credits Consumed</span>
+              <div className="p-2.5 bg-subtle border border-slate-100 rounded-lg text-muted-foreground">
                 <Zap className="w-4 h-4" />
               </div>
             </div>
             <div className="mt-3">
-              <div className="text-2xl font-bold text-slate-900 tracking-tight">{totalCreditsUsed.toLocaleString()}</div>
-              <div className="flex items-center gap-1 mt-1.5 text-xs text-slate-400 font-medium">
+              <div className="text-2xl font-bold text-foreground tracking-tight">{totalCreditsUsed.toLocaleString()}</div>
+              <div className="flex items-center gap-1 mt-1.5 text-xs text-muted-foreground font-medium">
                 Total credits deducted from balance
               </div>
             </div>
@@ -295,16 +295,16 @@ export default function UsageAnalytics() {
         </div>
 
         {/* Endpoint Breakdown */}
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden max-w-5xl">
+        <div className="bg-background border border-border rounded-xl custom-shadow overflow-hidden max-w-5xl">
           <div className="p-6 border-b border-slate-100">
-            <h3 className="text-sm font-bold text-slate-900">Endpoint Request Breakdown</h3>
-            <p className="text-xs text-slate-400 mt-1">Telemetry calls sorted by route volume.</p>
+            <h3 className="text-sm font-bold text-foreground">Endpoint Request Breakdown</h3>
+            <p className="text-xs text-muted-foreground mt-1">Telemetry calls sorted by route volume.</p>
           </div>
 
           {endpointBreakdown.length === 0 ? (
             <div className="py-16 text-center select-none">
               <Activity className="w-10 h-10 mx-auto mb-3 text-slate-300" />
-              <p className="text-sm font-semibold text-slate-700">No telemetry log entries found.</p>
+              <p className="text-sm font-semibold text-muted-foreground">No telemetry log entries found.</p>
               <p className="text-xs text-slate-450 mt-1.5 max-w-xs mx-auto">
                 Once you integrate generated keys and request indices, statistics will populate here.
               </p>
@@ -313,7 +313,7 @@ export default function UsageAnalytics() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm border-collapse text-left">
                 <thead>
-                  <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider select-none">
+                  <tr className="bg-subtle border-b border-border text-xs font-semibold text-muted-foreground uppercase tracking-wider select-none">
                     <th className="py-3 px-6 font-sans">API Name & Route</th>
                     <th className="py-3 px-6 font-sans">Total Requests</th>
                     <th className="py-3 px-6 font-sans">Traffic Share</th>
@@ -323,31 +323,31 @@ export default function UsageAnalytics() {
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {endpointBreakdown.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-slate-50/40 transition-colors">
+                    <tr key={idx} className="hover:bg-subtle/40 transition-colors">
                       {/* Route */}
-                      <td className="py-4 px-6 font-mono text-xs text-slate-700">
-                        <span className="font-bold text-[#14532D] bg-[#14532D]/5 px-2 py-0.5 rounded text-[9px] mr-2 uppercase tracking-wide">
+                      <td className="py-4 px-6 font-mono text-xs text-muted-foreground">
+                        <span className="font-bold text-accent bg-accent/5 px-2 py-0.5 rounded text-[9px] mr-2 uppercase tracking-wide">
                           {row.method}
                         </span>
                         {row.path}
-                        <span className="block text-[10px] text-slate-400 font-sans mt-0.5">{row.name} API</span>
+                        <span className="block text-[10px] text-muted-foreground font-sans mt-0.5">{row.name} API</span>
                       </td>
 
                       {/* Total Requests */}
-                      <td className="py-4 px-6 font-semibold text-slate-800">
+                      <td className="py-4 px-6 font-semibold text-foreground">
                         {row.calls.toLocaleString()}
                       </td>
 
                       {/* Traffic Share */}
                       <td className="py-4 px-6">
                         <div className="flex items-center gap-3 w-40">
-                          <div className="flex-1 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                          <div className="flex-1 bg-muted h-1.5 rounded-full overflow-hidden">
                             <div
                               className="bg-[#22C55E] h-1.5 rounded-full"
                               style={{ width: `${row.percentage}%` }}
                             />
                           </div>
-                          <span className="text-xs font-semibold text-slate-500">{row.percentage}%</span>
+                          <span className="text-xs font-semibold text-muted-foreground">{row.percentage}%</span>
                         </div>
                       </td>
 
@@ -358,7 +358,7 @@ export default function UsageAnalytics() {
 
                       {/* Success Rate */}
                       <td className="py-4 px-6">
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-[#14532D] inline-flex items-center gap-1">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-accent inline-flex items-center gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />
                           {row.successRate}
                         </span>

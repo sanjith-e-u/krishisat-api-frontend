@@ -198,7 +198,7 @@ export default function DashboardApiKeys() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <svg className="animate-spin h-8 w-8 text-[#14532D]" fill="none" viewBox="0 0 24 24">
+        <svg className="animate-spin h-8 w-8 text-accent" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
         </svg>
@@ -210,15 +210,15 @@ export default function DashboardApiKeys() {
     <div className="space-y-8 relative">
       
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">API Keys</h1>
-          <p className="text-sm text-slate-500 mt-1">Manage credentials to authenticate with the X-AGI agriculture intelligence services.</p>
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">API Keys</h1>
+          <p className="text-sm text-muted-foreground mt-1">Manage credentials to authenticate with the X-AGI agriculture intelligence services.</p>
         </div>
         
         <button
           onClick={() => setModalOpen(true)}
-          className="h-10 bg-[#14532D] hover:bg-[#114524] text-white px-4 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-1.5 shadow-sm focus:outline-none cursor-pointer"
+          className="h-10 bg-accent hover:bg-[#114524] text-white px-4 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-1.5 custom-shadow focus:outline-none cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Generate API Key</span>
@@ -238,15 +238,15 @@ export default function DashboardApiKeys() {
 
       {/* Empty State */}
       {keys.length === 0 ? (
-        <div className="py-16 text-center select-none bg-white border border-slate-200 rounded-xl max-w-3xl">
+        <div className="py-16 text-center select-none bg-background border border-border rounded-xl max-w-3xl">
           <Key className="w-10 h-10 mx-auto mb-3 text-slate-300" />
-          <p className="text-sm font-semibold text-slate-800">No active API credentials found.</p>
+          <p className="text-sm font-semibold text-foreground">No active API credentials found.</p>
           <p className="text-xs text-slate-450 mt-1.5 max-w-xs mx-auto">
             You need to purchase access to an API from the catalog to generate a secret credential.
           </p>
           <Link
             href="/marketplace"
-            className="inline-flex items-center gap-1.5 mt-5 h-9 px-4 bg-[#14532D] hover:bg-[#114524] text-white rounded-lg text-xs font-semibold shadow-sm transition-colors"
+            className="inline-flex items-center gap-1.5 mt-5 h-9 px-4 bg-accent hover:bg-[#114524] text-white rounded-lg text-xs font-semibold custom-shadow transition-colors"
           >
             Browse API Catalog
           </Link>
@@ -256,7 +256,7 @@ export default function DashboardApiKeys() {
         <div className="space-y-8 max-w-5xl">
           {apiNames.map((apiName) => (
             <div key={apiName} className="space-y-4">
-              <h2 className="text-sm font-extrabold text-slate-900 uppercase tracking-widest bg-slate-100/60 p-2 rounded-lg border border-slate-200/50 w-fit">
+              <h2 className="text-sm font-extrabold text-foreground uppercase tracking-widest bg-muted/60 p-2 rounded-lg border border-border/50 w-fit">
                 {apiName} Keys
               </h2>
 
@@ -274,8 +274,8 @@ export default function DashboardApiKeys() {
                     <div
                       key={k.id}
                       className={cn(
-                        "bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between transition-all",
-                        isRevoked && "opacity-55 bg-slate-50/50"
+                        "bg-background border border-border rounded-2xl p-5 custom-shadow flex flex-col justify-between transition-all",
+                        isRevoked && "opacity-55 bg-subtle/50"
                       )}
                     >
                       <div>
@@ -284,7 +284,7 @@ export default function DashboardApiKeys() {
                             className={cn(
                               "text-[9px] font-bold px-2 py-0.5 rounded font-mono uppercase tracking-wide",
                               isRevoked
-                                ? "bg-slate-200 text-slate-400"
+                                ? "bg-slate-200 text-muted-foreground"
                                 : k.env_scope === "live"
                                 ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
                                 : "bg-blue-50 text-blue-700 border border-blue-100"
@@ -303,24 +303,24 @@ export default function DashboardApiKeys() {
                           </span>
                         </div>
 
-                        <h3 className={cn("text-sm font-extrabold text-slate-800", isRevoked && "line-through text-slate-400")}>
+                        <h3 className={cn("text-sm font-extrabold text-foreground", isRevoked && "line-through text-muted-foreground")}>
                           {k.name}
                         </h3>
 
                         {/* Obfuscated Key Preview */}
-                        <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between font-mono text-xs text-slate-650 mt-3 select-all">
+                        <div className="bg-subtle border border-border rounded-xl p-3 flex items-center justify-between font-mono text-xs text-slate-650 mt-3 select-all">
                           <span className="truncate max-w-[190px]">
                             {keyPreview}
                           </span>
                           <button
                             onClick={() => handleCopyPreview(k.id, keyPreview)}
-                            className="p-1 rounded text-slate-400 hover:text-slate-850 cursor-pointer focus:outline-none"
+                            className="p-1 rounded text-muted-foreground hover:text-slate-850 cursor-pointer focus:outline-none"
                             title="Copy Key Preview"
                           >
                             {isCopied ? (
                               <Check className="w-3.5 h-3.5 text-emerald-600" />
                             ) : (
-                              <Copy className="w-3.5 h-3.5 text-slate-500" />
+                              <Copy className="w-3.5 h-3.5 text-muted-foreground" />
                             )}
                           </button>
                         </div>
@@ -328,7 +328,7 @@ export default function DashboardApiKeys() {
 
                       {/* Card Footer Actions */}
                       <div className="mt-5 pt-3 border-t border-slate-100 flex justify-between items-center select-none text-xs">
-                        <span className="text-[10px] text-slate-400 font-medium">
+                        <span className="text-[10px] text-muted-foreground font-medium">
                           Created {new Date(k.created_at).toLocaleDateString()}
                         </span>
 
@@ -345,7 +345,7 @@ export default function DashboardApiKeys() {
                             </button>
                             <button
                               onClick={() => setRevokingKeyId(null)}
-                              className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-[10px] font-semibold transition-colors cursor-pointer"
+                              className="px-2 py-1 bg-muted hover:bg-slate-200 text-muted-foreground rounded text-[10px] font-semibold transition-colors cursor-pointer"
                             >
                               No
                             </button>
@@ -378,10 +378,10 @@ export default function DashboardApiKeys() {
           />
 
           {/* Modal Card */}
-          <div className="relative bg-white border border-slate-200 rounded-2xl shadow-2xl p-6 w-full max-w-[440px] z-50 animate-in slide-in-from-top-4 duration-300 flex flex-col gap-5">
+          <div className="relative bg-background border border-border rounded-2xl shadow-2xl p-6 w-full max-w-[440px] z-50 animate-in slide-in-from-top-4 duration-300 flex flex-col gap-5">
             <div>
-              <h3 className="text-base font-bold text-slate-900 tracking-tight">Generate API Key</h3>
-              <p className="text-xs text-[#64748B] mt-0.5">Select target API and labeling scopes for the new credential.</p>
+              <h3 className="text-base font-bold text-foreground tracking-tight">Generate API Key</h3>
+              <p className="text-xs text-muted-foreground mt-0.5">Select target API and labeling scopes for the new credential.</p>
             </div>
 
             {newPlaintextKey ? (
@@ -397,13 +397,13 @@ export default function DashboardApiKeys() {
                   </div>
                 </div>
 
-                <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex items-center justify-between font-mono text-xs text-slate-800">
-                  <span className="truncate max-w-[260px] select-all font-semibold text-slate-900">
+                <div className="bg-subtle border border-border rounded-xl p-3.5 flex items-center justify-between font-mono text-xs text-foreground">
+                  <span className="truncate max-w-[260px] select-all font-semibold text-foreground">
                     {newPlaintextKey}
                   </span>
                   <button
                     onClick={handleCopyGeneratedKey}
-                    className="p-1 rounded text-slate-400 hover:text-slate-800 transition-colors flex items-center gap-1 focus:outline-none cursor-pointer"
+                    className="p-1 rounded text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 focus:outline-none cursor-pointer"
                   >
                     {copiedGeneratedKey ? (
                       <>
@@ -412,8 +412,8 @@ export default function DashboardApiKeys() {
                       </>
                     ) : (
                       <>
-                        <Copy className="w-3.5 h-3.5 text-slate-500" />
-                        <span className="text-[10px] font-semibold text-slate-500">Copy</span>
+                        <Copy className="w-3.5 h-3.5 text-muted-foreground" />
+                        <span className="text-[10px] font-semibold text-muted-foreground">Copy</span>
                       </>
                     )}
                   </button>
@@ -422,7 +422,7 @@ export default function DashboardApiKeys() {
                 <div className="flex justify-end mt-2">
                   <button
                     onClick={handleCloseModal}
-                    className="h-10 bg-[#14532D] hover:bg-[#114524] text-white px-5 rounded-lg text-xs font-semibold shadow-sm transition-colors cursor-pointer"
+                    className="h-10 bg-accent hover:bg-[#114524] text-white px-5 rounded-lg text-xs font-semibold custom-shadow transition-colors cursor-pointer"
                   >
                     Close
                   </button>
@@ -433,7 +433,7 @@ export default function DashboardApiKeys() {
               <form onSubmit={handleGenerateKey} className="flex flex-col gap-4">
                 {/* Key Label */}
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="keyName" className="text-xs font-semibold text-slate-700">
+                  <label htmlFor="keyName" className="text-xs font-semibold text-muted-foreground">
                     Key Label Name
                   </label>
                   <input
@@ -443,20 +443,20 @@ export default function DashboardApiKeys() {
                     placeholder="e.g. NDVI sandbox client"
                     value={newKeyName}
                     onChange={(e) => setNewKeyName(e.target.value)}
-                    className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                    className="w-full h-10 px-3 text-sm bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
                   />
                 </div>
 
                 {/* Target API Selection */}
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="targetApi" className="text-xs font-semibold text-slate-700">
+                  <label htmlFor="targetApi" className="text-xs font-semibold text-muted-foreground">
                     Target Endpoint API
                   </label>
                   <select
                     id="targetApi"
                     value={selectedApiId}
                     onChange={(e) => setSelectedApiId(e.target.value)}
-                    className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                    className="w-full h-10 px-3 text-sm bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
                   >
                     {apis.map((api) => (
                       <option key={api.id} value={api.id}>
@@ -468,14 +468,14 @@ export default function DashboardApiKeys() {
 
                 {/* Scope Selection */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-xs font-semibold text-slate-700">Environment Scope</span>
+                  <span className="text-xs font-semibold text-muted-foreground">Environment Scope</span>
                   <div className="flex gap-3">
                     <label
                       className={cn(
                         "flex-1 border rounded-lg p-3 flex flex-col gap-1 cursor-pointer select-none transition-all",
                         newKeyEnv === "sandbox"
-                          ? "border-[#14532D] bg-[#14532D]/5 ring-2 ring-[#14532D]/10"
-                          : "border-slate-200 hover:bg-slate-50"
+                          ? "border-accent bg-accent/5 ring-2 ring-accent/10"
+                          : "border-border hover:bg-subtle"
                       )}
                     >
                       <input
@@ -485,16 +485,16 @@ export default function DashboardApiKeys() {
                         onChange={() => setNewKeyEnv("sandbox")}
                         className="sr-only"
                       />
-                      <span className="text-xs font-bold text-slate-800">Sandbox</span>
-                      <span className="text-[10px] text-slate-400 leading-normal">Mock indices. Quotas limited to 1,000 calls.</span>
+                      <span className="text-xs font-bold text-foreground">Sandbox</span>
+                      <span className="text-[10px] text-muted-foreground leading-normal">Mock indices. Quotas limited to 1,000 calls.</span>
                     </label>
 
                     <label
                       className={cn(
                         "flex-1 border rounded-lg p-3 flex flex-col gap-1 cursor-pointer select-none transition-all",
                         newKeyEnv === "live"
-                          ? "border-[#14532D] bg-[#14532D]/5 ring-2 ring-[#14532D]/10"
-                          : "border-slate-200 hover:bg-slate-50"
+                          ? "border-accent bg-accent/5 ring-2 ring-accent/10"
+                          : "border-border hover:bg-subtle"
                       )}
                     >
                       <input
@@ -504,8 +504,8 @@ export default function DashboardApiKeys() {
                         onChange={() => setNewKeyEnv("live")}
                         className="sr-only"
                       />
-                      <span className="text-xs font-bold text-slate-800">Production</span>
-                      <span className="text-[10px] text-slate-400 leading-normal">Real Sentinel satellite pipelines. Billing active.</span>
+                      <span className="text-xs font-bold text-foreground">Production</span>
+                      <span className="text-[10px] text-muted-foreground leading-normal">Real Sentinel satellite pipelines. Billing active.</span>
                     </label>
                   </div>
                 </div>
@@ -515,14 +515,14 @@ export default function DashboardApiKeys() {
                   <button
                     type="button"
                     onClick={handleCloseModal}
-                    className="h-10 px-4 border border-slate-200 rounded-lg text-slate-650 hover:bg-slate-50 text-sm font-semibold transition-colors focus:outline-none cursor-pointer"
+                    className="h-10 px-4 border border-border rounded-lg text-slate-650 hover:bg-subtle text-sm font-semibold transition-colors focus:outline-none cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={generating}
-                    className="h-10 px-4 bg-[#14532D] hover:bg-[#114524] disabled:bg-[#14532D]/50 text-white rounded-lg text-sm font-semibold transition-colors focus:outline-none shadow-sm cursor-pointer flex items-center justify-center min-w-[100px]"
+                    className="h-10 px-4 bg-accent hover:bg-[#114524] disabled:bg-accent/50 text-white rounded-lg text-sm font-semibold transition-colors focus:outline-none custom-shadow cursor-pointer flex items-center justify-center min-w-[100px]"
                   >
                     {generating ? (
                       <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">

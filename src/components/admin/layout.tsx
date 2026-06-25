@@ -57,7 +57,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     <div className="flex flex-col justify-between h-full">
       <div>
         {/* Logo Header */}
-        <div className="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/20">
+        <div className="h-16 flex items-center px-6 border-b border-border bg-subtle">
           <Link href="/" className="select-none flex">
             <Logo size="sm" dark />
           </Link>
@@ -75,11 +75,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors focus:outline-none focus:ring-1 focus:ring-amber-500",
                   isActive
-                    ? "bg-white/10 text-white border-l-2 border-l-amber-400"
-                    : "text-slate-400 hover:text-white hover:bg-white/5"
+                    ? "bg-accent/10 text-accent border-l-2 border-l-accent"
+                    : "text-muted-foreground hover:text-foreground hover:bg-subtle"
                 )}
               >
-                <item.icon className={cn("w-4 h-4 shrink-0", isActive ? "text-amber-400" : "text-slate-400")} />
+                <item.icon className={cn("w-4 h-4 shrink-0", isActive ? "text-accent" : "text-muted-foreground")} />
                 <span>{item.name}</span>
               </Link>
             )
@@ -88,18 +88,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       </div>
 
       {/* Sidebar Footer */}
-      <div className="p-4 border-t border-slate-800 bg-slate-950/10">
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-          <div className="flex justify-between items-center text-xs font-semibold text-slate-400 mb-3">
+      <div className="p-4 border-t border-border bg-subtle">
+        <div className="bg-background border border-border rounded-xl p-4">
+          <div className="flex justify-between items-center text-xs font-semibold text-muted-foreground mb-3">
             <span>Access Mode</span>
-            <span className="bg-amber-500/15 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full text-[9px] uppercase font-mono tracking-wider font-bold">
+            <span className="bg-amber-500/15 text-accent border border-amber-500/20 px-2 py-0.5 rounded-full text-[9px] uppercase font-mono tracking-wider font-bold">
               Admin Panel
             </span>
           </div>
           <Link
             href="/dashboard"
             onClick={onClose}
-            className="w-full h-9 border border-slate-700 hover:bg-slate-800 hover:border-slate-600 text-white rounded-lg text-xs font-bold transition-all focus:outline-none flex items-center justify-center gap-1.5"
+            className="w-full h-9 border border-border hover:bg-muted hover:border-accent text-foreground rounded-lg text-xs font-bold transition-all hover:text-accent focus:outline-none flex items-center justify-center gap-1.5"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Dashboard</span>
@@ -112,7 +112,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <div className="flex min-h-screen bg-surface">
       {/* Desktop Sidebar */}
-      <aside className="w-[260px] h-screen bg-[#0F172A] text-white flex flex-col justify-between border-r border-slate-800 shrink-0 sticky top-0 z-30 select-none shadow-sm hidden lg:flex">
+      <aside className="w-[260px] h-screen bg-card text-foreground flex flex-col justify-between border-r border-border shrink-0 sticky top-0 z-30 select-none custom-shadow hidden lg:flex">
         <SidebarContent />
       </aside>
 
@@ -122,16 +122,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           {/* Backdrop */}
           <div
             onClick={() => setMobileSidebarOpen(false)}
-            className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300 animate-in fade-in"
+            className="fixed inset-0 bg-background/50 backdrop-blur-sm transition-opacity duration-300 animate-in fade-in"
           />
 
           {/* Drawer Sidebar container */}
-          <div className="relative flex flex-col w-[260px] h-full bg-[#0F172A] shadow-2xl animate-in slide-in-from-left duration-300">
+          <div className="relative flex flex-col w-[260px] h-full bg-card shadow-2xl animate-in slide-in-from-left duration-300">
             {/* Close button inside mobile header */}
             <button
               type="button"
               onClick={() => setMobileSidebarOpen(false)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg focus:outline-none focus:ring-1 focus:ring-amber-500"
+              className="absolute top-4 right-4 p-2 text-muted-foreground hover:text-foreground hover:bg-subtle rounded-lg focus:outline-none focus:ring-1 focus:ring-amber-500"
               aria-label="Close menu drawer"
             >
               <X className="w-5 h-5" />
@@ -145,17 +145,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       <div className="flex-1 min-w-0 flex flex-col min-h-screen">
         
         {/* Admin Topbar */}
-        <header className="sticky top-0 right-0 z-20 bg-white border-b border-slate-200 h-16 px-6 flex items-center justify-between select-none">
+        <header className="sticky top-0 right-0 z-20 bg-background border-b border-border h-16 px-6 flex items-center justify-between select-none">
           <div className="flex items-center gap-4">
             <button
               type="button"
               onClick={() => setMobileSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-50 focus:outline-none"
+              className="lg:hidden p-2 rounded-lg text-muted-foreground hover:bg-subtle focus:outline-none"
               aria-label="Toggle Navigation Drawer"
             >
               <Menu className="w-5 h-5" />
             </button>
-            <h2 className="text-lg font-bold text-[#0F172A] tracking-tight">{getPageTitle()}</h2>
+            <h2 className="text-lg font-bold text-foreground tracking-tight">{getPageTitle()}</h2>
           </div>
 
           <div className="flex items-center gap-4">
@@ -164,37 +164,37 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               Admin Mode
             </span>
 
-            <div className="w-px h-6 bg-slate-200" />
+            <div className="w-px h-6 bg-border" />
 
             {/* Profile Dropdown */}
             <div className="relative flex" ref={profileRef}>
               <button
                 type="button"
                 onClick={() => setProfileOpen(!profileOpen)}
-                className="flex items-center gap-2 p-1 rounded-full hover:bg-slate-50 focus:outline-none"
+                className="flex items-center gap-2 p-1 rounded-full hover:bg-subtle focus:outline-none"
               >
-                <div className="w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-sm shadow-inner">
+                <div className="w-8 h-8 rounded-full bg-amber-500 text-accent-foreground flex items-center justify-center font-bold text-sm shadow-inner">
                   A
                 </div>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400 hidden sm:block" />
+                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground hidden sm:block" />
               </button>
 
               {profileOpen && (
-                <div className="absolute right-0 mt-10 w-52 bg-white border border-slate-200 rounded-xl shadow-lg p-1 space-y-0.5 z-40 animate-in fade-in slide-in-from-top-1.5 duration-100">
+                <div className="absolute right-0 mt-10 w-52 bg-background border border-border rounded-xl shadow-lg p-1 space-y-0.5 z-40 animate-in fade-in slide-in-from-top-1.5 duration-100">
                   <div className="px-3 py-2 select-none">
-                    <p className="text-xs font-bold text-slate-800">Administrator</p>
-                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">admin@X-AGI.dev</p>
+                    <p className="text-xs font-bold text-foreground">Administrator</p>
+                    <p className="text-[10px] text-muted-foreground font-mono mt-0.5">admin@x-agi.dev</p>
                   </div>
-                  <div className="border-t border-slate-100" />
+                  <div className="border-t border-border" />
                   <Link
                     href="/dashboard"
                     onClick={() => setProfileOpen(false)}
-                    className="w-full px-3 py-2 rounded-lg text-xs text-slate-600 hover:bg-slate-50 flex items-center gap-2.5"
+                    className="w-full px-3 py-2 rounded-lg text-xs text-muted-foreground hover:bg-subtle flex items-center gap-2.5"
                   >
-                    <ArrowLeft className="w-3.5 h-3.5 text-slate-400" />
+                    <ArrowLeft className="w-3.5 h-3.5 text-muted-foreground" />
                     <span>User Portal</span>
                   </Link>
-                  <div className="border-t border-slate-100 my-1" />
+                  <div className="border-t border-border my-1" />
                   <Link
                     href="/login"
                     onClick={() => setProfileOpen(false)}

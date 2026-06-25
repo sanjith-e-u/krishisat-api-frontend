@@ -11,15 +11,15 @@ export interface MetricCardProps {
 
 export default function MetricCard({ title, value, trend, trendType = "none", icon }: MetricCardProps) {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+    <div className="bg-background border border-border rounded-xl p-6 custom-shadow">
       <div className="flex justify-between items-start">
-        <span className="text-xs font-semibold text-slate-500 tracking-wide uppercase">{title}</span>
-        <div className="p-2.5 bg-slate-50 border border-slate-100 rounded-lg text-slate-600">
+        <span className="text-xs font-semibold text-muted-foreground tracking-wide uppercase">{title}</span>
+        <div className="p-2.5 bg-subtle border border-slate-100 rounded-lg text-muted-foreground">
           {icon}
         </div>
       </div>
       <div className="mt-3">
-        <div className="text-2xl font-bold text-slate-900 tracking-tight">{value}</div>
+        <div className="text-2xl font-bold text-foreground tracking-tight">{value}</div>
         {trend && (
           <div className="flex items-center gap-1 mt-1.5 text-xs">
             {trendType === "up" && (
@@ -32,7 +32,7 @@ export default function MetricCard({ title, value, trend, trendType = "none", ic
                 <TrendingDown className="w-3.5 h-3.5" /> {trend}
               </span>
             )}
-            <span className="text-slate-400 font-medium">vs last period</span>
+            <span className="text-muted-foreground font-medium">vs last period</span>
           </div>
         )}
       </div>

@@ -13,7 +13,7 @@ export default function DashboardSettings() {
   // Profile Form States
   const [profile, setProfile] = useState({
     name: "Dev Agronomist",
-    email: "dev@X-AGI.dev",
+    email: "dev@x-agi.dev",
     role: "Senior Systems Engineer"
   })
 
@@ -29,7 +29,7 @@ export default function DashboardSettings() {
   const [apiConfig, setApiConfig] = useState({
     cacheEnabled: true,
     cacheTtl: "60",
-    webhookUrl: "https://api.X-AGI.dev/v1/telemetry-hook",
+    webhookUrl: "https://api.x-agi.dev/v1/telemetry-hook",
     verboseLogging: false
   })
 
@@ -113,13 +113,13 @@ export default function DashboardSettings() {
         )}
 
         {/* Page Header */}
-        <div className="border-b border-slate-200 pb-6">
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Workspace Settings</h1>
-          <p className="text-sm text-slate-500 mt-1">Configure profile coordinates, API parameters, caching rules, and event triggers.</p>
+        <div className="border-b border-border pb-6">
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">Workspace Settings</h1>
+          <p className="text-sm text-muted-foreground mt-1">Configure profile coordinates, API parameters, caching rules, and event triggers.</p>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex border-b border-slate-200 overflow-x-auto gap-1">
+        <div className="flex border-b border-border overflow-x-auto gap-1">
           {tabs.map((tab) => {
             const Icon = tab.icon
             const isActive = activeTab === tab.id
@@ -130,11 +130,11 @@ export default function DashboardSettings() {
                 className={cn(
                   "flex items-center gap-2 px-4 py-3.5 border-b-2 text-xs font-semibold transition-all whitespace-nowrap focus:outline-none",
                   isActive
-                    ? "border-[#14532D] text-[#14532D]"
-                    : "border-transparent text-slate-500 hover:text-slate-900"
+                    ? "border-accent text-accent"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
                 )}
               >
-                <Icon className={cn("w-4 h-4", isActive ? "text-[#14532D]" : "text-slate-400")} />
+                <Icon className={cn("w-4 h-4", isActive ? "text-accent" : "text-muted-foreground")} />
                 <span>{tab.label}</span>
               </button>
             )
@@ -142,51 +142,51 @@ export default function DashboardSettings() {
         </div>
 
         {/* Tab Panels */}
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+        <div className="bg-background border border-border rounded-xl p-6 custom-shadow">
           
           {/* Tab 1: Profile */}
           {activeTab === "profile" && (
             <form onSubmit={handleSaveProfile} className="space-y-6">
               <div className="border-b border-slate-100 pb-4 mb-4">
-                <h3 className="text-sm font-bold text-slate-900">Developer Profile</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Manage your personal developer account details.</p>
+                <h3 className="text-sm font-bold text-foreground">Developer Profile</h3>
+                <p className="text-xs text-muted-foreground mt-0.5">Manage your personal developer account details.</p>
               </div>
 
               {/* Grid Form */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="devName" className="text-xs font-semibold text-slate-700">Full Name</label>
+                  <label htmlFor="devName" className="text-xs font-semibold text-muted-foreground">Full Name</label>
                   <input
                     id="devName"
                     type="text"
                     required
                     value={profile.name}
                     onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                    className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                    className="w-full h-10 px-3 text-sm bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="devEmail" className="text-xs font-semibold text-slate-700">Account Email</label>
+                  <label htmlFor="devEmail" className="text-xs font-semibold text-muted-foreground">Account Email</label>
                   <input
                     id="devEmail"
                     type="email"
                     required
                     value={profile.email}
                     onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                    className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                    className="w-full h-10 px-3 text-sm bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5 md:col-span-2">
-                  <label htmlFor="devRole" className="text-xs font-semibold text-slate-700">Team Role</label>
+                  <label htmlFor="devRole" className="text-xs font-semibold text-muted-foreground">Team Role</label>
                   <input
                     id="devRole"
                     type="text"
                     required
                     value={profile.role}
                     onChange={(e) => setProfile({ ...profile, role: e.target.value })}
-                    className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                    className="w-full h-10 px-3 text-sm bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
                   />
                 </div>
               </div>
@@ -194,7 +194,7 @@ export default function DashboardSettings() {
               <div className="pt-4 border-t border-slate-100 flex justify-end">
                 <button
                   type="submit"
-                  className="h-10 bg-[#14532D] hover:bg-[#114524] text-white px-5 rounded-lg text-xs font-bold transition-all shadow-sm focus:outline-none"
+                  className="h-10 bg-accent hover:bg-[#114524] text-white px-5 rounded-lg text-xs font-bold transition-all custom-shadow focus:outline-none"
                 >
                   Save Profile Settings
                 </button>
@@ -206,55 +206,55 @@ export default function DashboardSettings() {
           {activeTab === "company" && (
             <form onSubmit={handleSaveCompany} className="space-y-6">
               <div className="border-b border-slate-100 pb-4 mb-4">
-                <h3 className="text-sm font-bold text-slate-900">Workspace & Organization</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Customize properties matching your regional crop registries.</p>
+                <h3 className="text-sm font-bold text-foreground">Workspace & Organization</h3>
+                <p className="text-xs text-muted-foreground mt-0.5">Customize properties matching your regional crop registries.</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="companyName" className="text-xs font-semibold text-slate-700">Company Name</label>
+                  <label htmlFor="companyName" className="text-xs font-semibold text-muted-foreground">Company Name</label>
                   <input
                     id="companyName"
                     type="text"
                     required
                     value={company.name}
                     onChange={(e) => setCompany({ ...company, name: e.target.value })}
-                    className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                    className="w-full h-10 px-3 text-sm bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="workspaceSlug" className="text-xs font-semibold text-slate-700">Workspace Slug</label>
+                  <label htmlFor="workspaceSlug" className="text-xs font-semibold text-muted-foreground">Workspace Slug</label>
                   <input
                     id="workspaceSlug"
                     type="text"
                     required
                     value={company.slug}
                     onChange={(e) => setCompany({ ...company, slug: e.target.value })}
-                    className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                    className="w-full h-10 px-3 text-sm bg-background border border-border rounded-lg font-mono focus:outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="cropTypes" className="text-xs font-semibold text-slate-700">Primary Monitored Crop Types</label>
+                  <label htmlFor="cropTypes" className="text-xs font-semibold text-muted-foreground">Primary Monitored Crop Types</label>
                   <input
                     id="cropTypes"
                     type="text"
                     placeholder="e.g. Wheat, Rice, Cotton"
                     value={company.crops}
                     onChange={(e) => setCompany({ ...company, crops: e.target.value })}
-                    className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                    className="w-full h-10 px-3 text-sm bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="monitoredRegion" className="text-xs font-semibold text-slate-700">Geographic Region Scope</label>
+                  <label htmlFor="monitoredRegion" className="text-xs font-semibold text-muted-foreground">Geographic Region Scope</label>
                   <input
                     id="monitoredRegion"
                     type="text"
                     value={company.region}
                     onChange={(e) => setCompany({ ...company, region: e.target.value })}
-                    className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                    className="w-full h-10 px-3 text-sm bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
                   />
                 </div>
               </div>
@@ -262,7 +262,7 @@ export default function DashboardSettings() {
               <div className="pt-4 border-t border-slate-100 flex justify-end">
                 <button
                   type="submit"
-                  className="h-10 bg-[#14532D] hover:bg-[#114524] text-white px-5 rounded-lg text-xs font-bold transition-all shadow-sm focus:outline-none"
+                  className="h-10 bg-accent hover:bg-[#114524] text-white px-5 rounded-lg text-xs font-bold transition-all custom-shadow focus:outline-none"
                 >
                   Update Organization
                 </button>
@@ -274,15 +274,15 @@ export default function DashboardSettings() {
           {activeTab === "api" && (
             <form onSubmit={handleSaveApi} className="space-y-6">
               <div className="border-b border-slate-100 pb-4 mb-4">
-                <h3 className="text-sm font-bold text-slate-900">API Speed & Performance Hooks</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Control calculation caches and event message logs.</p>
+                <h3 className="text-sm font-bold text-foreground">API Speed & Performance Hooks</h3>
+                <p className="text-xs text-muted-foreground mt-0.5">Control calculation caches and event message logs.</p>
               </div>
 
               {/* Cache Enabled Toggle */}
-              <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-subtle border border-slate-100 rounded-lg">
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900">Activate Telemetry Index Cache</h4>
-                  <p className="text-[10px] text-slate-400 leading-relaxed mt-0.5">
+                  <h4 className="text-xs font-bold text-foreground">Activate Telemetry Index Cache</h4>
+                  <p className="text-[10px] text-muted-foreground leading-relaxed mt-0.5">
                     Caches sensory calculations for overlapping query footprints to save credits.
                   </p>
                 </div>
@@ -296,7 +296,7 @@ export default function DashboardSettings() {
                 >
                   <span
                     className={cn(
-                      "w-4 h-4 bg-white rounded-full absolute top-1 transition-all shadow-sm",
+                      "w-4 h-4 bg-background rounded-full absolute top-1 transition-all custom-shadow",
                       apiConfig.cacheEnabled ? "left-6" : "left-1"
                     )}
                   />
@@ -305,34 +305,34 @@ export default function DashboardSettings() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="cacheTtl" className="text-xs font-semibold text-slate-700">Cache Footprint TTL (Minutes)</label>
+                  <label htmlFor="cacheTtl" className="text-xs font-semibold text-muted-foreground">Cache Footprint TTL (Minutes)</label>
                   <input
                     id="cacheTtl"
                     type="number"
                     value={apiConfig.cacheTtl}
                     onChange={(e) => setApiConfig({ ...apiConfig, cacheTtl: e.target.value })}
-                    className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                    className="w-full h-10 px-3 text-sm bg-background border border-border rounded-lg font-mono focus:outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
                     disabled={!apiConfig.cacheEnabled}
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="webhookUrl" className="text-xs font-semibold text-slate-700">Event Webhook Endpoint</label>
+                  <label htmlFor="webhookUrl" className="text-xs font-semibold text-muted-foreground">Event Webhook Endpoint</label>
                   <input
                     id="webhookUrl"
                     type="url"
                     value={apiConfig.webhookUrl}
                     onChange={(e) => setApiConfig({ ...apiConfig, webhookUrl: e.target.value })}
-                    className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                    className="w-full h-10 px-3 text-sm bg-background border border-border rounded-lg font-mono focus:outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
                   />
                 </div>
               </div>
 
               {/* Verbose Sandbox Logs Toggle */}
-              <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-subtle border border-slate-100 rounded-lg">
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900 font-sans">Sandbox Verbose Payload Outlets</h4>
-                  <p className="text-[10px] text-slate-400 leading-relaxed mt-0.5">
+                  <h4 className="text-xs font-bold text-foreground font-sans">Sandbox Verbose Payload Outlets</h4>
+                  <p className="text-[10px] text-muted-foreground leading-relaxed mt-0.5">
                     Include full atmospheric scattering and cloud cover metadata in query returns.
                   </p>
                 </div>
@@ -346,7 +346,7 @@ export default function DashboardSettings() {
                 >
                   <span
                     className={cn(
-                      "w-4 h-4 bg-white rounded-full absolute top-1 transition-all shadow-sm",
+                      "w-4 h-4 bg-background rounded-full absolute top-1 transition-all custom-shadow",
                       apiConfig.verboseLogging ? "left-6" : "left-1"
                     )}
                   />
@@ -356,7 +356,7 @@ export default function DashboardSettings() {
               <div className="pt-4 border-t border-slate-100 flex justify-end">
                 <button
                   type="submit"
-                  className="h-10 bg-[#14532D] hover:bg-[#114524] text-white px-5 rounded-lg text-xs font-bold transition-all shadow-sm focus:outline-none"
+                  className="h-10 bg-accent hover:bg-[#114524] text-white px-5 rounded-lg text-xs font-bold transition-all custom-shadow focus:outline-none"
                 >
                   Save API Configuration
                 </button>
@@ -368,16 +368,16 @@ export default function DashboardSettings() {
           {activeTab === "notifications" && (
             <form onSubmit={handleSaveNotifications} className="space-y-6">
               <div className="border-b border-slate-100 pb-4 mb-4">
-                <h3 className="text-sm font-bold text-slate-900">Email Notification Rules</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Control when X-AGI emits account events to your inbox.</p>
+                <h3 className="text-sm font-bold text-foreground">Email Notification Rules</h3>
+                <p className="text-xs text-muted-foreground mt-0.5">Control when X-AGI emits account events to your inbox.</p>
               </div>
 
               <div className="space-y-4">
                 {/* Rule 1: Quota threshold */}
                 <div className="flex items-start justify-between py-3 border-b border-slate-100 last:border-0">
                   <div className="pr-4">
-                    <h4 className="text-xs font-bold text-slate-900">Index Credit Quota Alert</h4>
-                    <p className="text-[10px] text-slate-400 leading-relaxed mt-0.5">
+                    <h4 className="text-xs font-bold text-foreground">Index Credit Quota Alert</h4>
+                    <p className="text-[10px] text-muted-foreground leading-relaxed mt-0.5">
                       Notify me immediately when monthly remaining credits decline below 20%.
                     </p>
                   </div>
@@ -391,7 +391,7 @@ export default function DashboardSettings() {
                   >
                     <span
                       className={cn(
-                        "w-4 h-4 bg-white rounded-full absolute top-1 transition-all shadow-sm",
+                        "w-4 h-4 bg-background rounded-full absolute top-1 transition-all custom-shadow",
                         notifications.usageAlert ? "left-6" : "left-1"
                       )}
                     />
@@ -401,8 +401,8 @@ export default function DashboardSettings() {
                 {/* Rule 2: Invoices */}
                 <div className="flex items-start justify-between py-3 border-b border-slate-100 last:border-0">
                   <div className="pr-4">
-                    <h4 className="text-xs font-bold text-slate-900">Successful Billing Statements</h4>
-                    <p className="text-[10px] text-slate-400 leading-relaxed mt-0.5">
+                    <h4 className="text-xs font-bold text-foreground">Successful Billing Statements</h4>
+                    <p className="text-[10px] text-muted-foreground leading-relaxed mt-0.5">
                       Email structured receipt logs and download-ready PDF invoice links.
                     </p>
                   </div>
@@ -416,7 +416,7 @@ export default function DashboardSettings() {
                   >
                     <span
                       className={cn(
-                        "w-4 h-4 bg-white rounded-full absolute top-1 transition-all shadow-sm",
+                        "w-4 h-4 bg-background rounded-full absolute top-1 transition-all custom-shadow",
                         notifications.invoicePaid ? "left-6" : "left-1"
                       )}
                     />
@@ -426,8 +426,8 @@ export default function DashboardSettings() {
                 {/* Rule 3: Outages */}
                 <div className="flex items-start justify-between py-3 border-b border-slate-100 last:border-0">
                   <div className="pr-4">
-                    <h4 className="text-xs font-bold text-slate-900">Sensor Network Interferences</h4>
-                    <p className="text-[10px] text-slate-400 leading-relaxed mt-0.5">
+                    <h4 className="text-xs font-bold text-foreground">Sensor Network Interferences</h4>
+                    <p className="text-[10px] text-muted-foreground leading-relaxed mt-0.5">
                       Alert immediately if orbital schedules or telemetry APIs register outages.
                     </p>
                   </div>
@@ -441,7 +441,7 @@ export default function DashboardSettings() {
                   >
                     <span
                       className={cn(
-                        "w-4 h-4 bg-white rounded-full absolute top-1 transition-all shadow-sm",
+                        "w-4 h-4 bg-background rounded-full absolute top-1 transition-all custom-shadow",
                         notifications.outageAlert ? "left-6" : "left-1"
                       )}
                     />
@@ -451,8 +451,8 @@ export default function DashboardSettings() {
                 {/* Rule 4: Newsletter */}
                 <div className="flex items-start justify-between py-3 border-b border-slate-100 last:border-0">
                   <div className="pr-4">
-                    <h4 className="text-xs font-bold text-slate-900">Product Logs & Math Grids Releases</h4>
-                    <p className="text-[10px] text-slate-400 leading-relaxed mt-0.5">
+                    <h4 className="text-xs font-bold text-foreground">Product Logs & Math Grids Releases</h4>
+                    <p className="text-[10px] text-muted-foreground leading-relaxed mt-0.5">
                       Receive monthly digests describing orbital vector enhancements and new indexes.
                     </p>
                   </div>
@@ -466,7 +466,7 @@ export default function DashboardSettings() {
                   >
                     <span
                       className={cn(
-                        "w-4 h-4 bg-white rounded-full absolute top-1 transition-all shadow-sm",
+                        "w-4 h-4 bg-background rounded-full absolute top-1 transition-all custom-shadow",
                         notifications.newsletter ? "left-6" : "left-1"
                       )}
                     />
@@ -477,7 +477,7 @@ export default function DashboardSettings() {
               <div className="pt-4 border-t border-slate-100 flex justify-end">
                 <button
                   type="submit"
-                  className="h-10 bg-[#14532D] hover:bg-[#114524] text-white px-5 rounded-lg text-xs font-bold transition-all shadow-sm focus:outline-none"
+                  className="h-10 bg-accent hover:bg-[#114524] text-white px-5 rounded-lg text-xs font-bold transition-all custom-shadow focus:outline-none"
                 >
                   Save Notification Rules
                 </button>
@@ -491,13 +491,13 @@ export default function DashboardSettings() {
               {/* Password Management */}
               <form onSubmit={handleSaveSecurity} className="space-y-6">
                 <div className="border-b border-slate-100 pb-4 mb-4">
-                  <h3 className="text-sm font-bold text-slate-900">Password Management</h3>
-                  <p className="text-xs text-slate-400 mt-0.5">Ensure your account uses a secure password of at least 8 characters.</p>
+                  <h3 className="text-sm font-bold text-foreground">Password Management</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">Ensure your account uses a secure password of at least 8 characters.</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="currentPassword" className="text-xs font-semibold text-slate-700">Current Password</label>
+                    <label htmlFor="currentPassword" className="text-xs font-semibold text-muted-foreground">Current Password</label>
                     <input
                       id="currentPassword"
                       type="password"
@@ -505,12 +505,12 @@ export default function DashboardSettings() {
                       placeholder="••••••••"
                       value={security.currentPassword}
                       onChange={(e) => setSecurity({ ...security, currentPassword: e.target.value })}
-                      className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                      className="w-full h-10 px-3 text-sm bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
                     />
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="newPassword" className="text-xs font-semibold text-slate-700">New Password</label>
+                    <label htmlFor="newPassword" className="text-xs font-semibold text-muted-foreground">New Password</label>
                     <input
                       id="newPassword"
                       type="password"
@@ -518,12 +518,12 @@ export default function DashboardSettings() {
                       placeholder="••••••••"
                       value={security.newPassword}
                       onChange={(e) => setSecurity({ ...security, newPassword: e.target.value })}
-                      className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                      className="w-full h-10 px-3 text-sm bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
                     />
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="confirmPassword" className="text-xs font-semibold text-slate-700">Confirm Password</label>
+                    <label htmlFor="confirmPassword" className="text-xs font-semibold text-muted-foreground">Confirm Password</label>
                     <input
                       id="confirmPassword"
                       type="password"
@@ -531,7 +531,7 @@ export default function DashboardSettings() {
                       placeholder="••••••••"
                       value={security.confirmPassword}
                       onChange={(e) => setSecurity({ ...security, confirmPassword: e.target.value })}
-                      className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14532D]/10 focus:border-[#14532D] transition-all"
+                      className="w-full h-10 px-3 text-sm bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition-all"
                     />
                   </div>
                 </div>
@@ -539,7 +539,7 @@ export default function DashboardSettings() {
                 <div className="pt-4 border-t border-slate-100 flex justify-end">
                   <button
                     type="submit"
-                    className="h-10 bg-[#14532D] hover:bg-[#114524] text-white px-5 rounded-lg text-xs font-bold transition-all shadow-sm focus:outline-none"
+                    className="h-10 bg-accent hover:bg-[#114524] text-white px-5 rounded-lg text-xs font-bold transition-all custom-shadow focus:outline-none"
                   >
                     Update Password
                   </button>
@@ -549,14 +549,14 @@ export default function DashboardSettings() {
               {/* Two-Factor Authentication */}
               <div className="space-y-6 pt-6 border-t border-slate-100">
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900">Two-Factor Authentication</h3>
-                  <p className="text-xs text-slate-400 mt-0.5">Add an extra layer of security to your developer account.</p>
+                  <h3 className="text-sm font-bold text-foreground">Two-Factor Authentication</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">Add an extra layer of security to your developer account.</p>
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-subtle border border-slate-100 rounded-lg">
                   <div>
-                    <h4 className="text-xs font-bold text-slate-900">Authenticator App (TOTP)</h4>
-                    <p className="text-[10px] text-slate-400 leading-relaxed mt-0.5">
+                    <h4 className="text-xs font-bold text-foreground">Authenticator App (TOTP)</h4>
+                    <p className="text-[10px] text-muted-foreground leading-relaxed mt-0.5">
                       Use an authenticator application (Google Authenticator, 1Password, etc.) to generate verification codes.
                     </p>
                   </div>
@@ -570,7 +570,7 @@ export default function DashboardSettings() {
                   >
                     <span
                       className={cn(
-                        "w-4 h-4 bg-white rounded-full absolute top-1 transition-all shadow-sm",
+                        "w-4 h-4 bg-background rounded-full absolute top-1 transition-all custom-shadow",
                         security.twoFactorEnabled ? "left-6" : "left-1"
                       )}
                     />
@@ -593,23 +593,23 @@ export default function DashboardSettings() {
               {/* Active Sessions */}
               <div className="space-y-6 pt-6 border-t border-slate-100">
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900">Active Sessions</h3>
-                  <p className="text-xs text-slate-400 mt-0.5">Devices currently authenticated to your developer credentials.</p>
+                  <h3 className="text-sm font-bold text-foreground">Active Sessions</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">Devices currently authenticated to your developer credentials.</p>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between shadow-sm">
+                <div className="bg-background border border-border rounded-xl p-4 flex items-center justify-between custom-shadow">
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-slate-50 border border-slate-100 rounded-lg text-slate-500">
+                    <div className="p-2.5 bg-subtle border border-slate-100 rounded-lg text-muted-foreground">
                       <Laptop className="w-5 h-5" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-slate-900">MacBook Pro — Chrome</span>
+                        <span className="text-xs font-bold text-foreground">MacBook Pro — Chrome</span>
                         <span className="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-2 py-0.5 rounded-full border border-emerald-250">
                           Current Session
                         </span>
                       </div>
-                      <p className="text-[10px] text-slate-400 mt-1 font-mono">Chennai, TN, India • Last Active: Just now</p>
+                      <p className="text-[10px] text-muted-foreground mt-1 font-mono">Chennai, TN, India • Last Active: Just now</p>
                     </div>
                   </div>
                 </div>
