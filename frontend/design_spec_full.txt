@@ -1,0 +1,319 @@
+<USER_REQUEST>
+# Port full X-AGI design system from Lovable spec to this Next.js project
+
+This is a complete visual system port — colors, typography, spacing,
+backgrounds, animations, and interactive effects. This supersedes any
+earlier "flat/minimal" design instructions you were given previously
+— this spec is the new source of truth, full scope, nothing simplified
+or skipped.
+
+Implement in the phases below, IN ORDER. After each phase, run the
+build and confirm no errors before moving to the next phase. Do not
+attempt all phases in a single pass — verify incrementally.
+
+## Phase 0 — Audit before building
+
+Before writing any code:
+1. Check package.json for: framer-motion, lucide-react, any existing
+   theme/dark-mode provider (next-themes or custom). Report what
+   exists vs. what needs installing.
+2. Check if Geist/Geist Mono are available via next/font/google in
+   the installed Next.js version. If not, report back and we'll
+   decide on Inter + JetBrains Mono as fallback.
+3. Check globals.css for any existing CSS custom properties or theme
+   tokens already defined, so we extend rather than duplicate.
+
+Report findings before proceeding to Phase 1.
+
+## Phase 1 — Typography and color tokens
+
+Add font setup:
+```
+--font-sans: "Geist", "Inter", ui-sans-serif, system-ui, sans-serif
+--font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, monospace
+```
+Apply globally on <html>:
+```css
+font-feature-settings: "cv11", "ss01", "ss03";
+-webkit-font-smoothing: antialiased;
+text-rendering: optimizeLegibility;
+```
+
+Type scale (implement as Tailwind classes or CSS custom properties,
+whichever matches this project's existing convention):
+```
+H1 hero:      5rem/6rem/7rem (mobile/md/lg), weight 600, tracking-tight, leading-[1.05]
+H2 section:   3rem → 4rem → 5rem, weight 600, tracking-tight
+H3 card:      1.25rem → 2rem, weight 600
+Body:         1rem / 0.875rem, weight 400, leading-relaxed
+Eyebrow:      0.75rem mono, uppercase, tracking-widest, weight 400
+Stats numbers: 1.5rem → 2.25rem mono, weight 600, tracking-tight
+Code/endpoints: 0.75rem → 0.8125rem mono, weight 400, leading-relaxed
+Badge/status:  0.6875rem → 0.75rem mono, uppercase, tracking-wider
+```
+
+Color tokens — implement using OKLCH color space exactly as specified
+(do not convert to hex/rgb, OKLCH gives perceptually uniform lightness
+which matters for how light/dark mode contrast feels):
+
+LIGHT MODE (:root):
+```css
+--background: oklch(1 0 0);
+--foreground: oklch(0.16 0.015 160);
+--subtle: oklch(0.985 0.005 160);
+--card: oklch(1 0 0);
+--popover: oklch(1 0 0);
+--primary: oklch(0.72 0.18 145);
+--primary-foreground: oklch(0.16 0.015 160);
+--secondary: oklch(0.97 0.005 160);
+--muted: oklch(0.97 0.005 160);
+--muted-foreground: oklch(0.48 0.015 160);
+--accent: oklch(0.72 0.18 145);
+--accent-strong: oklch(0.42 0.12 150);
+--destructive: oklch(0.6 0.22 25);
+--border: oklch(0.92 0.005 160);
+--border-strong: oklch(0.85 0.01 160);
+--ring: oklch(0.72 0.18 145);
+```
+
+DARK MODE (.dark):
+```css
+--background: oklch(0.16 0.01 160);
+--foreground: oklch(0.96 0.005 160);
+--subtle: oklch(0.2 0.012 160);
+--card: oklch(0.18 0.012 160);
+--primary: oklch(0.78 0.18 152);
+--accent: oklch(0.78 0.18 152);
+--accent-strong: oklch(0.82 0.16 152);
+--muted-foreground: oklch(0.65 0.015 160);
+--border: oklch(0.27 0.012 160);
+--border-strong: oklch(0.34 0.015 160);
+```
+
+Selection color:
+```css
+::selection {
+  background-color: color-mix(in oklab, var(--accent) 30%, transparent);
+  color: var(--foreground);
+}
+```
+
+Add a theme toggle (sun/moon icon, 36×36px button) in the nav bar if
+one doesn't already exist (check Phase 0 findings). Persist choice in
+localStorage — this is the one acceptable browser-storage use case
+since it's a UI preference, not application data.
+
+After this phase: confirm build passes, take a screenshot of any
+plain page showing the new font + base colors applied.
+
+## Phase 2 — Layout, spacing, and global container
+
+```
+Container: max-w-6xl, px-6, mx-auto
+Section vertical padding: py-20 mobile, md:py-32 desktop
+Every major section: border-b border-border (1px bottom border)
+Card internal padding: p-7
+Button padding: px-5 py-2.5
+Grid dividers: gap-px with bg-border as the grid background (creates
+  1px hairline gutters between grid cells)
+```
+
+## Phase 3 — Background effects
+
+Implement these as reusable utility classes/components:
+
+**bg-grid** (solid grid, general use):
+56×56px repeating linear gradient grid, 1px lines at 60% opacity of
+--border.
+
+**bg-grid-fade** (hero only):
+Same grid, masked with radial gradient `ellipse 80% 60% at 50% 0%`,
+fading from opaque at top-center to transparent below.
+
+**Scanlines** (very subtle, apply at low opacity site-wide or hero-only — your choice, recommend hero-only first):
+```css
+background-image: repeating-linear-gradient(
+  to bottom,
+  transparent 0px, transparent 2px,
+  color-mix(in oklab, var(--foreground) 5%, transparent) 3px,
+  transparent 4px
+);
+opacity: 0.06;
+```
+
+**Aurora blobs** (hero background, two absolutely-positioned radial
+gradients):
+- Left: -left-32 top-10, 520×520px, blur-3xl, opacity 0.40
+- Right: -right-40 top-40, 600×600px, blur-3xl, opacity 0.30
+- Both use color-mix(in oklab, var(--accent) 45-55%, transparent)
+
+**Central glow** (final CTA section only): 900×500px radial gradient,
+centered, opacity 0.25.
+
+## Phase 4 — Keyframe animation system
+
+Define these keyframes globally, then expose as Tailwind utilities
+(@utility or tailwind.config animation extension, match whatever this
+project already uses):
+
+```
+fadeUp:      0.7s cubic-bezier(0.16,1,0.3,1) — translateY(12px)→0, opacity 0→1
+fadeIn:      0.6s ease-out — opacity only
+reveal:      0.7s cubic-bezier(0.16,1,0.3,1) — translateY(16px)→0, used w/ IntersectionObserver
+auroraDrift: 18s ease-in-out — translate3d(-8%,-4%)→(8%,6%) + scale 1→1.15
+auroraDrift2: 22s ease-in-out — opposite drift + scale(1.1)
+gridDrift:   28s linear — background-position 0 0 → 56px 56px
+float:       5s ease-in-out — translateY(0)→-6px
+marquee:     32s linear — translateX(0)→-50%
+spinSlow:    10s-50s linear — rotate(0)→360deg
+pulseDot:    2s — opacity 1→0.35→1
+pulseRing:   2.4s — box-shadow ring expands 0px→8px then fades
+scan:        3.8s — horizontal laser line sweeps -10%→110%
+shimmer:     7s — background-position 200%→-200%
+holoSweep:   5s — gradient position 0%→200%
+```
+
+Map to utility classes: animate-fade-up, animate-fade-in,
+animate-pulse-dot, animate-pulse-ring, animate-float, animate-marquee,
+animate-grid-drift, animate-aurora-1, animate-aurora-2, animate-scan.
+
+**Scroll progress bar**: fixed, 2px tall, top of page, z-[60]. Width
+bound to scroll percentage (scrollHeight - clientHeight). Style:
+```css
+background: linear-gradient(to right, transparent, var(--accent), transparent);
+box-shadow: 0 0 12px var(--accent);
+```
+
+**Critical — accessibility override** (implement this now, don't
+forget it):
+```css
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+```
+
+After this phase: confirm build passes, confirm reduced-motion
+override works (test via browser devtools "Emulate CSS prefers-
+reduced-motion" if possible).
+
+## Phase 5 — Interactive effects (likely needs framer-motion if not
+## already installed — confirm from Phase 0 audit first)
+
+**Card shine sweep** (.shine-host + .shine-overlay): on hover, a
+skewed gradient band sweeps across — transparent 30% → accent@22%
+opacity 50% → transparent 70%, from translateX(-120%) skewX(-20deg)
+to translateX(220%) skewX(-20deg), 0.9s cubic-bezier(0.16,1,0.3,1).
+
+**Hover glow** (.hover-glow): lift -2px with layered box-shadow:
+```css
+box-shadow:
+  0 0 0 1px color-mix(in oklab, var(--accent) 40%, transparent),
+  0 24px 60px -28px color-mix(in oklab, var(--accent) 55%, transparent);
+```
+
+**Magnetic buttons** (.btn-magnetic): hover translateY(-1px) + accent
+shadow, active translateY(0), transition 0.25s cubic-bezier(0.16,1,0.3,1).
+
+**3D tilt wrapper** (<Tilt> component): perspective 900px container,
+mousemove calculates normalized cursor position (-0.5 to 0.5), rotates
+card up to ±6deg on X/Y via rotateY/rotateX, updates --mx/--my CSS
+vars for glow overlay, resets smoothly on mouseleave.
+
+**Mouse spotlight** (<MouseSpotlight>): radial gradient overlay
+tracking cursor via mousemove listener:
+```css
+radial-gradient(420px circle at var(--mx,50%) var(--my,0%),
+  color-mix(in oklab, var(--accent) 22%, transparent), transparent 60%);
+```
+
+**Tilt glow** (.tilt-glow::after): uses --mx/--my from Tilt component,
+internal radial glow, opacity 0→1 on hover.
+
+**Gradient ring** (.gradient-ring::before): spinning conic-gradient
+border via padding+mask-composite border hack, spinSlow 10s linear
+infinite, opacity 0.65.
+
+## Phase 6 — Text effects
+
+**Text shimmer** (.text-shimmer, hero H1 first line):
+```css
+background-image: linear-gradient(100deg,
+  var(--foreground) 20%,
+  color-mix(in oklab, var(--accent) 85%, var(--foreground)) 45%,
+  var(--foreground) 70%);
+background-size: 200% 100%;
+animation: shimmer 7s linear infinite;
+background-clip: text; color: transparent;
+```
+
+**Text holographic** (.text-holo, alternative/upgrade):
+5-stop sweeping gradient, holoSweep 5s linear infinite, same
+background-clip: text technique.
+
+## Phase 7 — Component rebuilds (apply all tokens from Phases 1-6)
+
+Rebuild these components/sections using everything established above
+— refer to the detailed component breakdown for exact structure:
+
+1. **Nav**: h-16, sticky top-0 z-50, bg-background/80 backdrop-blur-xl,
+   24×24px logo mark (nested square, border accent/60, inset fill
+   accent), theme toggle, "Get API Key" pill CTA, mobile dropdown.
+
+2. **Hero**: status pill with dual-dot pulse indicator, H1 with
+   text-holo on first line, CTA row, stats grid (gap-px bg-border
+   dividers, animated counters, hover bg-subtle + bottom accent
+   line), live ticker marquee (duplicated content, seamless loop,
+   telemetry tags: NDVI/NDMI/NDRE/SAVI/LST/RAIN/GDD/EVI/NDWI/CI/WIND/HUMID),
+   CodePanel (gradient-ring border, macOS-style dots, LIVE badge with
+   pulse, scan-line sweep, request/response split with terminal-
+   typing effect on response side at 420cps with blinking cursor).
+
+3. **Core APIs grid**: 3-col, gap-px bg-border, Tilt-wrapped cards
+   with shine-host + tilt-glow.
+
+4. **Unified Intelligence Layer**: bg-subtle section, 2-col grid,
+   shine-host hover-glow cards.
+
+5. **AI Models teaser**: gradient-ring + hover-glow + shine-host,
+   "Coming Soon" badge, locked/disabled CTA.
+
+6. **How It Works**: 3-col gap-px bg-border, large mono step numbers
+   at accent/30 opacity, shine-host + bottom accent line on hover.
+
+7. **Sandbox**: 2-col layout, checklist with accent checkmarks, tabs
+   with bottom border indicator, mock auth box, Send button with
+   simulated 600ms latency, scrollable monospace response panel.
+
+8. **Pricing**: 3-col, popular tier border-accent + floating badge,
+   accent Check icons, btn-magnetic full-width CTAs.
+
+9. **Trust badges**: 3-col gap-px divider grid, 40×40px icon
+   containers.
+
+10. **Footer**: bg-subtle, 5-col grid, mono uppercase column titles,
+    hover:text-accent links.
+
+Build component by component, confirm build passes after each one,
+before moving to the next.
+
+## Final verification
+
+1. Full build passes with zero errors
+2. Toggle light/dark mode, confirm both look correct and the choice
+   persists on reload
+3. Confirm prefers-reduced-motion correctly disables all animation
+4. Screenshot the hero section in both themes
+5. Confirm the live ticker marquee loops seamlessly with no visible
+   jump/snap at the loop point
+6. Confirm 3D tilt and mouse spotlight effects only activate on
+   devices with a mouse (not on touch — these should not error or
+   feel broken on mobile/tablet, gracefully do nothing)
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-06-23T10:23:32+05:30.
+</ADDITIONAL_METADATA>
+---

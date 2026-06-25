@@ -1,0 +1,701 @@
+<USER_REQUEST>
+# KrishiSat Developer Documentation Portal — Production Implementation Plan
+
+## Objective
+
+Build a production-quality developer documentation experience for KrishiSat that serves as the central hub for:
+
+* API onboarding
+* Authentication guides
+* Endpoint documentation
+* SDK examples
+* Response schemas
+* Developer support
+
+The experience should feel comparable to:
+
+* Stripe Docs
+* Twilio Docs
+* Mapbox Docs
+* Planet Labs Developer Docs
+
+---
+
+# Phase 1 — Navigation Integration
+
+## Update Header Navigation
+
+### File
+
+```text
+src/components/nav.tsx
+```
+
+### Changes
+
+Replace:
+
+```tsx
+href="/marketplace"
+```
+
+for the Docs navigation item with:
+
+```tsx
+href="/docs"
+```
+
+Requirements:
+
+* Preserve styling
+* Preserve mobile navigation
+* Preserve active route highlighting
+
+---
+
+## Update Footer Navigation
+
+### File
+
+```text
+src/components/footer.tsx
+```
+
+### Changes
+
+Developer Links
+
+Replace:
+
+```tsx
+Documentation → /developers
+```
+
+with:
+
+```tsx
+Documentation → /docs
+```
+
+Replace:
+
+```tsx
+API Reference → /developers
+```
+
+with:
+
+```tsx
+API Reference → /developers/reference
+```
+
+Verify:
+
+* No broken links
+* Mobile footer remains responsive
+
+---
+
+# Phase 2 — Documentation Data Architecture
+
+## Create Dedicated Documentation Data Source
+
+### File
+
+```text
+src/data/docs-sections.ts
+```
+
+Purpose:
+
+Store all documentation content separately from UI logic.
+
+Export:
+
+```ts
+export interface DocSection
+```
+
+and
+
+```ts
+export const docsSections = [...]
+```
+
+Each section should contain:
+
+```ts
+{
+  id: string
+  title: string
+  subtitle: string
+  group: string
+
+  description: string[]
+
+  endpoint?: {
+    method: string
+    path: string
+    credits: number
+  }
+
+  code: {
+    curl: string
+    python: string
+    node: string
+  }
+
+  response: string
+}
+```
+
+---
+
+# Phase 3 — Documentation Layout
+
+## Create Dedicated Layout
+
+### File
+
+```text
+src/app/docs/la
+<truncated 5007 bytes>
+:
+
+```tsx
+<nav aria-label="Documentation navigation">
+```
+
+---
+
+## Copy Buttons
+
+Add:
+
+```tsx
+aria-label
+```
+
+for all actions.
+
+---
+
+## Keyboard Accessibility
+
+Support:
+
+* Tab
+* Enter
+* Space
+* Arrow navigation
+
+throughout the documentation page.
+
+---
+
+# Phase 7 — Error States
+
+## Empty Search Results
+
+Display:
+
+```text
+No results found
+```
+
+Include:
+
+* icon
+* helpful suggestion
+* clear search action
+
+---
+
+## Missing Docs Data
+
+Handle:
+
+```text
+docsSections = []
+```
+
+gracefully.
+
+No crashes.
+
+---
+
+# Phase 8 — Component Extraction
+
+Create:
+
+```text
+src/components/docs/
+```
+
+Components:
+
+```text
+docs-sidebar.tsx
+docs-content.tsx
+docs-code-panel.tsx
+docs-mobile-toc.tsx
+language-tabs.tsx
+copy-button.tsx
+search-input.tsx
+```
+
+Benefits:
+
+* cleaner page.tsx
+* maintainable architecture
+* scalable for future APIs
+
+---
+
+# Verification Checklist
+
+## Build Verification
+
+Run:
+
+```bash
+npm run build
+```
+
+Verify:
+
+* TypeScript passes
+* No ESLint errors
+* No hydration warnings
+
+---
+
+## Functional Testing
+
+Verify:
+
+### Sidebar
+
+* active highlight works
+* search works
+* smooth scroll works
+
+### Mobile
+
+* TOC works
+* search works
+
+### Code Panel
+
+* tabs switch correctly
+* copy buttons work
+
+### Scroll Sync
+
+* active section updates
+* code updates
+* response updates
+
+### URL Hashes
+
+```text
+/docs#ndvi
+/docs#weather
+/docs#authentication
+```
+
+all load correctly.
+
+---
+
+# Completion Criteria
+
+The implementation is complete when:
+
+✅ Three-column layout works
+
+✅ 15 sections exist
+
+✅ Mobile TOC exists
+
+✅ Search works
+
+✅ URL hashes work
+
+✅ Active section sync works
+
+✅ Dynamic code panel works
+
+✅ Response payload panel works
+
+✅ Accessibility passes
+
+✅ Build passes
+
+✅ Documentation experience feels comparable to modern API platforms
+
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-06-11T22:22:44+05:30.
+</ADDITIONAL_METADATA><USER_REQUEST>
+# KrishiSat Final Logo & Brand Identity Implementation Plan
+
+## Objective
+
+Replace the current placeholder branding with a professional, enterprise-grade KrishiSat brand system that immediately communicates:
+
+* Agricultural Intelligence
+* Satellite Analytics
+* Enterprise SaaS
+* Developer Infrastructure
+
+The final experience should feel comparable to:
+
+* Stripe
+* Vercel
+* Planet Labs
+* Mapbox
+* Linear
+
+and be suitable for:
+
+* Enterprise customers
+* Government organizations
+* Agritech companies
+* Investors
+* Accelerators
+
+---
+
+# Phase 1 — Brand Asset Structure
+
+## Create Dedicated Brand Assets
+
+Inside:
+
+```text
+public/
+```
+
+Add:
+
+```text
+logo-full-dark.png
+logo-full-light.png
+logo-icon.png
+```
+
+### Purpose
+
+#### logo-full-dark.png
+
+Used on:
+
+* White backgrounds
+* Light navbar
+* Documentation pages
+
+#### logo-full-light.png
+
+Used on:
+
+* Dark footer
+* Dark hero sections
+* Dark dashboards
+
+#### logo-icon.png
+
+Used for:
+
+* Mobile navigation
+* Dashboard sidebar
+* Favicon generation
+* App icons
+
+---
+
+# Phase 2 — Reusable Logo Component
+
+## Create
+
+```text
+src/components/brand/logo.tsx
+```
+
+### Props
+
+```ts
+type LogoProps = {
+  size?: "sm" | "md" | "lg"
+  variant?: "full" | "icon"
+  theme?: "light" | "dark"
+  showTagline?: boolean
+}
+```
+
+---
+
+## Size Definitions
+
+### Small
+
+```text
+44px height
+```
+
+Use for:
+
+* Footer
+* Compact dashboard layouts
+
+---
+
+### Medium
+
+```text
+60px height
+```
+
+Use for:
+
+* Main navbar
+
+This becomes the default size.
+
+---
+
+### Large
+
+```text
+72px height
+```
+
+Use for:
+
+* Hero sections
+* Marketing pages
+* Future landing page branding
+
+---
+
+# Phase 3 — Navbar Brand Redesign
+
+## Update
+
+```text
+src/components/nav.tsx
+```
+
+---
+
+## Remove
+
+```text
+PLATFORM
+```
+
+badge entirely.
+
+Delete all platform badge code.
+
+---
+
+## Replace Existing Logo
+
+Use:
+
+```tsx
+<Logo
+  size="md"
+  variant="full"
+  theme="dark"
+/>
+```
+
+-
+<truncated 2056 bytes>
+tically switch assets.
+
+### Light Background
+
+Use:
+
+```text
+logo-full-dark.png
+```
+
+---
+
+### Dark Background
+
+Use:
+
+```text
+logo-full-light.png
+```
+
+---
+
+### Avoid
+
+```css
+brightness-0
+invert
+```
+
+Do not use CSS filters for logo color changes.
+
+Use dedicated brand assets instead.
+
+---
+
+# Phase 8 — SEO & Metadata
+
+Update:
+
+```text
+app/layout.tsx
+```
+
+Metadata assets.
+
+Ensure logo is used in:
+
+* OpenGraph images
+* Social previews
+* Favicon workflow
+* Manifest icons
+
+Maintain brand consistency.
+
+---
+
+# Phase 9 — Future-Proofing
+
+The logo component should support future usage in:
+
+### Dashboard
+
+```tsx
+<Logo variant="icon" />
+```
+
+for sidebar collapse mode.
+
+---
+
+### Admin Panel
+
+```tsx
+<Logo variant="icon" />
+```
+
+---
+
+### Authentication Pages
+
+```tsx
+<Logo variant="full" />
+```
+
+---
+
+### Email Templates
+
+```tsx
+<Logo variant="full" />
+```
+
+---
+
+# Verification Checklist
+
+## Desktop
+
+* Logo is immediately visible
+* Logo height ≈ 60px
+* Navbar feels balanced
+* No PLATFORM badge
+* Navigation remains centered
+* CTA remains right aligned
+
+---
+
+## Mobile
+
+* Logo scales correctly
+* Tagline hidden
+* No layout overflow
+* Navigation remains usable
+
+---
+
+## Footer
+
+* Proper logo variant displayed
+* Tagline visible
+* Consistent branding
+
+---
+
+## Performance
+
+* Next.js Image component used
+* Optimized image loading
+* No CLS issues
+* No TypeScript errors
+* No ESLint warnings
+
+---
+
+# Final Expected Result
+
+When a user lands on the site, the first impression should be:
+
+```text
+KrishiSat
+Agricultural Intelligence Platform
+```
+
+The logo should become a strong trust-building element that visually anchors the entire product and immediately positions KrishiSat as a professional agricultural intelligence and satellite analytics company rather than a startup placeholder brand.
+
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-06-12T10:19:47+05:30.
+</ADDITIONAL_METADATA><USER_REQUEST>
+Confirmed — that's a clear and accurate breakdown, thank you for 
+the honesty. Proceed to Phase 2.
+
+One thing to verify as you go: I want to confirm the theme toggle 
+actually flips background/text colors on pages OTHER than the 
+homepage hero (which may be intentionally dark-only by design). 
+Check a docs or pricing page in light vs dark mode and confirm 
+both render correctly before we get further into the component 
+rebuild phases.
+
+Stop again after Phase 2 for another visual check before Phase 3.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-06-23T10:32:48+05:30.
+</ADDITIONAL_METADATA><USER_REQUEST>
+STOP — this is broken, not just a color issue. The pricing and docs 
+pages have lost ALL styling — no fonts, no layout, no card 
+structure, default browser link/heading styles only. This looks 
+like a CSS build failure or a syntax error in globals.css, not a 
+theme color problem.
+
+Before doing anything else:
+1. Check the browser console for CSS/JS errors on these pages
+2. Re-check globals.css for a syntax error introduced by the 
+   fix_theme_colors.py script or the Phase 2 layout utilities
+3. Confirm Tailwind is actually compiling and being applied — 
+   check the page source/devtools to see if the stylesheet is 
+   loading at all
+4. Do NOT proceed to Phase 3 until this is fully fixed and you've 
+   shown me a working screenshot of pricing and docs pages looking 
+   normal again
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-06-23T10:38:04+05:30.
+</ADDITIONAL_METADATA>
