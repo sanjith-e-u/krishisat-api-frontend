@@ -11,7 +11,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   const token = cookieStore.get("auth-token")?.value
 
   if (!token) {
-    redirect("/admin/login")
+    redirect("/admin-login")
   }
 
   const supabase = createClient(supabaseUrl, supabaseAnonKey, {
@@ -25,7 +25,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   
   if (authError || !user) {
-    redirect("/admin/login")
+    redirect("/admin-login")
   }
 
   const { data: profile, error: profileError } = await supabase

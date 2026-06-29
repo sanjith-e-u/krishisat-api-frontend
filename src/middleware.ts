@@ -6,9 +6,9 @@ export function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
   // Protect /admin routes
-  if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
+  if (pathname.startsWith("/admin") && pathname !== "/admin-login") {
     if (!token) {
-      const loginUrl = new URL("/admin/login", request.url);
+      const loginUrl = new URL("/admin-login", request.url);
       loginUrl.searchParams.set("return_to", pathname + search);
       return NextResponse.redirect(loginUrl);
     }
@@ -24,7 +24,7 @@ export function middleware(request: NextRequest) {
   }
 
   // Redirect authenticated users trying to access login/register
-  if (pathname === "/login" || pathname === "/register" || pathname === "/admin/login") {
+  if (pathname === "/login" || pathname === "/register" || pathname === "/admin-login") {
     if (token) {
       // Very basic fallback: if trying to access a login page while logged in, 
       // go to dashboard. Server-side checks will bounce them later if needed.
