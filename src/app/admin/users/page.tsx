@@ -22,7 +22,6 @@ interface UserItem {
 export default function AdminUsers() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
-  const [isAdmin, setIsAdmin] = useState(true)
   const [users, setUsers] = useState<UserItem[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
@@ -113,30 +112,7 @@ export default function AdminUsers() {
       }
 
       try {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", session.user.id)
-          .single()
-          
-
-        const email = session.user.email || ""
-        const fullName = profile?.full_name || ""
-        const organization = profile?.organization || ""
-
-        const isUserAdmin = 
-          email === "admin@x-agi.dev" || 
-          email.startsWith("admin") || 
-          fullName.toLowerCase() === "admin" || 
-          organization.toLowerCase() === "admin" ||
-          profile?.role === "admin"
-
-        if (!isUserAdmin) {
-          router.push("/dashboard")
-          return
-        }
-
-        setIsAdmin(true)
+        // The server-side layout.tsx already guarantees the user is an admin.
         await loadData()
       } catch (err) {
         console.error("Admin check failed:", err)
@@ -271,8 +247,6 @@ export default function AdminUsers() {
       </div>
     )
   }
-
-  if (!isAdmin) return null
 
   return (
     <div className="space-y-8 select-none relative">

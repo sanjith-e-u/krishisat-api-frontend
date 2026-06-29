@@ -10,7 +10,6 @@ import { supabase } from "@/lib/supabase"
 export default function AdminApiMonitoring() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
-  const [isAdmin, setIsAdmin] = useState(true)
   const [logs, setLogs] = useState<any[]>([])
   
   // KPI stats
@@ -83,30 +82,8 @@ export default function AdminApiMonitoring() {
       }
 
       try {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", session.user.id)
-          .single()
-          
-
-        const email = session.user.email || ""
-        const fullName = profile?.full_name || ""
-        const organization = profile?.organization || ""
-
-        const isUserAdmin = 
-          email === "admin@x-agi.dev" || 
-          email.startsWith("admin") || 
-          fullName.toLowerCase() === "admin" || 
-          organization.toLowerCase() === "admin" ||
-          profile?.role === "admin"
-
-        if (!isUserAdmin) {
-          router.push("/dashboard")
-          return
-        }
-
-        setIsAdmin(true)
+        // The server-side layout.tsx already guarantees the user is an admin.
+        // Proceed directly to loading data.
         await loadMonitoringData()
         
         // Polling for live request feed (every 5 seconds)
@@ -209,8 +186,6 @@ export default function AdminApiMonitoring() {
       </div>
     )
   }
-
-  if (!isAdmin) return null
 
   return (
     <div className="space-y-8 select-none">
