@@ -17,6 +17,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Logo from "@/components/brand/logo"
+import { supabase } from "@/lib/supabase"
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -195,14 +196,23 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     <span>User Portal</span>
                   </Link>
                   <div className="border-t border-border my-1" />
-                  <Link
-                    href="/login"
-                    onClick={() => setProfileOpen(false)}
-                    className="w-full px-3 py-2 rounded-lg text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center gap-2.5"
+                  <button
+                    onClick={async () => {
+                      setProfileOpen(false)
+                      // 1. Clear Supabase local session
+                      await supabase.auth.signOut()
+                      
+                      // 2. Clear Next.js middleware cookie
+                      document.cookie = "auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+                      
+                      // 3. Force hard navigation to clear server component state
+                      window.location.href = "/"
+                    }}
+                    className="w-full px-3 py-2 rounded-lg text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center gap-2.5 cursor-pointer text-left"
                   >
                     <LogOut className="w-3.5 h-3.5 text-rose-500" />
                     <span>Sign Out</span>
-                  </Link>
+                  </button>
                 </div>
               )}
             </div>

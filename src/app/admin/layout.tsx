@@ -34,7 +34,15 @@ export default async function Layout({ children }: { children: React.ReactNode }
     .eq("id", user.id)
     .single()
 
+  console.log("=== SERVER-SIDE (LAYOUT) ROLE CHECK ===")
+  console.log("User ID:", user.id)
+  console.log("Profile Data returned:", profile)
+  console.log("Profile Error returned:", profileError)
+  console.log("Comparison Check: profile?.role !== 'admin' is", profile?.role !== 'admin')
+  console.log("=======================================")
+
   if (profileError || profile?.role !== "admin") {
+    console.log("LAYOUT BLOCKED: Redirecting to /dashboard")
     redirect("/dashboard")
   }
 

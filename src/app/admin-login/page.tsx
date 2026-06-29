@@ -75,10 +75,18 @@ export default function AdminLogin() {
           .eq("id", data.user.id)
           .single()
 
+        console.log("=== CLIENT-SIDE LOGIN ROLE CHECK ===")
+        console.log("User ID:", data.user.id)
+        console.log("Profile Data returned:", profile)
+        console.log("Profile Error returned:", profileError)
+        console.log("Expected Role: admin")
+        console.log("Actual Role:", profile?.role)
+        console.log("====================================")
+
         if (profileError || profile?.role !== "admin") {
           // If not an admin, log them out immediately
           await supabase.auth.signOut()
-          setGeneralError("Access denied. Admin privileges required.")
+          setGeneralError(`Access denied. Admin privileges required. (Role found: ${profile?.role || "null"})`)
           setLoading(false)
           return
         }

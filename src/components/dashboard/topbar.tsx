@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Bell, Search, Menu, ChevronDown, User, LogOut, Settings } from "lucide-react"
 import Link from "next/link"
+import { supabase } from "@/lib/supabase"
 
 interface TopbarProps {
   onMenuToggle: () => void;
@@ -145,17 +146,23 @@ export default function DashboardTopbar({ onMenuToggle }: TopbarProps) {
                 <span>Settings</span>
               </Link>
               <div className="border-t border-slate-100 my-1" />
-              <Link
-                href="/login"
-                onClick={() => {
+              <button
+                onClick={async () => {
                   setProfileOpen(false)
+                  // 1. Clear Supabase local session
+                  await supabase.auth.signOut()
+                  
+                  // 2. Clear Next.js middleware cookie
                   document.cookie = "auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+                  
+                  // 3. Force hard navigation to clear server component state
+                  window.location.href = "/"
                 }}
-                className="w-full px-3 py-2 rounded-lg text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center gap-2.5"
+                className="w-full px-3 py-2 rounded-lg text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center gap-2.5 cursor-pointer text-left"
               >
                 <LogOut className="w-3.5 h-3.5 text-rose-500" />
                 <span>Sign Out</span>
-              </Link>
+              </button>
             </div>
           )}
         </div>
