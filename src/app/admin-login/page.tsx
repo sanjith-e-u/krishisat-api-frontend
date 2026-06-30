@@ -1,13 +1,13 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, Suspense } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import Logo from "@/components/brand/logo"
 import { supabase } from "@/lib/supabase"
 import { AlertCircle, Lock } from "lucide-react"
 
-export default function AdminLogin() {
+function AdminLoginContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const returnTo = searchParams.get("return_to") || "/admin"
@@ -186,5 +186,21 @@ export default function AdminLogin() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function AdminLogin() {
+  return (
+    <Suspense 
+      fallback={
+        <main className="min-h-screen bg-surface flex items-center justify-center p-6 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-500/10 via-surface to-surface">
+          <div className="w-full max-w-[420px] bg-background border border-amber-500/20 rounded-2xl shadow-2xl p-8 flex items-center justify-center h-[400px]">
+            <div className="text-amber-500 font-medium">Loading portal...</div>
+          </div>
+        </main>
+      }
+    >
+      <AdminLoginContent />
+    </Suspense>
   )
 }
