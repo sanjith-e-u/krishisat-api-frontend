@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Sprout, Droplets, Cloud, MapPin, Search, Copy, Check, ExternalLink, ShieldAlert, ArrowRight, BarChart2 } from "lucide-react"
 import { supabase } from "@/lib/supabase"
+import { API_BASE_URL } from "@/lib/config"
 
 interface ApiProduct {
   name: string;
@@ -133,7 +134,7 @@ export default function MarketplacePage() {
 
     setLoadingApi(apiName)
     try {
-      const response = await fetch("http://localhost:8000/v1/keys/generate", {
+      const response = await fetch(`${API_BASE_URL}/v1/keys/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

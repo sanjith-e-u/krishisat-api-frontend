@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Eye, EyeOff, Copy, Trash2, Key, Check, Plus, AlertCircle } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { cn } from "@/lib/utils"
+import { API_BASE_URL } from "@/lib/config"
 
 interface ApiKeyItem {
   id: string;
@@ -114,7 +115,7 @@ export default function DashboardApiKeys() {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) return
 
-      const response = await fetch("http://localhost:8000/v1/keys/generate", {
+      const response = await fetch(`${API_BASE_URL}/v1/keys/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

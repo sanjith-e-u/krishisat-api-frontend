@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { Search, Sprout, Droplets, Cloud, MapPin, Key, Copy, Check, ShieldAlert, ArrowRight } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { cn } from "@/lib/utils"
+import { API_BASE_URL } from "@/lib/config"
 
 interface PurchasedApiItem {
   id: string;
@@ -120,7 +121,7 @@ export default function DashboardApis() {
 
     setGeneratingApiName(apiName)
     try {
-      const response = await fetch("http://localhost:8000/v1/keys/generate", {
+      const response = await fetch(`${API_BASE_URL}/v1/keys/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
